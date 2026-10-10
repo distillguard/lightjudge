@@ -1,4 +1,4 @@
-# 연구보고서 v3.1
+# 연구보고서 v3.2
 
 <!-- main-status:start -->
 **진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](../results/protocols/status.json)
@@ -6,7 +6,7 @@
 
 ## 핵심 설계
 
-주 질문은 **confidence 기반 적응형 KL 혼합이 고정 50:50 혼합보다 나은가**다. 본문은 Accuracy·선택지 NLL·paired 95% CI로 정리하고, 신뢰도·오류·gate·비용은 보조 자료로 둔다. [고정 설계](RESEARCH_PLAN.md)
+주 질문은 **confidence 기반 적응형 KL 혼합이 고정 50:50 혼합보다 정답률을 높이는가**다. 본문은 생성 Accuracy·개별 seed·평균±SD와 **적응형−고정 혼합의 Accuracy 차이·paired 95% CI**를 중심으로 구성한다. Gate 분기·Teacher 오류·학습곡선은 해석 분석, 선택지 NLL은 보조 성능, ECE·Brier·비용은 부록이다. [평가 정의·필요성·동결 원칙](RESEARCH_PLAN.md#평가와-보고)
 
 | 항목 | 실험 설정 |
 |---|---|
@@ -23,7 +23,7 @@ Student 학습은 BF16+LoRA다. Teacher만 양자화했고 Student QLoRA는 수�
 
 Gold는 실제 정답으로 학습한 SFT 기준선이고 Response는 Teacher가 생성한 답변을 hard label로 모방한다. Forward·Reverse·고정 혼합·적응형 혼합은 T=2 전체 어휘의 soft distribution을 이용한다. Forward와 Reverse는 불일치를 각각 Teacher와 Student 확률로 가중하며, 고정 혼합은 둘을 매번 50:50으로 평균하고 적응형은 상대 entropy confidence로 한 방향을 선택한다. [6개 방식의 수식·예시·차이와 선행연구](RESEARCH_PLAN.md#methods)
 
-네 KL 조건은 같은 EOS CE·Temperature·학습량을 사용한다. 적응형 gate는 정답 판별기나 Teacher 오류 필터가 아니며 Reverse도 동결 Teacher를 목표로 Student를 학습한다. 따라서 Accuracy·NLL·paired CI 결과로 효과를 판단한다. 현재 검증·집계된 것은 Gold·Response·Forward·Reverse의 각 3 seeds뿐이며 두 혼합의 비교는 미완료다.
+네 KL 조건은 같은 EOS CE·Temperature·학습량을 사용한다. 적응형 gate는 정답 판별기나 Teacher 오류 필터가 아니며 Reverse도 동결 Teacher를 목표로 Student를 학습한다. 따라서 효과의 주 판단은 Accuracy 차이와 불확실성으로 하고 NLL·gate·오류 패턴으로 해석을 보완한다. 현재 검증·집계된 것은 Gold·Response·Forward·Reverse의 각 3 seeds뿐이며 두 혼합의 비교는 미완료다.
 
 ## 준비·검증 완료
 
@@ -54,39 +54,81 @@ Reverse−Forward Accuracy는 −0.56%p, 조건부 95% CI −1.90~+0.89%p로 Rev
 <!-- kl-results-live:start -->
 ## 본실험 중간 결과: 12/18 검증·집계 완료
 
-네 조건을 각각 seed 42·7·123에서 전체 train 1,118개로 3 epochs·420 steps 학습하고, 저장 adapter를 다시 불러와 validation 299개를 평가했다. 모든 실행의 adapter·평가 파일 hash, 매 epoch 전체 문항 사용, 같은 seed의 초기 adapter·문항 순서와 유한한 손실/gradient를 확인했다. 형식 오류·잘림은 0건이다.
+네 조건을 각각 seed 42·7·123에서 train 1,118개로 3 epochs·420 steps 학습하고 저장 adapter를 다시 불러와 validation 299개를 평가했다. Adapter·평가 hash, 매 epoch 전체 문항 사용, 같은 seed의 초기 adapter·문항 순서와 유한한 손실/gradient를 확인했다. 형식 오류·잘림은 0건이다. 아래는 **validation 중간 결과**이며 최종 test 결론이 아니다.
 
-| 모델·조건 | Accuracy | 선택지 NLL ↓ |
-|---|---:|---:|
-| Teacher NF4 | 92.64% (277/299) | 0.2436 |
-| 원본 Student | 76.25% (228/299) | 0.5918 |
-| Gold SFT, 3 seed 평균±SD | **85.28±1.21%** | **0.9288±0.0491** |
-| Response KD, 3 seed 평균±SD | **86.29±1.67%** | **0.9296±0.1233** |
-| Forward KL, 3 seed 평균±SD | **85.95±0.88%** | **0.4475±0.0263** |
-| Reverse KL, 3 seed 평균±SD | **86.18±0.39%** | **0.4738±0.0287** |
+### 1. 주 성능: 정답률과 학습 반복 변동
 
-| 탐색적 비교 | Accuracy 차이·95% CI (%p) | 선택지 NLL 차이·95% CI |
-|---|---:|---:|
-| Reverse−Forward | +0.22 [-1.23, +1.67] | +0.0263 [-0.0021, +0.0556] |
-| Forward−Gold | +0.67 [-1.78, +3.12] | -0.4813 [-0.6618, -0.3132] |
-| Forward−Response | -0.33 [-2.34, +1.67] | -0.4821 [-0.6764, -0.3070] |
+Teacher NF4는 **92.64% (277/299)**, 원본 Student는 **76.25% (228/299)**다. 두 기준 모델은 학습 반복이 없는 참조 결과로 seed SD를 계산하지 않는다.
 
-Reverse−Forward는 Accuracy·NLL 구간 모두 0을 포함해 우열을 확인하지 못했다. Forward는 Gold·Response보다 세 seed 모두 NLL이 낮고, 탐색적 구간도 개선 방향이지만 Accuracy 우위는 미확인이다. Gold·Response는 원본 Student보다 Accuracy가 높아졌으나 NLL은 악화됐다. Accuracy와 확률 품질을 구분해 해석한다.
+| 조건 | seed 42 | seed 7 | seed 123 | 평균±seed SD |
+|---|---:|---:|---:|---:|
+| Gold SFT | 84.28% | 86.62% | 84.95% | **85.28±1.21%** |
+| Response KD | 87.96% | 86.29% | 84.62% | **86.29±1.67%** |
+| Forward KL | 84.95% | 86.62% | 86.29% | **85.95±0.88%** |
+| Reverse KL | 85.95% | 86.62% | 85.95% | **86.18±0.39%** |
+| 고정 혼합 | 평가 미완료 | 미완료 | 미완료 | 미집계 |
+| 적응형 혼합 | 미완료 | 미완료 | 미완료 | 미집계 |
 
-CI는 같은 문항을 모든 조건·seed에서 함께 5,000회 재표집한 구간이며 관측한 세 학습 seed에 조건부다. SD는 seed 표본 표준편차(ddof=1)다. 897개 독립 문항으로 계산하지 않았다. 위 비교는 **미조정 탐색적 중간 결과**이며, 주 비교인 적응형−고정 혼합과 최종 test는 아직 미완료다. 고정 혼합 seed 42의 학습은 이후 완료됐지만 validation은 미완료다. 현재는 사용자 요청으로 중단했으며, 남은 학습은 5회·validation은 6회다. 고정 epoch 3 기준을 유지한다.
+![주 성능: 정답률과 개별 seed](../results/main/accuracy.png)
 
-![네 조건의 성능과 신뢰구간](../results/main/performance.png)
+SD는 세 학습 seed의 표본 표준편차(ddof=1)다. 그림의 오차 막대는 **seed SD이며 95% CI가 아니다**. Gold·Response·Forward·Reverse 모두 원본 Student보다 평균 정답률이 높지만 이 표만으로 방법 사이의 우위를 판단하지 않는다.
+
+### 2. 비교 판단: Accuracy 차이와 paired CI
+
+**주 비교인 적응형−고정 혼합은 아직 미완료**다. 고정 혼합 seed 42는 학습만 완료됐고 validation은 미완료다. 아래 세 비교는 기존에 지정한 탐색적 중간 비교다.
+
+| 비교 | 평균 차이 (%p) | paired 95% CI (%p) | 해석 |
+|---|---:|---:|---|
+| Reverse−Forward | +0.22 | [-1.23, +1.67] | 우위 미확인 |
+| Forward−Gold | +0.67 | [-1.78, +3.12] | 우위 미확인 |
+| Forward−Response | -0.33 | [-2.34, +1.67] | 우위 미확인 |
+
+![방법 간 Accuracy 차이와 paired 신뢰구간](../results/main/paired_accuracy.png)
+
+같은 문항을 모든 조건·seed에서 함께 5,000회 재표집했다. CI는 관측한 세 seed에 조건부이며 학습 seed 전체 모집단의 변동까지 포함하지 않는다. 299개 문항을 897개 독립 문항으로 계산하지 않았다. 현재 구간은 모두 0을 포함하므로 Accuracy 우위는 미확인이고, '차이가 없다'거나 동등하다는 결론도 내리지 않는다.
+
+### 3. 보조 성능: 정답에 부여한 확률
+
+| 모델·조건 | 선택지 NLL ↓ (학습 조건은 평균±seed SD) |
+|---|---:|
+| Teacher NF4 | 0.2436 |
+| 원본 Student | 0.5918 |
+| Gold SFT | 0.9288±0.0491 |
+| Response KD | 0.9296±0.1233 |
+| Forward KL | 0.4475±0.0263 |
+| Reverse KL | 0.4738±0.0287 |
+
+Forward는 Gold·Response보다 세 seed 모두 NLL이 낮고 기존 탐색적 차이 CI도 개선 방향이다. 그러나 Accuracy 우위는 미확인이다. Gold·Response는 원본 Student보다 Accuracy가 높지만 NLL은 나빠졌다. **정답률과 확률 품질을 구분하는 근거**이며 NLL 개선을 주 연구 질문의 성공으로 대체하지 않는다. NLL은 T=1 첫 step의 유효 선택지 확률로 계산하며 calibration만 측정하는 값이 아니다. [정의·한계](RESEARCH_PLAN.md#선택지-nll-보조-지표로-유지) · [기존 NLL·Brier·ECE와 모든 탐색적 CI](../results/main/comparison.json)
+
+### 4. 해석 분석: gate와 Teacher 오류
+
+적응형은 아직 학습하지 않아 **실제 gate 분기 비율은 보고할 수 없다**. 단독 Forward·Reverse 로그의 entropy gate 값은 가상 분기 진단이며 적응형의 관측 결과로 쓰지 않는다.
+
+Validation의 Teacher 오답 22개 중 원본 Student가 맞춘 것은 7개다. 아래 수치는 **seed 42 · 7 · 123 순서의 개수**이며 train Teacher 오답 52개와 다른 문항 집합이다.
+
+| 조건 | Teacher 오답을 맞춤 (각 /22) | Teacher와 같은 오답 (각 /22) | 원본 Student 정답을 잃음 (각 /7) |
+|---|---:|---:|---:|
+| Gold SFT | 7 · 7 · 9 | 12 · 14 · 12 | 2 · 3 · 2 |
+| Response KD | 11 · 8 · 9 | 8 · 12 · 11 | 1 · 3 · 1 |
+| Forward KL | 8 · 9 · 10 | 11 · 10 · 10 | 3 · 2 · 1 |
+| Reverse KL | 6 · 9 · 10 | 13 · 11 · 10 | 3 · 2 · 1 |
+
+분모가 작고 동일 문항을 반복 관찰하므로 기술적 패턴만 해석한다. Gold도 Teacher 오답을 맞추거나 원본 정답을 잃을 수 있어 이 표만으로 Teacher 오류의 인과적 전달이나 gate의 개선 효과를 증명하지 않는다. [오류 그래프](../results/main/teacher_errors.png)
+
+### 5. 학습 진단
 
 ![네 조건의 seed 42 학습곡선](../results/main/learning_curves.png)
 
-성능 그림은 전체 validation 299개·각 3 seeds이며 점은 개별 seed, 오차 막대는 문항 bootstrap CI다. 학습곡선은 seed 42의 고정 train/validation **각 64개**에서 측정한 공통 Gold CE·Accuracy다. 최적화 손실은 조건별 목적함수이며 직접 크기를 비교하지 않는다. 진단 후 adapter 가중치가 같고, 최종 64개 validation 답변·log-probability가 전체 재평가와 정확히 일치했다.
+Seed 42의 고정 train/validation **각 64개 subset**에서 측정한 공통 Gold CE·Accuracy다. Train subset은 실제 학습 문항에 포함된다. 서로 다른 optimizer 목적함수의 loss 크기는 직접 비교하지 않는다. 진단 후 adapter 가중치가 같고 최종 64개 validation 답변·log-probability가 전체 재평가와 일치했다. 이 곡선은 최종 validation/test 전체 성능이나 최적 checkpoint 선택을 대신하지 않는다.
 
-[4 조건·3 seed 수치와 paired CI](../results/main/comparison.json) · [학습 손실·신뢰도·오류·비용 그래프](../results/main/index.html) · [12회 학습·평가·보존 검증](../results/checks/through_reverse_validation_verified.json)
+현재 사용자 요청으로 중단했으며 남은 학습은 5회·validation은 6회다. 고정 epoch 3과 미평가 test를 유지한다.
+
+[검증된 원 수치](../results/main/comparison.json) · [주 성능→비교→해석→보조 자료 순서의 갤러리](../results/main/index.html) · [12회 학습·평가·보존 검증](../results/checks/through_reverse_validation_verified.json)
 <!-- kl-results-live:end -->
 
 ## 보조 자료와 한계
 
-학습곡선은 seed 42의 고정 train·validation 각 64개 진단 subset에서 측정한다. 최종 validation/test 성능은 전체 문항을 사용한다. Brier·ECE·gate 분기·Teacher 오류·gradient·추론 비용은 JSON·그래프 갤러리에 보관한다. Train 오류 진단과 held-out 문항 분석을 분리하고 subset 분자/분모를 표시한다.
+기존 Accuracy·NLL 결합 그림, NLL·Brier·ECE의 탐색적 구간, gradient·시간·VRAM·모델 크기는 JSON·부록 갤러리에 모두 보존한다. 본문에서 지표의 역할을 구분해도 불리한 기존 결과를 삭제하지 않는다. 이번 정리는 중간 validation을 확인한 후 이루어진 보고 변경이며 원본 프로토콜·평가 계산·주 비교는 그대로다. [보고 변경 기록](../results/protocols/reporting_review.json)
 
 현재는 한 모델 조합·영어 ARC·첫 답변 위치의 증류 실험이다. 공개 checkpoint의 ARC 사전 노출은 미확인이다. [CaRE-KD](https://arxiv.org/html/2609.36734v1)의 혼합 손실 적용 비교로서 신규 알고리즘이나 전체 프레임워크 재현을 주장하지 않는다. Confidence가 높아도 Teacher가 틀릴 수 있고, CI가 0을 포함하는 결과는 동등성의 증거가 아니다.
 

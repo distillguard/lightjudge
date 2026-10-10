@@ -1,0 +1,84 @@
+{
+  "kind": "reporting_clarification_after_interim_validation",
+  "document_version": "3.2",
+  "reviewed_at_kst": "2026-10-10",
+  "purpose": "Separate performance metrics, statistical uncertainty, mechanism analysis and supplementary diagnostics for the frozen Adaptive-minus-Fixed accuracy question.",
+  "interim_results_seen": true,
+  "test_evaluated": false,
+  "original_training_protocol_sha256": "9de30c8b3ff239b6c4be79fcdb7cc815bde9d05c0ff0115bd43d8bbb0ce61d8a",
+  "source_comparison": "results/main/comparison.json",
+  "source_comparison_sha256": "0a697c2fb2a526685a44814800ee967d9759ef3c7e311b733eb2241e53756dae",
+  "primary_outcome_unchanged": "Final-test generation accuracy: adaptive_mix minus fixed_mix",
+  "reporting_order": [
+    {
+      "role": "primary_performance",
+      "content": "Generation accuracy for Teacher, original Student and six conditions; individual observed seeds and mean +/- sample SD."
+    },
+    {
+      "role": "primary_inference",
+      "content": "Adaptive-minus-Fixed accuracy difference in percentage points and existing paired 95% question-bootstrap CI."
+    },
+    {
+      "role": "descriptive_mechanism",
+      "content": "Actual adaptive branch fractions by epoch/seed and teacher-error patterns with denominators; no causal claim."
+    },
+    {
+      "role": "training_diagnostics",
+      "content": "Objective loss and common gold CE/accuracy on fixed seed-42 diagnostic subsets; no checkpoint selection."
+    },
+    {
+      "role": "secondary_performance",
+      "content": "Choice NLL at T=1 over valid answer letters; not a co-primary outcome, sequence NLL or calibration alone."
+    },
+    {
+      "role": "appendix",
+      "content": "Brier, ten-bin choice ECE, reliability, exploratory metric CIs, clipping, timing, VRAM and model size."
+    }
+  ],
+  "statistical_method_unchanged": {
+    "bootstrap_replicates": 5000,
+    "bootstrap_seed": 42,
+    "pairing": "Same question indices in all conditions and seeds; average three observed seeds per question.",
+    "ci_scope": "Conditional on observed seeds; not uncertainty over new training seeds.",
+    "seed_sd": "Sample SD, ddof=1; separate from question-bootstrap CI."
+  },
+  "no_changes_to": [
+    "research question",
+    "training/evaluation/statistical source code",
+    "six conditions and three training seeds",
+    "data and model revisions",
+    "fixed final epoch 3",
+    "original protocol",
+    "existing raw results and metric CIs"
+  ],
+  "limitations": [
+    "Reporting hierarchy clarified after viewing interim validation; all original metrics remain available.",
+    "Adaptive-minus-Fixed validation and all test evaluation remain pending.",
+    "Teacher-error validation subsets have only 22 and 7 questions; descriptive analysis only.",
+    "Published plots are interim snapshots, not live pipeline outputs."
+  ],
+  "new_figures": [
+    "results/main/accuracy.png",
+    "results/main/paired_accuracy.png"
+  ],
+  "references": [
+    "https://aclanthology.org/D17-1035/",
+    "https://aclanthology.org/P18-1128/",
+    "https://arxiv.org/abs/1706.04599",
+    "https://arxiv.org/html/2609.36734v1"
+  ],
+  "verification": {
+    "protected_original_artifacts_unchanged": 130,
+    "frozen_compatible_source_files_unchanged": 7,
+    "original_training_protocol_unchanged": true,
+    "comparison_statistics_unchanged": true,
+    "seed_means_sd_and_paired_mean_differences_rechecked": true,
+    "markdown_and_gallery_file_links_checked": true,
+    "new_training_or_model_evaluation": false
+  },
+  "new_figure_sha256": {
+    "results/main/accuracy.png": "6c31f0125ae04b5fcb164385e2d2eb45874ad7e532c1767d7dc2df1a679c48cf",
+    "results/main/paired_accuracy.png": "13b10b53d4bb84cf8312c9b754b19c977934074d6ad747109705b486eddcfb7d"
+  },
+  "automatic_report_note": "Frozen analyze_kl.py computations and report writer are retained; publication snapshots are arranged manually for this reporting clarification."
+}

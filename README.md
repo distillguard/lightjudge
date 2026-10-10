@@ -1,6 +1,6 @@
 # LightJudge
 
-문서 버전 **v3.1** · 전체 train 본실험에 집중
+문서 버전 **v3.2** · 전체 train 본실험에 집중
 
 Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 KL 혼합이 고정 혼합보다 나은지** 비교한다.
 
@@ -17,10 +17,12 @@ Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반
 | 데이터 | ARC-Challenge train 1,118 / validation 299 / test 1,172 |
 | 본실험 | Gold·Response·Forward·Reverse·고정 혼합·적응형 혼합 × 3 seeds = 18회 |
 | 공통 학습 | 원본 Student부터 3 epochs·420 steps, LoRA rank 8, T=2 |
-| 핵심 결과 | Accuracy·선택지 NLL·paired 95% CI |
+| 주 결과 | Accuracy·개별 seed·평균±SD, 적응형−고정 혼합의 Accuracy 차이·paired 95% CI |
+| 해석 분석 | 실제 gate 분기·Teacher 오류 패턴·학습곡선 |
+| 보조 지표 | 선택지 NLL; Brier·ECE·비용은 부록 |
 | 최종 test | 동결 후 Teacher·원본 Student·본실험 18개 모델 전체 |
 
-완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. Epoch별 곡선 진단은 고정 train/validation 각 64개로 줄였고, 학습·최종 성능 평가는 각 전체 분할을 사용한다. 보조 지표와 비용은 JSON·그래프 갤러리에 둔다.
+완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. Epoch별 곡선 진단은 고정 train/validation 각 64개로 줄였고, 학습·최종 성능 평가는 각 전체 분할을 사용한다. **CI는 별도 성능 지표가 아니라 차이의 불확실성**이며, seed SD와 구분한다. 선택지 NLL은 확률 품질을 보는 보조 지표로 유지한다. [평가 정의·판단 근거](docs/RESEARCH_PLAN.md#평가와-보고) · [재정리한 중간 결과·그래프](results/main/index.html)
 
 ## 디렉토리 구성
 
@@ -65,7 +67,7 @@ lightjudge/
 
 ## 실행
 
-아래 명령은 모델 cache·데이터·학습 준비 산출물을 갖춘 기존 로컬 환경용이다. 저장소의 중간 결과 snapshot만으로 전체 pipeline을 바로 재개할 수는 없다. 현재 실험은 사용자 요청으로 중단돼 있으며 폴더 정리 중 추가 학습·test 평가는 수행하지 않았다.
+아래 명령은 모델 cache·데이터·학습 준비 산출물을 갖춘 기존 로컬 환경용이다. 저장소의 중간 결과 snapshot만으로 전체 pipeline을 바로 재개할 수는 없다. 현재 실험은 사용자 요청으로 중단돼 있으며 문서·보고 정리 중 추가 학습·test 평가는 수행하지 않았다.
 
 ```powershell
 # 의존성 목록

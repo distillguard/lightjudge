@@ -1,4 +1,4 @@
-# 연구계획서 v3.1
+# 연구계획서 v3.2
 
 <!-- main-status:start -->
 **진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](../results/protocols/status.json)
@@ -8,7 +8,7 @@
 
 **Teacher·Student의 confidence를 이용한 KL 혼합이 고정 50:50 혼합보다 증류 성능을 개선하는가?**
 
-주 비교는 적응형−고정 혼합의 생성 Accuracy다. 선택지 NLL을 핵심 부지표로 보고, Forward·Reverse와 Gold·Response는 해석을 위한 대조군으로 둔다. 개선을 가정하지 않고 부정적인 결과도 포함한다.
+주 비교는 **적응형−고정 혼합의 생성 Accuracy 차이**다. 3개 seed의 결과와 paired 95% CI로 차이의 크기·변동·불확실성을 보고, gate 분기와 Teacher 오류 패턴으로 해석을 보완한다. 선택지 NLL은 확률 품질을 보는 보조 지표다. Forward·Reverse와 Gold·Response는 대조군이며 개선을 가정하지 않는다.
 
 ## 모델과 데이터
 
@@ -104,17 +104,47 @@ Gold−Response는 실제 정답과 Teacher hard label의 차이, Response−For
 
 ## 평가와 보고
 
-| 구분 | 산출물 |
-|---|---|
-| 본문 | 6조건의 Accuracy·선택지 NLL, 3-seed 평균±sample SD, paired 차이의 95% CI |
-| 학습곡선 | 실제 optimizer loss. seed 42에서 epoch 0·1·2·3의 고정 train/validation 각 64개 진단 |
-| 보조 자료 | Brier·10-bin ECE·gate 분기·Teacher 오류·gradient clipping·시간·VRAM·모델 크기 |
+Accuracy와 NLL은 서로 다른 성능 지표이고 **CI는 지표가 아니라 비교의 불확실성**이다. 이번 연구의 본문은 아래 순서로 구성한다.
 
-64개 진단 문항은 분할별 source_id의 SHA-256 순서로 고정하며, 학습에 쓰는 train 1,118개와 별도다. 진단 평가의 RNG·모드·가중치를 보존하고 checkpoint 선택에 쓰지 않는다. **학습 후 성능 평가는 validation 299개와 test 1,172개 전체**에서 수행한다.
+| 역할 | 보고할 내용 | 연구 질문과의 연결 |
+|---|---|---|
+| 주 성능 | Teacher·원본 Student·6조건의 생성 Accuracy, 개별 seed와 3-seed 평균±sample SD | 실제 정답률이 얼마나 개선되는가 |
+| 주 비교 | 적응형−고정 혼합의 Accuracy 차이(%p)와 paired 95% CI | confidence gate의 성능 이득을 확인할 수 있는가 |
+| 해석 분석 | 적응형의 실제 Forward/Reverse 분기 비율(전체·epoch·seed), Teacher 오류 패턴 | 방향 선택이 작동했는가, 어떤 오류가 남았는가 |
+| 학습 진단 | optimizer loss와 공통 Gold CE·Accuracy 곡선 | 학습이 안정적이며 과적합 징후가 있는가 |
+| 보조 성능 | 선택지 NLL; Brier·10-bin ECE·reliability plot은 부록 | 정답률과 별개로 답의 확률 품질이 달라지는가 |
+| 부록·검증 | 개별 실행 로그, 형식 오류·잘림, gradient clipping, 시간·VRAM·adapter 크기 | 동일 예산과 실행 타당성 확인 |
 
-평가 confidence는 T=1 첫 생성 step을 유효 선택지로 정규화한다. 생성은 thinking=False·greedy·최대 새 token 8·batch 1·use_cache=False로 고정한다. 같은 문항을 모든 조건·seed에서 함께 5,000회 bootstrap(seed 42)한다. CI는 관측한 세 학습 seed에 조건부이며 평가 문항을 3배로 계산하지 않는다. NLL 등 부 분석은 미조정 탐색적 구간으로 표시하고, CI가 0을 포함하면 우위 미확인으로 기록한다. 동등성을 주장하지 않는다.
+### Accuracy와 paired CI: 유지
 
-조건·checkpoint·지표·코드·입력·분석을 동결한 뒤 **Teacher·원본 Student + 본실험 18개 모델**의 test를 평가한다. 파일럿 모델은 최종 test 대상에서 제외한다. test 결과로 재학습·조건 선택·epoch 선택을 하지 않는다.
+Accuracy는 greedy 생성 답변을 엄격히 파싱해 정답 letter와 일치하는지 계산한다. 형식 오류는 오답이며 token 제한 도달은 별도 집계한다. 현재 두 항목 모두 0건이다. Thinking=False·최대 새 token 8·batch 1·use_cache=False를 유지한다. 학습 seed의 SD(ddof=1)는 **세 번의 학습 변동**이고, paired CI는 **평가 문항 표본의 불확실성**을 나타낸다. 둘을 대신 쓰거나 같은 오차 막대로 표기하지 않는다. 단일 실행보다 여러 실행의 분포를 보고할 이유는 [Reimers·Gurevych(2017)](https://aclanthology.org/D17-1035/)와 연결되며, 비교의 불확실성은 NLP 실험 설계에 맞게 다뤄야 한다는 [Dror 외(2018)](https://aclanthology.org/P18-1128/)의 논의에 따른다. 이 논문들이 우리 bootstrap 설정을 그대로 규정하는 것은 아니다.
+
+같은 문항을 모든 조건·seed에서 함께 5,000회 bootstrap(seed 42)한다. 문항별 세 seed 결과를 평균한 뒤 재표집하므로 CI는 **관측한 세 학습 seed에 조건부**다. Validation 299개를 897개 독립 문항으로 계산하지 않으며, 새로운 학습 seed에서의 변동까지 포함하는 CI로 해석하지 않는다. 주 비교는 최종 test의 적응형−고정 혼합이다. 나머지 사전 지정 비교는 미조정 탐색적 분석으로 표시한다. 차이의 CI가 0을 포함하면 우위 미확인으로 기록하고 동등성을 주장하지 않는다.
+
+### 선택지 NLL: 보조 지표로 유지
+
+$$
+NLL_{choice}=-\frac{1}{n}\sum_i\log p_i(y_i),\qquad
+p_i(k)=\frac{\exp z_{i,k}}{\sum_{j\in C_i}\exp z_{i,j}}
+$$
+
+여기서 C_i는 문항의 유효 선택지, z는 **T=1 첫 생성 step**의 letter logits다. 낮을수록 정답에 부여한 확률이 높다. 같은 Accuracy라도 확신한 오답이 많으면 NLL은 나빠질 수 있어 soft distribution 증류의 차이를 설명하는 데 도움이 된다. 다만 **Accuracy 개선을 대신 입증하거나 주 비교의 공동 성공 조건으로 쓰지 않는다.** 전체 문장 NLL·perplexity·T=2 전체 어휘 KL 학습 손실과 다르며, 선택지 외 확률 질량은 정규화 과정에서 제외된다.
+
+NLL은 calibration만 측정하는 지표가 아니다. Brier·ECE도 함께 참고하되 정확도와 confidence의 일치를 별도로 살펴본다는 [Guo 외(2017)](https://arxiv.org/abs/1706.04599)의 구분을 따른다. ECE는 선택지 argmax의 정오를 쓰므로 생성 Accuracy와 정의가 다를 수 있다. NLL·ECE를 학습 중 T=2 전체 어휘 entropy gate의 정확성으로 해석하지 않는다.
+
+### Gate·오류·학습곡선: 설명에 필요한 분석
+
+적응형의 **실제** 분기 비율을 epoch·seed별로 보고한다. Forward·Reverse 단독 조건에서 기록한 '만약 gate를 적용했다면' 분기 값은 실제 적응형 학습의 방향 선택이 아니다. Teacher와 같은 오답을 낸 수, Teacher 오답 중 Student가 맞춘 수, 원본 Student가 맞췄던 문항을 잃은 수를 조건별로 보고하며 분모를 표시한다. Train의 Teacher 오답 52/1,118개와 validation의 22/299개를 분리한다. Validation에서 원본 Student가 Teacher 오답을 맞춘 subset은 7개뿐이므로 탐색적 기술 분석이며 오류 전달의 인과관계를 입증하지 않는다.
+
+학습곡선은 seed 42의 epoch 0·1·2·3에서 고정 train/validation 각 64개 진단을 사용한다. Train 진단 64개는 **학습 train 안의 subset**이며 validation 진단은 별도 분할이다. 분할별 source_id의 SHA-256 순서로 고정하고 RNG·모드·가중치를 보존하며 checkpoint 선택에 쓰지 않는다. 공통 Gold CE·Accuracy와 목적함수 곡선을 구분하고 서로 다른 목적함수의 loss 크기로 우열을 판단하지 않는다. 최종 성능은 validation 299개와 test 1,172개 **전체**에서 측정한다.
+
+CaRE-KD도 [과제에 따라 ROUGE-L·pass@1·Accuracy를 선택](https://arxiv.org/html/2609.36734v1#S4)한다. 우리 과제는 정답 letter 하나를 출력하므로 BLEU·ROUGE·답 위치별 macro-F1을 핵심 지표로 추가하지 않는다. A/B/C/D는 문항마다 의미가 달라지는 위치이며 기존 NLI의 의미 클래스와 다르다. 지표를 늘리기 위한 추가 학습·threshold 탐색·p-value 나열은 하지 않는다.
+
+### 보고 정리와 동결
+
+v3.2는 **중간 validation을 확인한 뒤 지표의 역할을 명확히 한 보고 변경**이다. 원본 프로토콜에서 NLL이 main/secondary 양쪽에 있던 표현을 정리했으며, 기존 주 비교·통계 계산·학습 설정·결과를 바꾸지 않는다. NLL을 포함한 유리하거나 불리한 기존 수치와 탐색적 CI는 JSON·부록에 모두 보존한다. [보고 변경 기록](../results/protocols/reporting_review.json)
+
+조건·checkpoint·지표·코드·입력·분석을 동결한 뒤 **Teacher·원본 Student + 본실험 18개 모델**의 test를 평가한다. 파일럿 모델은 최종 test 대상에서 제외한다. Test 결과로 재학습·조건 선택·epoch 선택을 하지 않는다.
 
 ## 범위와 종료 기준
 
