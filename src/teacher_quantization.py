@@ -9,7 +9,7 @@ from pathlib import Path
 from time import perf_counter
 from zoneinfo import ZoneInfo
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 MODEL_ID = "Qwen/Qwen3.5-9B"
 REVISION = "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
 CACHE = ROOT / ".cache" / "huggingface" / "hub"

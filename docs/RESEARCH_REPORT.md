@@ -1,7 +1,7 @@
-# 연구보고서 v3.0
+# 연구보고서 v3.1
 
 <!-- main-status:start -->
-**진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](outputs/kl_extension/status.json)
+**진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](../results/protocols/status.json)
 <!-- main-status:end -->
 
 ## 핵심 설계
@@ -17,7 +17,13 @@
 | 학습 | 각 조건을 원본부터 3 epochs·420 steps, 고정 epoch 3 |
 | 평가 | validation 299개 / 동결 후 test 1,172개 전체 |
 
-Student 학습은 BF16+LoRA다. Teacher만 양자화했고 Student QLoRA는 수행하지 않는다. Train/validation/test의 원본 ID·전체 입력 hash 교집합은 0이며, 3·4·5개 선택지를 유지했다. [입력 기록](outputs/pilot/data_manifest.json)
+Student 학습은 BF16+LoRA다. Teacher만 양자화했고 Student QLoRA는 수행하지 않는다. Train/validation/test의 원본 ID·전체 입력 hash 교집합은 0이며, 3·4·5개 선택지를 유지했다. [입력 기록](../results/protocols/data_manifest.json)
+
+## 방법을 해석하는 기준
+
+Gold는 실제 정답으로 학습한 SFT 기준선이고 Response는 Teacher가 생성한 답변을 hard label로 모방한다. Forward·Reverse·고정 혼합·적응형 혼합은 T=2 전체 어휘의 soft distribution을 이용한다. Forward와 Reverse는 불일치를 각각 Teacher와 Student 확률로 가중하며, 고정 혼합은 둘을 매번 50:50으로 평균하고 적응형은 상대 entropy confidence로 한 방향을 선택한다. [6개 방식의 수식·예시·차이와 선행연구](RESEARCH_PLAN.md#methods)
+
+네 KL 조건은 같은 EOS CE·Temperature·학습량을 사용한다. 적응형 gate는 정답 판별기나 Teacher 오류 필터가 아니며 Reverse도 동결 Teacher를 목표로 Student를 학습한다. 따라서 Accuracy·NLL·paired CI 결과로 효과를 판단한다. 현재 검증·집계된 것은 Gold·Response·Forward·Reverse의 각 3 seeds뿐이며 두 혼합의 비교는 미완료다.
 
 ## 준비·검증 완료
 
@@ -26,7 +32,7 @@ Student 학습은 BF16+LoRA다. Teacher만 양자화했고 Student QLoRA는 수�
 - Teacher·원본 Student·기존 9개 adapter의 validation 신뢰도 측정 완료. 기존 생성 답변도 모두 재현했다.
 - KL 수식·gradient·hard gate·EOS·불완전 batch 정규화 검사를 통과했다. 범위 변경 후 검사는 새 프로토콜에 기록한다.
 
-[Teacher 생성 기록](outputs/kl_extension/targets/full/summary.json) · [겹치는 신호 검증](outputs/kl_extension/target_overlap_check.json) · [self-check](outputs/kl_extension/self_check.json) · [동결 프로토콜](outputs/kl_extension/training_protocol.json)
+[Teacher 생성 기록](../results/protocols/teacher_targets_summary.json) · [겹치는 신호 검증](../results/checks/target_overlap_check.json) · [self-check](../results/checks/self_check.json) · [동결 프로토콜](../results/protocols/training_protocol.json)
 
 ## 파일럿 요약: 탐색 기록
 
@@ -43,7 +49,7 @@ Reverse−Forward Accuracy는 −0.56%p, 조건부 95% CI −1.90~+0.89%p로 Rev
 
 남은 파일럿은 종료했다. 진행 중이던 고정 혼합 seed 42는 **64/96 steps에서 중단**했고 중간 로그를 보존했다. 최종 adapter·완료 결과로 사용하지 않는다. 완료된 Reverse 세 seed와 이전 실험 산출물은 보존했다.
 
-[파일럿 수치·검증](outputs/kl_extension/analysis/reverse_validation_interim/comparison.json) · [파일럿 학습곡선·그래프](outputs/kl_extension/analysis/reverse_validation_interim/index.html)
+[파일럿 수치·검증](../results/pilot/comparison.json) · [파일럿 학습곡선·그래프](../results/pilot/index.html)
 
 <!-- kl-results-live:start -->
 ## 본실험 중간 결과: 12/18 검증·집계 완료
@@ -69,13 +75,13 @@ Reverse−Forward는 Accuracy·NLL 구간 모두 0을 포함해 우열을 확인
 
 CI는 같은 문항을 모든 조건·seed에서 함께 5,000회 재표집한 구간이며 관측한 세 학습 seed에 조건부다. SD는 seed 표본 표준편차(ddof=1)다. 897개 독립 문항으로 계산하지 않았다. 위 비교는 **미조정 탐색적 중간 결과**이며, 주 비교인 적응형−고정 혼합과 최종 test는 아직 미완료다. 고정 혼합 seed 42의 학습은 이후 완료됐지만 validation은 미완료다. 현재는 사용자 요청으로 중단했으며, 남은 학습은 5회·validation은 6회다. 고정 epoch 3 기준을 유지한다.
 
-![네 조건의 성능과 신뢰구간](outputs/kl_extension/analysis/full_reverse_validation_interim/performance.png)
+![네 조건의 성능과 신뢰구간](../results/main/performance.png)
 
-![네 조건의 seed 42 학습곡선](outputs/kl_extension/analysis/full_reverse_validation_interim/learning_curves.png)
+![네 조건의 seed 42 학습곡선](../results/main/learning_curves.png)
 
 성능 그림은 전체 validation 299개·각 3 seeds이며 점은 개별 seed, 오차 막대는 문항 bootstrap CI다. 학습곡선은 seed 42의 고정 train/validation **각 64개**에서 측정한 공통 Gold CE·Accuracy다. 최적화 손실은 조건별 목적함수이며 직접 크기를 비교하지 않는다. 진단 후 adapter 가중치가 같고, 최종 64개 validation 답변·log-probability가 전체 재평가와 정확히 일치했다.
 
-[4 조건·3 seed 수치와 paired CI](outputs/kl_extension/analysis/full_reverse_validation_interim/comparison.json) · [학습 손실·신뢰도·오류·비용 그래프](outputs/kl_extension/analysis/full_reverse_validation_interim/index.html) · [12회 학습·평가·보존 검증](outputs/kl_extension/analysis/full_training_progress/through_reverse_validation_verified.json)
+[4 조건·3 seed 수치와 paired CI](../results/main/comparison.json) · [학습 손실·신뢰도·오류·비용 그래프](../results/main/index.html) · [12회 학습·평가·보존 검증](../results/checks/through_reverse_validation_verified.json)
 <!-- kl-results-live:end -->
 
 ## 보조 자료와 한계
@@ -84,4 +90,8 @@ CI는 같은 문항을 모든 조건·seed에서 함께 5,000회 재표집한 �
 
 현재는 한 모델 조합·영어 ARC·첫 답변 위치의 증류 실험이다. 공개 checkpoint의 ARC 사전 노출은 미확인이다. [CaRE-KD](https://arxiv.org/html/2609.36734v1)의 혼합 손실 적용 비교로서 신규 알고리즘이나 전체 프레임워크 재현을 주장하지 않는다. Confidence가 높아도 Teacher가 틀릴 수 있고, CI가 0을 포함하는 결과는 동등성의 증거가 아니다.
 
-[범위 변경·보존 기록](outputs/kl_extension/scope_change.json) · [원본 산출물 목록](outputs/kl_extension/preservation.json) · [중단 상태 기록](outputs/kl_extension/status.json)
+[범위 변경·보존 기록](../results/protocols/scope_change.json) · [원본 산출물 목록](../results/protocols/preservation.json) · [중단 상태 기록](../results/protocols/status.json)
+
+## 디렉토리 정리 기록
+
+코드는 `src/`, 문서는 `docs/`, 공개할 중간 결과는 `results/`, 의존성은 `requirements/`에 묶었다. 기존 `outputs/`·데이터·cache·adapter와 원본 동결 프로토콜은 로컬에 보존했다. 학습·손실·평가 수식은 바꾸지 않았으며 소스·문서 경로와 hash 검증의 경로 변경 호환 처리만 수정했다. [변경 전후 소스 hash와 경로 기록](../results/protocols/layout_migration.json)

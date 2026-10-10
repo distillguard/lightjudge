@@ -83,9 +83,10 @@ def self_check():
     from unittest.mock import patch
     with TemporaryDirectory() as directory:
         folder=Path(directory)
+        (folder/"docs").mkdir()
         template="<!-- main-status:start -->pending<!-- main-status:end -->\n<!-- kl-results-live:start -->pending<!-- kl-results-live:end -->"
         for name in ("RESEARCH_PLAN.md","RESEARCH_REPORT.md","README.md"):
-            (folder/name).write_text(template,encoding="utf-8")
+            (folder/(name if name == "README.md" else "docs/"+name)).write_text(template,encoding="utf-8")
         comparison={"accuracy":{"mean_difference":0.,"ci95":[-.1,.1]},
                     "choice_nll":{"mean_difference":.02,"ci95":[-.01,.04]}}
         fake={"scope":"full","split":"validation","n":299,"conditions":experiment.CONDITIONS,
@@ -93,14 +94,14 @@ def self_check():
               "primary_comparison":"adaptive_mix_minus_fixed_mix","comparisons":{"adaptive_mix_minus_fixed_mix":comparison}}
         with patch.object(pilot,"ROOT",folder):
             update_docs(folder,fake,True)
-            assert (folder/"RESEARCH_REPORT.md").read_text(encoding="utf-8") == template
+            assert (folder/"docs/RESEARCH_REPORT.md").read_text(encoding="utf-8") == template
             update_docs(folder,fake,False)
-            text=(folder/"RESEARCH_REPORT.md").read_text(encoding="utf-8")
+            text=(folder/"docs/RESEARCH_REPORT.md").read_text(encoding="utf-8")
             assert "선택지 NLL" in text and "각 64개" in text and "Brier" not in text
             fake["split"]="test";fake["n"]=1172
             update_docs(folder,fake,False)
         for name in ("RESEARCH_PLAN.md","RESEARCH_REPORT.md","README.md"):
-            text=(folder/name).read_text(encoding="utf-8")
+            text=(folder/(name if name == "README.md" else "docs/"+name)).read_text(encoding="utf-8")
             assert "18회 학습·validation·동결된 test 평가 완료" in text and "파일럿 추가" not in text
 
 
@@ -344,13 +345,13 @@ def update_docs(folder,summary,baseline_only):
         "",f"![Accuracy와 NLL]({(folder/'performance.png').as_posix()})",
         "", "학습곡선은 seed 42의 고정된 train·validation 각 64개 진단 subset이며 checkpoint 선택에 사용하지 않았다.",
         f"[학습곡선]({(folder/'learning_curves.png').as_posix()})",end,""]
-    p=pilot.ROOT/"RESEARCH_REPORT.md";text=p.read_text(encoding="utf-8")
+    p=pilot.ROOT/"docs/RESEARCH_REPORT.md";text=p.read_text(encoding="utf-8")
     a=text.index(start);b=text.index(end,a)+len(end)
     p.write_text(text[:a]+"\n".join(block)+text[b:],encoding="utf-8")
     state="전체 train 18회 학습·validation·동결된 test 평가 완료" if split == "test" else "전체 train 18회 학습·validation 완료; 동결 후 test 평가 진행"
     status_start="<!-- main-status:start -->";status_end="<!-- main-status:end -->"
     note=f"{status_start}\n**진행 상태:** {state}. [실측 결과]({(folder/'comparison.json').as_posix()})\n{status_end}"
     for name in ("RESEARCH_PLAN.md","RESEARCH_REPORT.md","README.md"):
-        p=pilot.ROOT/name;text=p.read_text(encoding="utf-8")
+        p=pilot.ROOT/(name if name == "README.md" else "docs/"+name);text=p.read_text(encoding="utf-8")
         a=text.index(status_start);b=text.index(status_end,a)+len(status_end)
         p.write_text(text[:a]+note+text[b:],encoding="utf-8")

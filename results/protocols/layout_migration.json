@@ -1,0 +1,57 @@
+{
+  "kind": "directory_reorganization",
+  "training_protocol_sha256": "9de30c8b3ff239b6c4be79fcdb7cc815bde9d05c0ff0115bd43d8bbb0ce61d8a",
+  "before_code_sha256": {
+    "kl_experiment.py": "c89f6057e3b2cb09c4fb1b997ec49ac90d9eaf4d79bf8729cd7622ced12fb2b7",
+    "analyze_kl.py": "625f249cecce3a4a32b61903c1666d89dd753c2010eadbb94d8945c13fdb942a",
+    "train_student.py": "d51f0db5d1cf4a047794b7763d55680abdf709ae0fcab8933b2f60eb99aa9eef",
+    "logit_kd.py": "546e15489a8adba7c26cb5cd89756f3fe42679a34feacd8782f2ad58a53abd50",
+    "monitor_training.py": "939b12c96df146030d310a61b7a8f44041586a763b86bd71764811c0a6620751",
+    "pilot.py": "415594b568171f08721a72b9f2a89ebb0f8b118063ab6c908c8a2cc6f6fb7817",
+    "teacher_quantization.py": "97a449a2a5c4da57ae096aaa23205d322084699811602ca9414ffc5cd4a23c21"
+  },
+  "after_code_sha256": {
+    "kl_experiment.py": "e6465c3bf443d990d6c2d2fbcd1efe4c2e41324498d586fb83c12b1544af5061",
+    "analyze_kl.py": "627850a5e93e062d8f0249dd9b5775a37593fe095a4eab6db5c62337f8705b66",
+    "train_student.py": "d51f0db5d1cf4a047794b7763d55680abdf709ae0fcab8933b2f60eb99aa9eef",
+    "logit_kd.py": "546e15489a8adba7c26cb5cd89756f3fe42679a34feacd8782f2ad58a53abd50",
+    "monitor_training.py": "939b12c96df146030d310a61b7a8f44041586a763b86bd71764811c0a6620751",
+    "pilot.py": "415594b568171f08721a72b9f2a89ebb0f8b118063ab6c908c8a2cc6f6fb7817",
+    "teacher_quantization.py": "4160cfa15099dcc144eab089f157b6d32bb92665c162111a1ba203f820aba439"
+  },
+  "changes": [
+    "Source files moved into src; project root resolved from parent directory.",
+    "Document paths changed to docs; dependencies moved into requirements.",
+    "Only code-hash guards accept this exact recorded migration; training, evaluation and distillation mathematics are unchanged.",
+    "Published result snapshots copied into results; original outputs, caches, data and frozen sources remain unchanged."
+  ],
+  "published_result_paths": {
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/calibration.png": "results/main/calibration.png",
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/comparison.json": "results/main/comparison.json",
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/costs.png": "results/main/costs.png",
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/gate_and_clipping.png": "results/main/gate_and_clipping.png",
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/index.html": "results/main/index.html",
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/learning_curves.png": "results/main/learning_curves.png",
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/objective_curves.png": "results/main/objective_curves.png",
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/performance.png": "results/main/performance.png",
+    "outputs/kl_extension/analysis/full_reverse_validation_interim/teacher_errors.png": "results/main/teacher_errors.png",
+    "outputs/kl_extension/analysis/full_training_progress/through_reverse_validation_verified.json": "results/checks/through_reverse_validation_verified.json",
+    "outputs/kl_extension/analysis/reverse_validation_interim/calibration.png": "results/pilot/calibration.png",
+    "outputs/kl_extension/analysis/reverse_validation_interim/comparison.json": "results/pilot/comparison.json",
+    "outputs/kl_extension/analysis/reverse_validation_interim/costs.png": "results/pilot/costs.png",
+    "outputs/kl_extension/analysis/reverse_validation_interim/gate_and_clipping.png": "results/pilot/gate_and_clipping.png",
+    "outputs/kl_extension/analysis/reverse_validation_interim/index.html": "results/pilot/index.html",
+    "outputs/kl_extension/analysis/reverse_validation_interim/learning_curves.png": "results/pilot/learning_curves.png",
+    "outputs/kl_extension/analysis/reverse_validation_interim/objective_curves.png": "results/pilot/objective_curves.png",
+    "outputs/kl_extension/analysis/reverse_validation_interim/performance.png": "results/pilot/performance.png",
+    "outputs/kl_extension/analysis/reverse_validation_interim/teacher_errors.png": "results/pilot/teacher_errors.png",
+    "outputs/kl_extension/preservation.json": "results/protocols/preservation.json",
+    "outputs/kl_extension/scope_change.json": "results/protocols/scope_change.json",
+    "outputs/kl_extension/self_check.json": "results/checks/self_check.json",
+    "outputs/kl_extension/status.json": "results/protocols/status.json",
+    "outputs/kl_extension/target_overlap_check.json": "results/checks/target_overlap_check.json",
+    "outputs/kl_extension/targets/full/summary.json": "results/protocols/teacher_targets_summary.json",
+    "outputs/kl_extension/training_protocol.json": "results/protocols/training_protocol.json",
+    "outputs/pilot/data_manifest.json": "results/protocols/data_manifest.json"
+  }
+}

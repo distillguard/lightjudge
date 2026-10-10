@@ -64,14 +64,30 @@ def run_path(scope, condition, seed):
 
 
 def code_hashes():
-    return {name:sha(ROOT/name) for name in
+    return {name:sha(Path(__file__).resolve().parent/name) for name in
             ("kl_experiment.py", "analyze_kl.py", "train_student.py", "logit_kd.py", "monitor_training.py", "pilot.py", "teacher_quantization.py")}
+
+
+def frozen_code_matches(expected):
+    current = code_hashes()
+    if expected == current:
+        return True
+    path = OUT/"layout_migration.json"
+    if not path.is_file():
+        return False
+    migration = json.loads(path.read_text(encoding="utf-8"))
+    # Only the recorded directory migration may reuse the original frozen protocol.
+    return (migration["kind"] == "directory_reorganization"
+        and migration["before_code_sha256"] == expected
+        and migration["after_code_sha256"] == current
+        and migration["training_protocol_sha256"] == sha(OUT/"training_protocol.json")
+        and all(sha(OUT/"sources_frozen"/name) == digest for name,digest in expected.items()))
 
 
 def require_protocol():
     path = OUT/"training_protocol.json"
     protocol = json.loads(path.read_text(encoding="utf-8"))
-    assert protocol["status"] == "passed" and protocol["code_sha256"] == code_hashes()
+    assert protocol["status"] == "passed" and frozen_code_matches(protocol["code_sha256"])
     return protocol, sha(path)
 
 
@@ -81,7 +97,7 @@ def check_test(scope, role, condition, seed):
         raise ValueError("Test evaluation is restricted to the frozen main-experiment scope")
     path = OUT/"test_manifest.json"
     manifest = json.loads(path.read_text(encoding="utf-8"))
-    assert manifest["status"] == "passed" and manifest["code_sha256"] == code_hashes()
+    assert manifest["status"] == "passed" and frozen_code_matches(manifest["code_sha256"])
     assert sha(OUT/"training_protocol.json") == manifest["training_protocol_sha256"]
     assert sha(pilot.DATA/"test.jsonl") == manifest["test_data_sha256"]
     tag = f"{scope}/{condition}/{seed}" if condition else f"{role}_baseline"
@@ -319,7 +335,7 @@ def probe(scope,condition):
     path = ctx["probe_path"]
     if ready(path):
         saved = json.loads(path.read_text(encoding="utf-8"))
-        assert saved["config"] == ctx["config"] and saved["code_sha256"] == code_hashes()
+        assert saved["config"] == ctx["config"] and frozen_code_matches(saved["code_sha256"])
         return
     metadata = {"status":"running","config":ctx["config"],"code_sha256":code_hashes(),"probe_model_reused":False}
     pilot.write_json(path,metadata)
@@ -358,12 +374,12 @@ def freeze_training():
         require_protocol()
         return
     assert ready(OUT/"self_check.json")
-    assert json.loads((OUT/"self_check.json").read_text(encoding="utf-8"))["code_sha256"] == code_hashes()
+    assert frozen_code_matches(json.loads((OUT/"self_check.json").read_text(encoding="utf-8"))["code_sha256"])
     for scope in ("full",):
         for condition in CONDITIONS:
             probe_path = OUT/"probes"/scope/f"{condition}.json"
             assert ready(probe_path)
-            assert json.loads(probe_path.read_text(encoding="utf-8"))["code_sha256"] == code_hashes()
+            assert frozen_code_matches(json.loads(probe_path.read_text(encoding="utf-8"))["code_sha256"])
     payload = {"status":"passed","frozen_at_kst":trainer.now(),"code_sha256":code_hashes(),
         "conditions":CONDITIONS,"seeds":SEEDS,"scopes":{"full":1118},
         "epoch_diagnostics":{"seed":42,"epochs":[0,1,2,3],"n_per_split":MONITOR_N,
@@ -389,7 +405,7 @@ def freeze_training():
         if destination.exists():
             assert sha(destination) == checksum
         else:
-            destination.write_bytes((ROOT/name).read_bytes())
+            destination.write_bytes((Path(__file__).resolve().parent/name).read_bytes())
     pilot.write_json(path,payload)
 
 
@@ -421,7 +437,7 @@ def freeze_test():
     require_protocol()
     path = OUT/"test_manifest.json"
     if ready(path):
-        assert json.loads(path.read_text(encoding="utf-8"))["code_sha256"] == code_hashes()
+        assert frozen_code_matches(json.loads(path.read_text(encoding="utf-8"))["code_sha256"])
         return
     models = {"teacher_baseline":{},"student_baseline":{}}
     for scope in ("full",):
