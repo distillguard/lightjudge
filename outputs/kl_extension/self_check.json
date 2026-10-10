@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "code_sha256": {
+    "kl_experiment.py": "c89f6057e3b2cb09c4fb1b997ec49ac90d9eaf4d79bf8729cd7622ced12fb2b7",
+    "analyze_kl.py": "625f249cecce3a4a32b61903c1666d89dd753c2010eadbb94d8945c13fdb942a",
+    "train_student.py": "d51f0db5d1cf4a047794b7763d55680abdf709ae0fcab8933b2f60eb99aa9eef",
+    "logit_kd.py": "546e15489a8adba7c26cb5cd89756f3fe42679a34feacd8782f2ad58a53abd50",
+    "monitor_training.py": "939b12c96df146030d310a61b7a8f44041586a763b86bd71764811c0a6620751",
+    "pilot.py": "415594b568171f08721a72b9f2a89ebb0f8b118063ab6c908c8a2cc6f6fb7817",
+    "teacher_quantization.py": "97a449a2a5c4da57ae096aaa23205d322084699811602ca9414ffc5cd4a23c21"
+  },
+  "checks": [
+    "KL values/gradients",
+    "hard gate branches/ties/no gradient",
+    "no hard/gold answer in KL",
+    "3/4/5 choice calibration",
+    "last partial group normalization",
+    "unfrozen test guard",
+    "full-only 18 training/20 test jobs",
+    "fixed 64-item diagnostic subsets",
+    "removed pilot training blocked",
+    "existing causal loss/RNG/calibration checks"
+  ],
+  "test_evaluation": false
+}

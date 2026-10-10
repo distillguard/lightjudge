@@ -1,0 +1,60 @@
+{
+  "status": "scope_reduced",
+  "reason": "user-approved full train only main experiment",
+  "archived_previous_protocol": "C:\\lightjudge\\outputs\\kl_extension\\previous_protocols\\20261009_192424_pilot_scope",
+  "previous_protocol_sha256": "3d83addee1b515af17d873b02a62b4b0eccf2e5e283ca5dcc21082c6494cbf6e",
+  "completed_extension_pilot_artifacts_sha256": {
+    "outputs\\kl_extension\\training\\pilot\\seed_123\\reverse_kl\\signal_log.jsonl": "bbfc5d994193f756b1854301e207faab6eb1446f817f513616c7c91521583154",
+    "outputs\\kl_extension\\training\\pilot\\seed_123\\reverse_kl\\summary.json": "7d814023a3125c4bfc7b6f51dda668a40f2152cc0a08801e8d73f961d6953ff2",
+    "outputs\\kl_extension\\training\\pilot\\seed_123\\reverse_kl\\train_log.jsonl": "9e36cecb3cbe72bea30687832fa5e2575856fd9bac5732fcc89a8fbebf1be167",
+    "outputs\\kl_extension\\training\\pilot\\seed_123\\reverse_kl\\adapter\\adapter_config.json": "1a017685ff7dcbec6405ecd2b9226690071855cfd3c8dc44cffcab5816af6c5d",
+    "outputs\\kl_extension\\training\\pilot\\seed_123\\reverse_kl\\adapter\\adapter_model.safetensors": "73afec9954e7cc2ab69649c329a060ed8fe7ac4d6bd9cc92c747aa830fe6b71a",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_0.json": "0bb278a5c88cb3c149568dc904e6f99f18110cbe08464bcfe35dbd04634c029a",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_0_train.jsonl": "9ede474a7eb8b6f8539c52b0a6d64b14ccb8cf8ed451c4e176d04080e70de3c7",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_0_validation.jsonl": "41357c54de12288e1164ab9a6ea1f2844ef9b556fb5bc38906c4b31968eb5f79",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_1.json": "1f4374781738c19fcb3ba0b64633565c76a936116e5b76fa1d07511ef9a393e6",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_1_train.jsonl": "963e8841347174e505c2a286749c4a91937a08e4b0127630e06ef79b338146b7",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_1_validation.jsonl": "c11156017b88b53ea5c3d265144d0e15107da10d6fc7199359ff3355c529d9a6",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_2.json": "cd91b8d0bc91234b51812ace22ad3ae631c16a129be184e35aad60937dafc54e",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_2_train.jsonl": "000a415d0367fc9db2d032da74771a0deb00ddc7f37444dd7664d6e5fe649b2f",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_2_validation.jsonl": "47a17fc723c7c1e3bbb0a5e528be61185af9b77cfd04908ee550ac87c8d0f9e7",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_3.json": "693a083e7af83750fc3e5fd7a1f81f7b993ebf9c24fce751e887b0b0e84a0129",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_3_train.jsonl": "8495524db74510f5b7808440cc5387b2a1c7dee5589c01909848c4588d58c726",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\epoch_3_validation.jsonl": "18bb91c8da149180bdbe255aa60af57fa61217b9d22f01ef83ba0d218de128a0",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\signal_log.jsonl": "8f5f9ad1607b827a75718e086af83783a73a5343040a973a05a99684de28fdc7",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\summary.json": "3175ed7bcd5ef8304da94217a762b1a302235e89f81a8e9c6df54957d66f2fef",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\train_log.jsonl": "92540ff1f31bcac64aa9ba2442be2a2c86ca26debe5e15e44148e95bc652a119",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\adapter\\adapter_config.json": "12d452dfd3d18c1360cff1144e9c7d7c5805c402225fd1d749dfebb6e6cde38d",
+    "outputs\\kl_extension\\training\\pilot\\seed_42\\reverse_kl\\adapter\\adapter_model.safetensors": "fa69adad64fabaf3c6b474fa6148fff67126b58eac4e56cf9b38359648b14cea",
+    "outputs\\kl_extension\\training\\pilot\\seed_7\\reverse_kl\\signal_log.jsonl": "ef72dee744887b2dd8fb2a567425d2f412cd1c0541fa599f666468c8e11295b8",
+    "outputs\\kl_extension\\training\\pilot\\seed_7\\reverse_kl\\summary.json": "e5d6fb4132f90fe40fec91d5b07588353980afa339b1e780becf075688fe34ad",
+    "outputs\\kl_extension\\training\\pilot\\seed_7\\reverse_kl\\train_log.jsonl": "db719161947c8df030e9acd0dfafe5e1f1a8c4fa9bf20acaf2d8494d1ea9d438",
+    "outputs\\kl_extension\\training\\pilot\\seed_7\\reverse_kl\\adapter\\adapter_config.json": "9013a241fae331f975c946b5e4c2beef2826ab99356677dad585cf760d91d49c",
+    "outputs\\kl_extension\\training\\pilot\\seed_7\\reverse_kl\\adapter\\adapter_model.safetensors": "77419fc1bf0d05f8d420fb9f6ec8360ca8d0efbba7a7beccfc51ba2af0567c45"
+  },
+  "original_artifacts_preserved": 103,
+  "cancelled_pilot": {
+    "condition": "fixed_mix",
+    "seed": 42,
+    "steps_completed": 64,
+    "steps_planned": 96,
+    "result_used_for_comparison": false
+  },
+  "planned_scopes": {
+    "full": 1118
+  },
+  "conditions": [
+    "gold_sft",
+    "response_kd",
+    "logit_kd",
+    "reverse_kl",
+    "fixed_mix",
+    "adaptive_mix"
+  ],
+  "seeds": [
+    42,
+    7,
+    123
+  ],
+  "test_evaluation_before_change": false
+}

@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "overlap_n": 256,
+  "hard_teacher_targets_reproduced": true,
+  "T2_full_vocab_log_probability_max_abs_error": 0.0,
+  "full_target_sha256": "a00226418d3300b77d84a6f2e0fe287806e7238fd91171a0dd7616f6fa84352a",
+  "pilot_target_sha256": "68d0397e114df8819d8abbc777fad375c3fcc9c54c194aeec141aec127c335f0",
+  "test_evaluation": false
+}

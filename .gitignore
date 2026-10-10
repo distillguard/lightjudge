@@ -1,0 +1,17 @@
+.venv/
+.cache/
+__pycache__/
+*.py[cod]
+data/
+models/
+outputs/
+.env
+.env.*
+_archive/
+
+# Model weights and checkpoints
+*.safetensors
+*.gguf
+*.pt
+*.pth
+*.ckpt

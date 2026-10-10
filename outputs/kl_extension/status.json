@@ -1,0 +1,16 @@
+{
+  "status": "stopped_by_user",
+  "current_command": [
+    "score",
+    "--scope",
+    "full",
+    "--condition",
+    "response_kd",
+    "--seed",
+    123
+  ],
+  "updated_at_kst": "2026-10-10T19:52:20.717211+09:00",
+  "test_phase": false,
+  "stopped_at_kst": "2026-10-10T19:52:22.023046+09:00",
+  "reason": "User requested to stop experiment work and upload the current project to GitHub."
+}
