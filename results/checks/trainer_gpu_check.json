@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "code_sha256": {
+    "kl_experiment.py": "e6465c3bf443d990d6c2d2fbcd1efe4c2e41324498d586fb83c12b1544af5061",
+    "analyze_kl.py": "627850a5e93e062d8f0249dd9b5775a37593fe095a4eab6db5c62337f8705b66",
+    "train_student.py": "d51f0db5d1cf4a047794b7763d55680abdf709ae0fcab8933b2f60eb99aa9eef",
+    "logit_kd.py": "546e15489a8adba7c26cb5cd89756f3fe42679a34feacd8782f2ad58a53abd50",
+    "monitor_training.py": "939b12c96df146030d310a61b7a8f44041586a763b86bd71764811c0a6620751",
+    "pilot.py": "415594b568171f08721a72b9f2a89ebb0f8b118063ab6c908c8a2cc6f6fb7817",
+    "teacher_quantization.py": "4160cfa15099dcc144eab089f157b6d32bb92665c162111a1ba203f820aba439",
+    "soft_gate.py": "774069647de1daf62b752f22d99b19bf9f2fe5643c2ebd31bde7a13031f6ed17",
+    "probe_soft_gate.py": "ce4732d64b2a51cf334b1a1d5ffd2a6b5c97930a210a631b375a44d0eddca69a",
+    "gate_experiment.py": "ba855f263553516b5026f4b2fda90e854890e7cbf15579d2003beac2060a0806"
+  },
+  "test_evaluation": false,
+  "adapter_saved": false,
+  "probe_model_reused_for_training": false,
+  "source_id": "MSA_2013_8_4",
+  "gradient_accumulation": 8,
+  "optimizer_steps": 1,
+  "loss": 1.0842623710632324,
+  "gradient_norm": 21.612600326538086,
+  "signals": {
+    "forward_kl": 0.5000737905502319,
+    "reverse_kl": 0.5922354459762573,
+    "teacher_confidence": 0.7132810354232788,
+    "student_confidence": 0.48470669984817505,
+    "counterfactual_hard_gate": 1.0,
+    "forward_weight": 0.5445253252983093,
+    "eos_ce": 0.0003203832311555743
+  },
+  "peak_allocated_bytes": 3966402560,
+  "seconds": 4.762531099840999,
+  "checked_at_kst": "2026-10-12T20:34:52.864987+09:00"
+}

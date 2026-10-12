@@ -1,4 +1,4 @@
-# 연구계획서 v4.2
+# 연구계획서 v4.3
 
 ## 1. 연구 과제와 개정 목적
 
@@ -9,10 +9,10 @@ Performance and Time-Efficiency Comparison of Confidence-Based Hard and Soft Gat
 작성일: 2026-10-12. 사용자 제공 「LightJudge 지식 증류 성능 및 시간 효율성 연구보고서」(11쪽)의 개정안을 바탕으로 작성했다. 기존 6조건의 중간 validation을 확인한 뒤 연구 질문을 개정한 **실행 전 설계안**이며, 새로운 실험이 완료됐다는 뜻이 아니다.
 
 <!-- main-status:start -->
-**기존 v3.2 진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](../results/protocols/status.json)
+**현재 v4.3 상태:** 새 학습 프로토콜 동결 완료. 기존 학습 13회·final validation 12회의 호환성을 검증해 재사용한다. 본실험 21조건 중 남은 학습은 8회이며 Fixed seed 42 시간 측정용 재현 1회는 별도다. 신규 학습·test 결과는 아직 없다.
 <!-- main-status:end -->
 
-v3.2의 주 비교는 Hard−Fixed였다. v4.0은 **Hard−Soft를 주 비교**로 삼고 Hard−Fixed·Soft−Fixed를 핵심 대조로 둔다. Accuracy와 학습 시간을 함께 보고하되 임의의 종합 점수로 합산하지 않는다. 새로운 동결 프로토콜을 작성하기 전까지 기존 코드·학습·test는 중단 상태를 유지한다. [개정·보존 기록](../results/protocols/research_revision_v4.json)
+v3.2의 주 비교는 Hard−Fixed였다. v4.0은 **Hard−Soft를 주 비교**로 삼고 Hard−Fixed·Soft−Fixed를 핵심 대조로 둔다. Accuracy와 학습 시간을 함께 보고하되 임의의 종합 점수로 합산하지 않는다. v4.3 학습 프로토콜을 별도로 동결했으며 기존 소스·프로토콜은 유지한다. 학습·validation 완료 후 별도 test 동결 단계로 진행한다. [개정·보존 기록](../results/protocols/research_revision_v4.json)
 
 ## 2. 연구 배경·목적·질문
 
@@ -195,9 +195,9 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 | 시간 측정 재현 | E5 seed 42 1회 추가. 본실험 21조건과 분리해 **총 학습 실행 예산 22회(기존 포함)**로 표시 |
 | 최종 test | Teacher·원본 Student + E1~E7의 21개 최종 adapter = 23개 모델 |
 
-기존 13회는 **v4.0 완료 실험으로 자동 재분류하지 않는다**. 원본 checkpoint·데이터·학습 설정·loss·초기화·문항 순서·평가 정의가 호환되는지 새 프로토콜에서 확인하고 참조 경로·hash로 재사용한다. 기존 프로토콜·소스·원본 103개와 Reverse 파일럿 27개 산출물은 유지하며, v4.0 출력은 별도 namespace에 저장한다. [기존 검증 결과](../results/checks/through_reverse_validation_verified.json)
+기존 13회는 **설정·초기화·순서·모델·데이터·adapter hash 호환성 검증 후 참조 경로로 재사용한다**. 원본 checkpoint·데이터·학습 설정·loss·초기화·문항 순서·평가 정의가 호환되는지 새 프로토콜에서 확인하고 참조 경로·hash로 재사용한다. 기존 프로토콜·소스·원본 103개와 Reverse 파일럿 27개 산출물은 유지하며, v4.0 출력은 별도 namespace에 저장한다. [기존 검증 결과](../results/checks/through_reverse_validation_verified.json)
 
-1. **설계 동결 준비:** E7 원문 gate·m=0.05·Soft gradient 유지·시간 구간·관측 주기·비교 우선순위를 코드/설정에 명시한다. 현재 코드는 6조건·18회 전용이므로 문서 변경만으로 7조건 pipeline을 실행하지 않는다.
+1. **설계 동결 준비:** E7 원문 gate·m=0.05·Soft gradient 유지·시간 구간·관측 주기·비교 우선순위를 코드/설정에 명시한다. 기존 6조건 실행기는 보존하고 별도 v4 실행기를 사용한다.
 2. **구현 검증:** E7 수식·gradient·g 범위, confidence 동률에서 Soft=σ(−0.05)/Hard=1, 식 (7)의 selection gradient와 공통 EOS·Student KL gradient 유지, finite loss·EOS·누적 batch·RNG 보존·GPU 메모리를 확인한다. 확인된 confidence 범위에 따라 Soft 가중치 범위도 검사한다.
 3. **프로토콜 개정:** 소스·공통 설정·원문 margin·gradient 설정·타이머 정의·초기 adapter·데이터·target cache의 hash와 기존 실행 재사용 근거를 별도 고정한다. 기존 동결 hash를 덮어쓰지 않는다.
 4. **학습·validation:** 남은 본실험 8회와 시간 재현 1회를 수행한다. 모든 조건의 epoch 3 final validation을 검증하고, E5~E7의 3-seed 시간·전체 validation 곡선·실제 gate 분포를 수집한다.
@@ -205,6 +205,12 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 6. **보고 종료:** RQ1·RQ2·RQ3의 표·그림·불확실성·시간 포함 범위·한계를 작성한다. Test를 보고 gate 설정·조건·seed·checkpoint를 다시 선택하거나 재학습하지 않는다.
 
 이미 확인한 중간 결과는 v3.2 기록으로 보존하며 E6·E7 결과를 추정해 채우지 않는다. [기존 연구보고서](RESEARCH_REPORT.md) · [기존 통계 원본](../results/main/comparison.json)
+
+### v4.3 실행 동결 완료
+
+`src/gate_experiment.py`는 기존 로더·encoder·Fixed/Hard 손실·평가 함수를 재사용하며 Soft만 검증된 원문 손실로 연결한다. 22개 검사와 실제 새 경로의 GPU 갱신 검사 후 소스 10개·runtime 버전·데이터/cache·재사용 13회/12회·보호 130개 산출물 hash를 동결했다. 기존 누적 학습과 새 loop의 parameter 갱신이 동일함을 마지막 부분 batch까지 검사했다. [동결 manifest](../results/protocols/gate_training_protocol.json) · [GPU 실측](../results/checks/trainer_gpu_check.json)
+
+9개 시간 측정 run의 순서는 seed 42 Fixed→Hard→Soft, seed 7 Hard→Soft→Fixed, seed 123 Soft→Fixed→Hard로 고정한다. 하나의 GPU에서 순차 실행하며 CPU 코어 증가나 GPU 동시 학습으로 시간 비교 조건을 바꾸지 않는다. 새 실행기는 학습·validation 검증 완료에서 멈추고 별도 test 동결을 기다린다.
 
 ## 7. 일정·논문 산출물
 

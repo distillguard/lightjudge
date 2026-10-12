@@ -1,11 +1,11 @@
 # LightJudge
 
-문서 버전 **v4.2** · PDF 기반 연구계획 개정, 새 실험은 실행 전
+문서 버전 **v4.3** · 근거 점검·새 학습 프로토콜 동결 완료
 
 공개 post-trained Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 Hard·Soft Gate의 정확도와 학습 시간**을 비교한다. Fixed 50:50은 핵심 대조군이다.
 
 <!-- main-status:start -->
-**진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](results/protocols/status.json)
+**현재 v4.3 상태:** 새 학습 프로토콜 동결 완료. 기존 학습 13회·final validation 12회의 호환성을 검증해 재사용한다. 본실험 21조건 중 남은 학습은 8회이며 Fixed seed 42 시간 측정용 재현 1회는 별도다. 신규 학습·test 결과는 아직 없다.
 <!-- main-status:end -->
 
 - [연구계획서](docs/RESEARCH_PLAN.md): 고정한 질문·조건·평가·종료 기준
@@ -23,13 +23,13 @@
 | 보조 지표 | 선택지 NLL·Brier·ECE·추론 지연·VRAM은 부록 |
 | 개정 최종 test 계획 | 동결 후 Teacher·원본 Student·21개 adapter = 23개 모델 |
 
-**실제 코드와 결과는 기존 6조건 v3.2 상태다. E7 원문 수식은 구현했고 본학습은 미수행이다. 전체 7조건 실행·시간 계측과 새 학습 프로토콜은 아직 준비 중이다.** 기존 13/18·12/18을 새 21조건의 진행률로 표시하지 않는다. [개정 이력](results/protocols/research_revision_v4.json)
+**7조건 학습·validation 실행기를 별도로 구현하고 동결했다.** 기존 7개 소스·원본 프로토콜·130개 보호 산출물은 유지한다. 재사용 가능한 13회 학습과 12회 검증은 hash·설정·초기화·문항 순서로 확인했다. [v4.3 동결 기록](results/protocols/gate_training_protocol.json)
 
 완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. 기존 epoch 진단은 seed 42의 train/validation 각 64개이며, 개정안의 E5~E7 정확도–시간 곡선은 세 seed 모두 validation 299개 전체에서 관측할 계획이다. **CI는 별도 성능 지표가 아니라 차이의 불확실성**이며, seed SD와 구분한다. 선택지 NLL은 확률 품질을 보는 보조 지표로 유지한다. [개정 평가·시간 정의](docs/RESEARCH_PLAN.md#evaluation) · [재정리한 중간 결과·그래프](results/main/index.html)
 
 **근거 정책:** 원문 식·공식 자료·기존 통제값·실측 검증·미확인을 구분한다. T=2·학습률·rank·epoch·seed를 논문의 표준값으로 표기하지 않는다. 근거가 없던 80% 목표는 철회했으며 기존 결과는 그대로다. [항목별 근거 점검](results/protocols/evidence_audit.json)
 
-Soft 수식 CPU 검사 9개·동결 회귀 검사 5개와 격리 GPU 검사가 통과했다. GPU 검사에서는 1회 갱신 후 모델을 폐기했고 본학습은 미수행이다. [GPU 검증 결과](results/checks/soft_gpu_probe.json)
+수식·기존 누적 갱신과의 일치·평가 RNG 보존·덮어쓰기 방지 등 **22개 검사**와 새 실행 경로의 격리 GPU 검사가 통과했다. GPU 검사 모델은 저장·재사용하지 않았다. [GPU 검증 결과](results/checks/soft_gpu_probe.json)
 
 ## 디렉토리 구성
 
@@ -51,7 +51,8 @@ lightjudge/
 
 | 코드 | 역할 |
 |---|---|
-| `src/kl_experiment.py` | 6조건 pipeline·GPU 사전검사·동결·평가 |
+| `src/kl_experiment.py` | 보존한 기존 6조건 실행·공통 평가 helper |
+| `src/gate_experiment.py` | v4.3 동결·Fixed/Hard/Soft 학습·전체 validation·시간 계측 |
 | `src/pilot.py` | 데이터 준비·프롬프트·기준 모델 평가 |
 | `src/train_student.py` | Student LoRA 학습·CE |
 | `src/logit_kd.py` | 기존 확률분포 cache·4가지 KL 손실·Hard gate |
@@ -61,7 +62,7 @@ lightjudge/
 | `src/teacher_quantization.py` | Teacher NF4 로딩·모델 설정 검사 |
 | `src/analyze_kl.py`, `src/analyze_training.py`, `src/plot_diagnostics.py` | 통계·학습곡선·그래프 |
 
-## 학습 방식: 기존 6조건과 신규 Soft 계획
+## 학습 방식: 7조건
 
 | 방식 | 핵심 알고리즘 |
 |---|---|
@@ -75,24 +76,21 @@ lightjudge/
 
 기존 네 KL 조건과 신규 Soft 계획은 T=2·전체 어휘 분포·공통 EOS CE를 사용한다. 모든 조건에서 Teacher는 동결하고 Student LoRA만 학습한다. [손실함수·예시·gate·논문 연결의 자세한 설명](docs/RESEARCH_PLAN.md#methods)
 
-## 기존 v3.2 코드의 실행 안내
+## v4.3 실행 안내
 
-아래 명령은 **기존 6조건 프로토콜 전용**이다. E7 학습 연결·새 시간 계측·21조건/23 test 지원을 구현하고 별도 프로토콜을 동결하기 전에는 v4.0 실행 명령으로 쓰지 않는다. 모델 cache·데이터·학습 준비 산출물을 갖춘 기존 로컬 환경용이다. 저장소의 중간 결과 snapshot만으로 전체 pipeline을 바로 재개할 수는 없다. 현재 실험은 사용자 요청으로 중단돼 있으며 문서·보고 정리 중 추가 학습·test 평가는 수행하지 않았다.
+기존 cache·데이터·완료 adapter가 있는 로컬 환경용이다. 실행기는 별도 `outputs/gate_comparison_v4/`에 저장하며, 미완료 run은 보존하고 자동 덮어쓰지 않는다. **GPU 학습이 이미 실행 중이면 같은 명령을 다시 실행하지 않는다.** Git의 `results/`는 기록 시점의 snapshot이다.
 
 ```powershell
-# 의존성 목록
-.\.venv\Scripts\python.exe -m pip install -r requirements/gpu.txt
-
-# 재개할 때 사용하는 진입점
-.\.venv\Scripts\python.exe -B -X utf8 src/kl_experiment.py self-check
-.\.venv\Scripts\python.exe -B -X utf8 src/kl_experiment.py pipeline
-
-# CPU 경로·동결 검증 회귀 검사
-.\.venv\Scripts\python.exe -B -m unittest discover -s tests
+# 구현·기존 결과 보존 검사
+.\.venv\Scripts\python.exe -B -X utf8 -m unittest discover -s tests
+# 기존 동결이 있으면 동일 소스·환경·재사용 hash 검증만 수행
+.\.venv\Scripts\python.exe -B -X utf8 src/gate_experiment.py freeze
+# Fixed·Hard·Soft 9회 순차 실행: 신규 본실험 8회 + 시간 재현 1회
+.\.venv\Scripts\python.exe -B -X utf8 src/gate_experiment.py pipeline
 ```
 
-기존 프로토콜의 원본 hash를 덮어쓰지 않았다. 정확히 기록된 디렉토리 변경만 호환 처리하고, 그 밖의 소스 변경은 기존 동결 실험의 재개를 차단한다. [경로 변경 기록](results/protocols/layout_migration.json)
+seed 42는 Fixed→Hard→Soft, seed 7은 Hard→Soft→Fixed, seed 123은 Soft→Fixed→Hard 순서다. 모든 측정 run은 epoch 0·1·2·3에서 validation 299개를 평가하고 평가 시간을 학습 시간에서 제외한다. Fixed seed 42 재현은 기존 최종 checkpoint를 대체하지 않는다. 각 최종 adapter를 다시 로딩해 final validation을 검증한다.
 
-기존 v3.2 Pipeline은 준비·검사 → 전체 train 18회 → validation → test 동결 → 20개 모델 test → 핵심 보고 순서다. 완료한 산출물은 검사 후 재사용하고 미완료 결과를 자동 덮어쓰지 않는다. 최종 test 결과로 조건·checkpoint를 다시 선택하거나 재학습하지 않는다.
+이번 실행기는 **학습·validation 단계에서 종료**한다. 그 뒤 별도 23개 모델의 test manifest·분석 코드를 동결하고 test를 평가한다. Test를 보고 재학습하거나 checkpoint를 바꾸지 않는다. 원본 6조건 pipeline은 v4 실행에 사용하지 않는다. [동결 프로토콜](results/protocols/gate_training_protocol.json) · [새 학습 경로 GPU 검사](results/checks/trainer_gpu_check.json)
 
 [파일럿 탐색 결과](results/pilot/index.html) · [범위 변경·원본 보존](results/protocols/scope_change.json)

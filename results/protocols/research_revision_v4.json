@@ -1,8 +1,8 @@
 {
   "kind": "research_plan_revision",
-  "version": "4.2",
+  "version": "4.3",
   "date_kst": "2026-10-12",
-  "execution_status": "paper_soft_loss_implemented_training_pipeline_not_frozen",
+  "execution_status": "v4_training_protocol_frozen_ready_to_run",
   "source_pdf": {
     "title": "LightJudge 지식 증류 성능 및 시간 효율성 연구보고서",
     "pages": 11,
@@ -62,7 +62,7 @@
     "official_code_config_verified": false,
     "scope_difference": "Paper gate applied to existing ARC first-answer T=2 full-vocabulary KL plus shared EOS; Revival/BALD are absent.",
     "source": "https://arxiv.org/html/2609.36734v1",
-    "status": "Loss implemented; nine CPU mathematical/gradient tests and isolated full-input GPU optimizer check passed; no E7 full training.",
+    "status": "Loss and full training caller implemented, 22 tests and isolated trainer GPU update check passed; full Soft training pending.",
     "paper_figure_scaling_verified": false,
     "replication_claim": "Application of literal public Eq.3 and Eq.7, not verified exact reproduction of experimental code scaling."
   },
@@ -125,7 +125,11 @@
     "soft_gate_gpu_probe": "results/checks/soft_gpu_probe.json",
     "gpu_probe_passed": true,
     "isolated_discarded_model_optimizer_steps": 1,
-    "new_full_experiment_training_or_scoring_performed": false
+    "new_full_experiment_training_or_scoring_performed": false,
+    "total_tests_passed": 22,
+    "v4_training_protocol": "results/protocols/gate_training_protocol.json",
+    "reused_training_verified": 13,
+    "reused_validation_verified": 12
   },
   "correction_2026_10_12": {
     "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",
@@ -139,5 +143,6 @@
     "existing_experiment_sources_unchanged": true
   },
   "evidence_audit": "results/protocols/evidence_audit.json",
-  "source_policy": "Every new numerical setting needs a source or explicitly documented control/measurement justification; method citations do not establish numerical defaults."
+  "source_policy": "Every new numerical setting needs a source or explicitly documented control/measurement justification; method citations do not establish numerical defaults.",
+  "training_stage_boundary": "Separate driver completes training/final validation only; 23-model test sealing and evaluation follow, never during training."
 }
