@@ -1,6 +1,6 @@
 # LightJudge
 
-문서 버전 **v4.0** · PDF 기반 연구계획 개정, 새 실험은 실행 전
+문서 버전 **v4.1** · PDF 기반 연구계획 개정, 새 실험은 실행 전
 
 Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 Hard·Soft Gate의 정확도와 학습 시간**을 비교한다. Fixed 50:50은 핵심 대조군이다.
 
@@ -23,7 +23,7 @@ Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반
 | 보조 지표 | 선택지 NLL·Brier·ECE·추론 지연·VRAM은 부록 |
 | 개정 최종 test 계획 | 동결 후 Teacher·원본 Student·21개 adapter = 23개 모델 |
 
-**실제 코드와 결과는 기존 6조건 v3.2 상태다. E7은 미구현·미학습이고 v4.0 실행 프로토콜은 아직 동결하지 않았다.** 기존 13/18·12/18을 새 21조건의 진행률로 표시하지 않는다. [개정 이력](results/protocols/research_revision_v4.json)
+**실제 코드와 결과는 기존 6조건 v3.2 상태다. E7 원문 수식은 구현했고 본학습은 미수행이다. 전체 7조건 실행·시간 계측과 새 학습 프로토콜은 아직 준비 중이다.** 기존 13/18·12/18을 새 21조건의 진행률로 표시하지 않는다. [개정 이력](results/protocols/research_revision_v4.json)
 
 완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. 기존 epoch 진단은 seed 42의 train/validation 각 64개이며, 개정안의 E5~E7 도달 시간은 세 seed 모두 validation 299개 전체에서 관측할 계획이다. **CI는 별도 성능 지표가 아니라 차이의 불확실성**이며, seed SD와 구분한다. 선택지 NLL은 확률 품질을 보는 보조 지표로 유지한다. [개정 평가·시간 정의](docs/RESEARCH_PLAN.md#evaluation) · [재정리한 중간 결과·그래프](results/main/index.html)
 
@@ -50,7 +50,8 @@ lightjudge/
 | `src/kl_experiment.py` | 6조건 pipeline·GPU 사전검사·동결·평가 |
 | `src/pilot.py` | 데이터 준비·프롬프트·기준 모델 평가 |
 | `src/train_student.py` | Student LoRA 학습·CE |
-| `src/logit_kd.py` | 확률분포 cache·4가지 KL 손실·gate |
+| `src/logit_kd.py` | 기존 확률분포 cache·4가지 KL 손실·Hard gate |
+| `src/soft_gate.py` | 원문 Soft gate·margin 0.05·selection gradient |
 | `src/monitor_training.py` | epoch 진단·생성 평가·신뢰도 지표 |
 | `src/teacher_quantization.py` | Teacher NF4 로딩·모델 설정 검사 |
 | `src/analyze_kl.py`, `src/analyze_training.py`, `src/plot_diagnostics.py` | 통계·학습곡선·그래프 |
@@ -65,7 +66,7 @@ lightjudge/
 | Reverse KL | Student → Teacher KL; Student 확률로 불일치 가중 |
 | 고정 혼합 | Forward·Reverse 손실을 항상 50:50 평균 |
 | Adaptive Hard (기존) | Teacher confidence ≥ Student면 Forward, 아니면 Reverse |
-| Adaptive Soft (신규 계획) | confidence 차이/τ_g의 sigmoid 가중치로 혼합; gate detach |
+| Adaptive Soft (원문 수식 구현) | sigmoid(confidence 차이 − 0.05); Soft gate gradient 유지 |
 
 기존 네 KL 조건과 신규 Soft 계획은 T=2·전체 어휘 분포·공통 EOS CE를 사용한다. 모든 조건에서 Teacher는 동결하고 Student LoRA만 학습한다. [손실함수·예시·gate·논문 연결의 자세한 설명](docs/RESEARCH_PLAN.md#methods)
 

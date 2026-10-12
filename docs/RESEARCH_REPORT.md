@@ -1,4 +1,4 @@
-# 연구보고서 v4.0 · 계획 개정 및 기존 결과 기록
+# 연구보고서 v4.1 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
 **진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](../results/protocols/status.json)
@@ -7,7 +7,7 @@
 
 ## 2026-10-12 계획 개정
 
-사용자 제공 PDF에 따라 [연구계획서 v4.0](RESEARCH_PLAN.md)은 **Hard−Soft의 Accuracy·시간 효율성**을 주 연구로 하고 E7을 추가한 7조건×3 seeds로 개정했다. Fixed 대비 두 비교는 핵심 대조다. E7은 미구현·미학습이며 현재 실행 코드는 기존 6조건 전용이다. 온도 산정·detach·시간 범위·목표 80%의 전체 validation 도달 관측을 새 동결 대상에 포함했다.
+사용자 제공 PDF에 따라 [연구계획서 v4.1](RESEARCH_PLAN.md)은 **Hard−Soft의 Accuracy·시간 효율성**을 주 연구로 하고 E7을 추가한 7조건×3 seeds로 개정했다. Fixed 대비 두 비교는 핵심 대조다. 2026-10-12 사용자 지적 후 원문을 대조해 임의 온도 선정·Soft detach를 철회했다. E7은 원문 sigmoid(confidence gap−m), m=0.05, selection gradient 유지로 수식을 구현했다. E7 본학습은 미수행이며 전체 실행 코드는 아직 기존 6조건 전용이다. 새 학습 프로토콜에는 원문 margin·gradient·시간 범위·목표 80% 도달 관측을 명시할 예정이다.
 
 아래 실험·수치·그래프는 **기존 v3.2의 6조건 기록**이다. 기존 13/18 학습·12/18 검증을 새 21회 진행률로 표시하지 않는다. 호환성 확인 시 남은 본실험 학습은 8회, 시간 측정용 Fixed seed 42 재현은 별도 1회다. 기존 최종 adapter를 바꾸지 않고 원본 프로토콜과 산출물을 보존한다. [계획 변경 이력](../results/protocols/research_revision_v4.json)
 

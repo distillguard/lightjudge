@@ -1,8 +1,8 @@
 {
   "kind": "research_plan_revision",
-  "version": "4.0",
+  "version": "4.1",
   "date_kst": "2026-10-12",
-  "execution_status": "planned_not_implemented_not_frozen",
+  "execution_status": "paper_soft_loss_implemented_training_pipeline_not_frozen",
   "source_pdf": {
     "title": "LightJudge 지식 증류 성능 및 시간 효율성 연구보고서",
     "pages": 11,
@@ -51,13 +51,18 @@
     "total_training_executions_including_legacy_and_timing": 22
   },
   "soft_gate_plan": {
-    "formula": "detach(sigmoid((c_teacher-c_student)/tau_g))",
-    "margin": 0,
-    "temperature_selection": "max(1e-4, median absolute initial confidence gap over 1118 train questions / ln(3))",
-    "tau_numeric_value": null,
-    "temperature_selection_uses_labels_or_heldout_accuracy": false,
-    "status": "New operational proposal in plan, not measured or implemented",
-    "paper_difference": "CaRE-KD Eq.3 uses sigmoid confidence gap minus margin; original soft gradient analysis includes selection gradients. This temperature-scaled detached variant is not a literal reproduction."
+    "formula": "sigmoid(c_teacher-c_student-margin)",
+    "margin": 0.05,
+    "margin_evidence": "Reported best ablation value in CaRE-KD section 4.5; not asserted to be the default for every original experiment or optimal on ARC.",
+    "separate_gate_temperature": null,
+    "temperature_selection": "Not applicable; no division by gate temperature in Eq.3. Equivalent unit slope is an algebraic observation, not a separately reported hyperparameter.",
+    "soft_gate_detached": false,
+    "teacher_frozen": true,
+    "selection_gradient": "Included as in Eq.7",
+    "official_code_config_verified": false,
+    "scope_difference": "Paper gate applied to existing ARC first-answer T=2 full-vocabulary KL plus shared EOS; Revival/BALD are absent.",
+    "source": "https://arxiv.org/html/2609.36734v1",
+    "status": "Loss implemented; nine CPU mathematical/gradient tests passed; no GPU or E7 training."
   },
   "time_to_accuracy_plan": {
     "conditions": [
@@ -108,6 +113,21 @@
     "legacy_adapter_files_verified": 26,
     "training_still_stopped": true,
     "test_still_unevaluated": true,
-    "new_model_training_or_scoring_performed": false
+    "new_model_training_or_scoring_performed": false,
+    "soft_gate_math_tests_passed": 9,
+    "layout_preservation_tests_passed": 5,
+    "branch": "main",
+    "source_implementation_sha256": "774069647de1daf62b752f22d99b19bf9f2fe5643c2ebd31bde7a13031f6ed17"
+  },
+  "correction_2026_10_12": {
+    "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",
+    "removed_unexecuted_proposal": "median absolute confidence gap / ln(3) gate temperature and detached soft gate",
+    "no_calibration_or_training_used_retracted_rule": true,
+    "paper_section_rechecked": [
+      "2.1 Eq.3",
+      "3.1 Eq.7",
+      "4.5 margin ablation"
+    ],
+    "existing_experiment_sources_unchanged": true
   }
 }

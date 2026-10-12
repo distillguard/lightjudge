@@ -1,4 +1,4 @@
-# 연구계획서 v4.0
+# 연구계획서 v4.1
 
 ## 1. 연구 과제와 개정 목적
 
@@ -91,20 +91,32 @@ $$
 | E4 Reverse | 0 |
 | E5 Fixed | 0.5 |
 | E6 Hard | 1[c(P) ≥ c(Q)] (동률은 Forward) |
-| E7 Soft | stop-gradient(σ((c(P)−c(Q))/τ_g)), τ_g > 0 |
+| E7 Soft | σ(c(P)−c(Q)−m), m=0.05, Student confidence를 통한 gradient 유지 |
 
-다섯 KL 조건 모두 첫 답변에 Gold CE나 Teacher hard-letter CE를 추가하지 않는다. 공통 EOS CE는 Teacher 답변 letter 다음 위치에서 계산한다. Teacher는 동결하며 Student Q에는 KL gradient가 흐르고, **gate 가중치만 detach**한다. Student confidence는 같은 학습 forward의 LoRA dropout을 포함한다. Confidence는 분포 집중도이며 정답일 확률이 아니다.
+다섯 KL 조건 모두 첫 답변에 Gold CE나 Teacher hard-letter CE를 추가하지 않는다. 공통 EOS CE는 Teacher 답변 letter 다음 위치에서 계산한다. Teacher는 동결하며 Student Q에는 KL gradient가 흐르고, Hard gate는 detach하고 **Soft gate의 Student confidence gradient는 유지**한다. Student confidence는 같은 학습 forward의 LoRA dropout을 포함한다. Confidence는 분포 집중도이며 정답일 확률이 아니다.
 
-### E7의 추가 설계와 동결 절차
+### E7: 원문 설정을 우선 적용
 
-Gate 온도 τ_g는 KD Temperature T=2와 별개다. 다음은 PDF의 미정 온도를 구체화한 **본 계획의 운영 제안**이며 아직 계산·실행한 값이 아니다.
+사용자 지적에 따라 v4.0의 `median(|Δc|)/ln(3)` 온도 선정안과 detached Soft 제안을 철회했다. 이 규칙을 이용한 calibration·학습은 수행하지 않았다. PDF의 τ_g 표기는 원문 수식과 다르므로 원문을 기준으로 정정한다.
 
-1. E7 본학습 전에 원본 Student를 평가 모드로 두고 train 1,118개 첫 답변 위치의 T=2 confidence 차이 δ_i=c(P_i)−c(Q_i)를 구한다. Gold 라벨·validation·test 성능은 온도 선정에 쓰지 않는다.
-2. 공통 온도를 `τ_g = max(1e−4, median(|δ_i|) / ln(3))`로 정한다. 중앙 규모의 confidence 차이가 sigmoid 0.25/0.75 정도의 가중치를 갖도록 스케일을 맞추려는 규칙이다. 계산된 숫자·입력 hash·코드·분포 요약을 저장하고 세 seed에서 동일 값을 사용한다.
-3. Median이 0이면 하한 적용과 gate의 0.5 집중을 기록한다. 거의 고정 혼합이 되는 경우도 결과로 보고하며 성능을 본 뒤 온도를 재조정하지 않는다. 학습 중 confidence 차이의 규모가 변하는 한계도 보고한다.
-4. g의 평균·SD·분위수와 0.1 이하/0.9 이상의 비율을 epoch·seed별로 기록한다. Hard는 실제 Forward/Reverse 선택 비율을 기록한다.
+[CaRE-KD §2.1 식 (3)](https://arxiv.org/html/2609.36734v1#S2.SS1)은 **g=σ(c(P)−c(Q)−m)**이며 별도 gate 온도로 나누지 않는다. 온도 표기로 다시 쓴다면 단위 스케일 τ_g=1과 같다는 것은 대수적 해석이며, 논문이 τ_g=1이라는 하이퍼파라미터를 따로 보고했다는 뜻은 아니다. 논문 §4.5는 margin ablation에서 **m=0.05**를 가장 좋은 값으로 보고하므로 첫 비교에 이 값을 그대로 고정한다. 이를 모든 실험의 공식 default나 ARC 최적값이라고 주장하지 않는다.
 
-[CaRE-KD 식 (3)](https://arxiv.org/html/2609.36734v1#S2.SS1)의 Soft는 `σ(c(P)−c(Q)−m)`이며, 원문의 gradient 분석에는 gate를 통한 selection gradient가 포함된다. 본 계획은 **온도 스케일링·margin 0·detached Soft**를 사용하므로 원문의 Soft를 그대로 재현하는 실험이 아니다. PDF의 공정 비교 제안을 채택해 가중치의 연속/이산 차이에 집중한다. Revival·BALD·데이터 거절은 포함하지 않는다.
+[§3.1 식 (7)](https://arxiv.org/html/2609.36734v1#S3.SS1)의 Soft gradient에는 `(D_F−D_R)∇g` selection 항이 있으므로 **Soft는 detach하지 않는다**. Teacher만 동결하고 Student Q·confidence에 gradient가 흐르게 한다. Hard는 이진 비교와 기존 gradient 차단을 유지한다. 따라서 두 변형의 차이에는 가중치 연속성뿐 아니라 margin·selection gradient가 포함되며 smoothing 하나의 인과 효과라고 해석하지 않는다.
+
+| 설정 | 채택 값·근거 |
+|---|---|
+| Gate 식 | 원문 sigmoid(confidence gap − margin) |
+| 별도 gate 온도 | 사용하지 않음 |
+| Soft margin | m=0.05, 원문 §4.5에서 보고한 최상 ablation 값 |
+| Soft gate gradient | 유지, 원문 §3.1의 selection 항 포함 |
+| KD Temperature | 기존 T=2 유지; gate 온도나 Revival의 sampling temperature와 구분 |
+| 추가 탐색 | 첫 실험에서는 없음. 별도 튜닝이 필요하면 후보·예산·선택 지표를 먼저 정의하고 validation에서 선택; test는 사용하지 않음 |
+
+논문은 supplementary에 코드를 제공한다고 적었지만 이번 확인에서 공식 실행 코드의 저장소·config를 검증하지 못했다. 현재 근거는 공개 원문의 식 (3)·식 (7)·§4.5이며 코드 복제를 주장하지 않는다. `src/soft_gate.py`에 이 수식과 기존 공통 EOS 목적함수를 구현하고 selection gradient를 검사한다.
+
+동률에서는 Hard=1이지만 Soft=σ(−0.05)≈0.4875다. Confidence가 [0,1]이면 Soft 가중치는 대략 0.259~0.721 범위여서 Hard처럼 0/1로 바뀌지 않는다. 실제 평균·SD·분위수·confidence gap을 기록하며, 50:50과 비슷해도 원문 설정을 성능 결과에 맞춰 재조정하지 않는다.
+
+이번 비교는 원문 gate를 **ARC·T=2·첫 답변 위치·공통 EOS CE**에 적용하는 연구다. Revival·BALD·on-policy 생성·원문 전체 benchmark를 재현하지 않는다. 실제 수식 구현: [Soft loss](../src/soft_gate.py), [gradient·EOS 검사](../tests/test_soft_gate.py).
 
 Hard가 한 방향을 선택한다는 것은 손실 가중치 선택이다. 기존 구현은 두 KL을 계산하고 혼합하므로 Hard가 반드시 연산량 절반이거나 Soft보다 빠르다고 가정하지 않는다. E5~E7의 KL 계산·로그 범위를 동일하게 유지한다.
 
@@ -164,12 +176,12 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 
 기존 13회는 **v4.0 완료 실험으로 자동 재분류하지 않는다**. 원본 checkpoint·데이터·학습 설정·loss·초기화·문항 순서·평가 정의가 호환되는지 새 프로토콜에서 확인하고 참조 경로·hash로 재사용한다. 기존 프로토콜·소스·원본 103개와 Reverse 파일럿 27개 산출물은 유지하며, v4.0 출력은 별도 namespace에 저장한다. [기존 검증 결과](../results/checks/through_reverse_validation_verified.json)
 
-1. **설계 동결 준비:** E7 온도 산정·detach·80% 목표·시간 구간·관측 주기·비교 우선순위를 코드/설정에 명시한다. 현재 코드는 6조건·18회 전용이므로 문서 변경만으로 7조건 pipeline을 실행하지 않는다.
-2. **구현 검증:** E7 수식·gradient·g 범위, confidence 동률에서 Soft=0.5/Hard=1, τ가 작을 때 비동률 Hard 근사·클 때 Fixed 근사, gate gradient 차단과 Student KL gradient 유지, finite loss·EOS·누적 batch·RNG 보존·GPU 메모리를 확인한다. 수치 오차로 sigmoid가 0/1에 포화되는 비율도 기록한다.
-3. **프로토콜 개정:** 소스·공통 설정·온도 숫자·타이머 정의·초기 adapter·데이터·target cache의 hash와 기존 실행 재사용 근거를 별도 고정한다. 기존 동결 hash를 덮어쓰지 않는다.
+1. **설계 동결 준비:** E7 원문 gate·m=0.05·Soft gradient 유지·80% 목표·시간 구간·관측 주기·비교 우선순위를 코드/설정에 명시한다. 현재 코드는 6조건·18회 전용이므로 문서 변경만으로 7조건 pipeline을 실행하지 않는다.
+2. **구현 검증:** E7 수식·gradient·g 범위, confidence 동률에서 Soft=σ(−0.05)/Hard=1, 식 (7)의 selection gradient와 공통 EOS·Student KL gradient 유지, finite loss·EOS·누적 batch·RNG 보존·GPU 메모리를 확인한다. 수치 오차로 sigmoid가 0/1에 포화되는 비율도 기록한다.
+3. **프로토콜 개정:** 소스·공통 설정·원문 margin·gradient 설정·타이머 정의·초기 adapter·데이터·target cache의 hash와 기존 실행 재사용 근거를 별도 고정한다. 기존 동결 hash를 덮어쓰지 않는다.
 4. **학습·validation:** 남은 본실험 8회와 시간 재현 1회를 수행한다. 모든 조건의 epoch 3 final validation을 검증하고, E5~E7의 3-seed 시간·전체 validation 곡선·실제 gate 분포를 수집한다.
 5. **test 동결·평가:** 21개 최종 adapter와 분석 코드를 동결한 뒤 23개 모델의 test 1,172개를 평가한다. Time-to-Accuracy는 validation에서만 측정하며 test를 학습 도중 호출하지 않는다.
-6. **보고 종료:** RQ1·RQ2·RQ3의 표·그림·불확실성·시간 포함 범위·미도달·한계를 작성한다. Test를 보고 온도·조건·seed·checkpoint를 다시 선택하거나 재학습하지 않는다.
+6. **보고 종료:** RQ1·RQ2·RQ3의 표·그림·불확실성·시간 포함 범위·미도달·한계를 작성한다. Test를 보고 gate 설정·조건·seed·checkpoint를 다시 선택하거나 재학습하지 않는다.
 
 이미 확인한 중간 결과는 v3.2 기록으로 보존하며 E6·E7 결과를 추정해 채우지 않는다. [기존 연구보고서](RESEARCH_REPORT.md) · [기존 통계 원본](../results/main/comparison.json)
 
@@ -179,7 +191,7 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 
 | 목표 기간 | 작업 |
 |---|---|
-| 10/12~10/15 | 계획 개정, E7·시간 계측 구현, 온도 산정·검증·새 프로토콜 동결 |
+| 10/12~10/15 | 계획 개정, E7·시간 계측 구현, 원문 gate·gradient 검증·새 프로토콜 동결 |
 | 10/16~10/20 | 잔여 학습·시간 재현·전체 validation 검증 |
 | 10/21~10/23 | 최종 adapter·분석 동결, 23개 모델 test·통계·그래프 |
 | 10/24~10/25 | Accuracy·시간 중심 원고, 근거·양식·저자·결과 검토 |
@@ -193,7 +205,7 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 
 - 영어 ARC·단일 Qwen 조합·첫 답변 위치·고정 예산에 한정된다. 공개 모델의 ARC 사전 노출은 확인하지 못했다.
 - 전체 어휘 entropy는 정답 confidence가 아니다. Soft와 Hard의 평균 Forward 기여율 차이가 성능을 설명할 수 있으며 가중치 일치 Fixed/Random 대조군 없이 gate 정보의 인과 효과를 단정하지 않는다.
-- Soft 온도 선정 규칙·detach는 본 연구의 변형이고 원문 Soft의 selection gradient 효과를 검증하지 않는다.
+- 원문 gate를 ARC에 적용한 비교다. 원문 실험 전체를 재현하지 않으며 공개 실행 코드 config는 미검증이다.
 - 3 seeds와 희소한 Teacher 오류 subset은 강한 일반화에 부족하다. 시간은 GPU 부하·I/O·캐시·실행 순서의 영향을 받으며 실측 환경을 함께 보고한다.
 
 평균 가중치 일치 Fixed/Random Gate, Feature/Relation KD, 다른 모델 계열·데이터·양자화·Reasoning KD는 **후속 연구**로 둔다. 이번에는 21개 성능 조건, 명시한 시간 측정, 동결 test, 핵심 표·그림·한계 보고를 완료하면 종료한다.
@@ -201,7 +213,7 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 ## 참고문헌·근거
 
 - 사용자 제공 PDF: 「LightJudge 지식 증류 성능 및 시간 효율성 연구보고서」, 2026-10-12. 연구 개정·7조건·시간 효율성·제출 구성의 기준 자료.
-- [CaRE-KD](https://arxiv.org/html/2609.36734v1): 상대 entropy confidence와 KL gate. 본 계획의 Soft 변형·detach 차이를 별도 명시.
+- [CaRE-KD](https://arxiv.org/html/2609.36734v1): 상대 entropy confidence와 KL gate. 식 (3)·식 (7)·margin ablation을 근거로 설정을 고정.
 - [MiniLLM](https://arxiv.org/abs/2306.08543): Reverse KL 기반 LLM 증류 관련 연구. On-policy 최적화 전체 재현은 아님.
 - [Hinton 외(2015)](https://arxiv.org/abs/1503.02531): soft-target 지식 증류.
 - [Reimers·Gurevych(2017)](https://aclanthology.org/D17-1035/) · [Dror 외(2018)](https://aclanthology.org/P18-1128/): 반복 성능 변동·NLP 통계 비교.
