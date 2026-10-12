@@ -2,7 +2,7 @@
   "kind": "research_plan_revision",
   "version": "4.3",
   "date_kst": "2026-10-12",
-  "execution_status": "hard_seed7_validation_complete_soft_seed7_training_running",
+  "execution_status": "hard_soft_seed7_validation_complete_fixed_seed7_training_running",
   "source_pdf": {
     "title": "LightJudge 지식 증류 성능 및 시간 효율성 연구보고서",
     "pages": 11,
@@ -131,16 +131,17 @@
     "reused_validation_verified": 12,
     "legacy_original_pipeline_still_stopped": true,
     "v4_pipeline_running": true,
-    "full_new_training_completed": 3,
+    "full_new_training_completed": 4,
     "v4_evaluation_connected": true,
     "evaluation_protocol": "results/protocols/gate_evaluation_protocol.json",
-    "completed_main_training": 16,
-    "completed_final_validation": 16,
+    "completed_main_training": 17,
+    "completed_final_validation": 17,
     "timing_replay_completed": 1,
     "fixed42_replay_weights_match_original": true,
     "soft_full_training_started": true,
     "seed42_cohort_complete": true,
-    "hard_seed7_complete": true
+    "hard_seed7_complete": true,
+    "soft_seed7_complete": true
   },
   "correction_2026_10_12": {
     "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",

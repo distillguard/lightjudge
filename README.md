@@ -5,7 +5,7 @@
 공개 post-trained Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 Hard·Soft Gate의 정확도와 학습 시간**을 비교한다. Fixed 50:50은 핵심 대조군이다.
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **16/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Hard seed 7 최종 validation 86.62%를 검증했고 Soft seed 7을 학습 중이다. Test는 미평가다. [진행 snapshot](results/protocols/gate_run_status.json)
+**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **17/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 7의 Hard 86.62%·Soft 85.62%를 검증했고 Fixed seed 7을 학습 중이다. Test는 미평가다. [진행 snapshot](results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 - [연구계획서](docs/RESEARCH_PLAN.md): 고정한 질문·조건·평가·종료 기준
@@ -25,7 +25,7 @@
 
 **7조건 학습·validation 실행기를 별도로 구현하고 동결했다.** 기존 7개 소스·원본 프로토콜·130개 보호 산출물은 유지한다. 재사용 가능한 13회 학습과 12회 검증은 hash·설정·초기화·문항 순서로 확인했다. [v4.3 동결 기록](results/protocols/gate_training_protocol.json)
 
-완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. 기존 epoch 진단은 seed 42의 train/validation 각 64개이며, 개정안의 E5~E7 정확도–시간 곡선은 세 seed 모두 validation 299개 전체에서 관측할 계획이다. **CI는 별도 성능 지표가 아니라 차이의 불확실성**이며, seed SD와 구분한다. 선택지 NLL은 확률 품질을 보는 보조 지표로 유지한다. [개정 평가·시간 정의](docs/RESEARCH_PLAN.md#evaluation) · [재정리한 중간 결과·그래프](results/main/index.html)
+완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. 기존 epoch 진단은 seed 42의 train/validation 각 64개이며, 개정안의 E5~E7 정확도–시간 곡선은 세 seed 모두 validation 299개 전체에서 관측한다. **CI는 별도 성능 지표가 아니라 차이의 불확실성**이며, seed SD와 구분한다. 선택지 NLL은 확률 품질을 보는 보조 지표로 유지한다. [개정 평가·시간 정의](docs/RESEARCH_PLAN.md#evaluation) · [재정리한 중간 결과·그래프](results/main/index.html)
 
 **근거 정책:** 원문 식·공식 자료·기존 통제값·실측 검증·미확인을 구분한다. T=2·학습률·rank·epoch·seed를 논문의 표준값으로 표기하지 않는다. 근거가 없던 80% 목표는 철회했으며 기존 결과는 그대로다. [항목별 근거 점검](results/protocols/evidence_audit.json)
 

@@ -1,7 +1,7 @@
 # 연구보고서 v4.3 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **16/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Hard seed 7 최종 validation 86.62%를 검증했고 Soft seed 7을 학습 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
+**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **17/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 7의 Hard 86.62%·Soft 85.62%를 검증했고 Fixed seed 7을 학습 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 
@@ -31,13 +31,13 @@ T=2·lr=2e−4·r=8·3 epochs·3 seeds는 기존 통제값이며 원문 default�
 
 원본 7개 소스·원본 프로토콜·130개 보호 산출물과 완료 adapter를 유지하고, 별도 v4 소스·runtime·설정·재사용 hash를 동결했다. 신규 학습 8회와 Fixed seed 42의 시간 측정 재현 1회를 순차 실행하도록 구성했다. 모든 epoch의 validation은 299개 전체이며, 저장한 최종 adapter를 다시 로딩해 검증한다. Fixed seed 42 성능 평가는 기존 adapter를 사용한다. [동결 manifest](../results/protocols/gate_training_protocol.json)
 
-현재 GPU는 RTX 5060 Ti 16GB 1개, CPU는 Ryzen 5 7500F 6코어·12스레드다. 학습 시간의 비교 가능성을 위해 GPU 학습은 동시에 실행하지 않는다. 새 실행기는 학습·validation 완료에서 종료하며, 아직 test 동결·23개 모델 test는 수행하지 않았다.
+현재 GPU는 RTX 5060 Ti 16GB 1개, CPU는 Ryzen 5 7500F 6코어·12스레드다. 학습 시간의 비교 가능성을 위해 GPU 학습은 동시에 실행하지 않는다. 새 학습 실행기는 학습·validation 완료에서 종료하며, 별도 후속 프로세스가 test 동결·23개 모델 평가를 맡는다.
 
 ## v4.3 후속 평가 준비·학습 중간 관측
 
 전체 33개 검사에서 test 조기 실행 차단, 21개 최종 adapter 검증·23개 평가 모델 구성, Fixed seed 42 재현 제외, 문항별 paired bootstrap, 보고서 재실행과 원본 보존을 확인했다. Test manifest 저장 경로 오류는 시험용 파일 검사에서 발견해 수정했으며 실제 baseline 기록은 변경되지 않았다. [후속 코드 검증](../results/checks/gate_evaluation_check.json)
 
-후속 프로세스는 현재 학습·validation 완료를 기다린다. 모든 조건 완료 후 checkpoint·소스·통계를 별도 동결하고 23개 모델 test → 통계·그림 → 문서 3개·Git 갱신 순으로 진행한다. 예약 작업이나 heartbeat는 생성하지 않았다. 아직 test 데이터의 모델 평가와 최종 checkpoint 동결은 수행하지 않았다. [평가·분석 사전 동결](../results/protocols/gate_evaluation_protocol.json)
+평가 사전 동결 시점에 후속 프로세스를 학습·validation 완료를 기다리는 상태로 연결했다. 실행 순서는 모든 조건 검증 → checkpoint·소스·통계 동결 → 23개 모델 test → 통계·그림 → 문서 3개·Git 갱신이다. 예약 작업이나 heartbeat는 생성하지 않았다. 실제 test 진행 상태는 상단 snapshot에 표시한다. [평가·분석 사전 동결](../results/protocols/gate_evaluation_protocol.json)
 
 ### v4.3 seed 42 완료 관측
 
@@ -55,7 +55,7 @@ Fixed 시간은 원본 adapter와 tensor hash가 일치하는 재현 run에서 �
 
 이 표와 그림은 **한 seed의 validation 중간 결과**다. 최종 test 결과·3-seed 평균·통계적 우위를 의미하지 않으며 설정·epoch 3 checkpoint는 변경하지 않았다. 시간은 모델·cache 로딩과 epoch 평가를 제외한 학생 학습 loop·로그·최종 저장 구간이다.
 
-**Seed 7 진행 관측:** Hard의 고정 epoch 3 adapter에서 validation Accuracy 86.62%, 선택지 NLL 0.4441, 학생 학습 단계 시간 27.12분을 확인했다. 전체 420 step·3,354 forward의 초기화·문항 순서·수치·gate 검사와 저장 후 299개 답변 일치를 통과했다. Epoch 0~3 Accuracy는 76.25% → 83.95% → 86.96% → 86.62%다. 사전에 고정한 epoch 3 checkpoint를 유지하며, Soft·Fixed seed 7은 계속 진행한다. [검증 snapshot](../results/protocols/gate_run_status.json)
+**Seed 7 진행 관측:** 고정한 epoch 3 adapter의 Hard validation Accuracy 86.62%, 선택지 NLL 0.4441, 학생 학습 단계 시간 27.12분이다. Soft는 Accuracy 85.62%, 선택지 NLL 0.4427, 학습 시간 27.52분이다. 두 조건 모두 420 step·3,354 forward의 초기화·문항 순서·학습률·수치·gate 검사와 저장 후 299개 답변 일치를 통과했다. Soft의 epoch 0~3 Accuracy는 76.25% → 84.28% → 87.63% → 85.62%다. 사전에 고정한 epoch 3 checkpoint를 유지했으며, Fixed seed 7은 진행 중이다. 한 seed의 validation 관측으로 최종 우열을 판단하지 않는다. [검증 snapshot](../results/protocols/gate_run_status.json)
 
 Teacher 준비의 기존 로그는 hard 응답 생성과 soft 확률 추출을 함께 측정했다. 두 비용을 소급 분리하거나 각각 실측했다고 표기하지 않는다. 학생 학습 단계 시간 비교는 별도 측정한다.
 
