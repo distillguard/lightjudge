@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "checked_at_kst": "2026-10-12T20:43:15.781147+09:00",
+  "training_protocol_sha256": "cfb7bf04ec9e185ba97aaa62f2f207a5a1fa7c96703b3efbfc9f0ad76763dac8",
+  "legacy_fixed42_run_preserved": true,
+  "new_fixed42_measurement_only": true,
+  "steps_checked": 24,
+  "source_ids_learning_rate_loss_gradient_norm_match_exactly": true,
+  "max_loss_difference": 0.0,
+  "max_gradient_norm_difference": 0.0,
+  "epoch0_validation_n": 299,
+  "epoch0_accuracy": 0.7625418060200669,
+  "epoch0_raw_student_generated_answers_all_match": true,
+  "test_evaluation": false,
+  "full_training_complete": false
+}

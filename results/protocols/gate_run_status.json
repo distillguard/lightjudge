@@ -10,12 +10,17 @@
   "cohort_index": 1,
   "cohort_total": 9,
   "updated_at_kst": "2026-10-12T20:38:30.458507+09:00",
-  "snapshot_notice": "Start snapshot only; live status is ignored local outputs/gate_comparison_v4/status.json",
+  "snapshot_at_kst": "2026-10-12T20:43:15.783147+09:00",
   "completed_main_training": 13,
   "completed_final_validation": 12,
-  "new_main_training_complete": 0,
-  "measurement_replay_complete": 0,
   "main_training_total": 21,
   "final_validation_total": 21,
-  "legacy_artifacts_unchanged": true
+  "measurement_replay_complete": 0,
+  "new_main_training_complete": 0,
+  "current_steps_verified": 24,
+  "current_steps_total": 420,
+  "epoch0_validation_complete": 299,
+  "initial_accuracy": 0.7625418060200669,
+  "verification": "results/checks/gate_start_check.json",
+  "snapshot_notice": "Observed start snapshot; live progress is local outputs/gate_comparison_v4/status.json and training summaries."
 }

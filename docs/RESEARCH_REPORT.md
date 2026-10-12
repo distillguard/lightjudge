@@ -31,6 +31,8 @@ T=2·lr=2e−4·r=8·3 epochs·3 seeds는 기존 통제값이며 원문 default�
 
 원본 7개 소스·원본 프로토콜·130개 보호 산출물과 완료 adapter를 유지하고, 별도 v4 소스·runtime·설정·재사용 hash를 동결했다. 신규 학습 8회와 Fixed seed 42의 시간 측정 재현 1회를 순차 실행하도록 구성했다. 모든 epoch의 validation은 299개 전체이며, 저장한 최종 adapter를 다시 로딩해 검증한다. Fixed seed 42 성능 평가는 기존 adapter를 사용한다. [동결 manifest](../results/protocols/gate_training_protocol.json)
 
+실행 시작 후 Fixed seed 42의 첫 **24/420 steps**에서 문항 순서·학습률·loss·gradient norm이 기존 실행과 정확히 일치했다. Epoch 0 validation은 76.25%이며 원본 Student의 299개 생성 답변을 모두 재현했다. 이는 시작 경로 검증이며 재현 학습 완료나 새 성능 결과를 뜻하지 않는다. [실행 검증](../results/checks/gate_start_check.json)
+
 현재 GPU는 RTX 5060 Ti 16GB 1개, CPU는 Ryzen 5 7500F 6코어·12스레드다. 학습 시간의 비교 가능성을 위해 GPU 학습은 동시에 실행하지 않는다. 새 실행기는 학습·validation 완료에서 종료하며, 아직 test 동결·23개 모델 test는 수행하지 않았다.
 
 ## 기존 v3.2의 핵심 설계
