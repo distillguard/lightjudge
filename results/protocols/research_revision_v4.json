@@ -2,7 +2,7 @@
   "kind": "research_plan_revision",
   "version": "4.3",
   "date_kst": "2026-10-12",
-  "execution_status": "all_training_validation_complete_test_sealed_evaluation_running",
+  "execution_status": "complete_training_validation_sealed_test_and_analysis",
   "source_pdf": {
     "title": "LightJudge 지식 증류 성능 및 시간 효율성 연구보고서",
     "pages": 11,
@@ -148,7 +148,7 @@
     "timing_runs_complete": 9,
     "seed123_cohort_complete": true,
     "test_checkpoint_seal_passed": true,
-    "total_final_test_models_scored": 8,
+    "total_final_test_models_scored": 23,
     "validation_analysis_passed": true,
     "validation_figures_visually_checked": 4,
     "test_evaluation_started": true

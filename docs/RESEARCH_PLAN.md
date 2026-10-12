@@ -9,7 +9,7 @@ Performance and Time-Efficiency Comparison of Confidence-Based Hard and Soft Gat
 작성일: 2026-10-12. 사용자 제공 「LightJudge 지식 증류 성능 및 시간 효율성 연구보고서」(11쪽)의 개정안을 바탕으로 작성했다. 기존 6조건의 중간 validation을 확인한 뒤 연구 질문을 개정한 **실행 전 설계안**으로 작성했다. 이후 진행 상태는 상단 snapshot과 연구보고서에 반영한다.
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 본실험 **21/21개 학습·final validation 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. 최종 checkpoint·코드·통계 동결 후 **8/23개 모델의 test 1,172개 평가 완료**. Teacher·원본 Student·Gold SFT·Response KD의 검증을 마쳤고 Forward KL을 평가 중이다. 전체 test 결과와 주 비교의 결론은 아직 미완료다. [진행 snapshot](../results/protocols/gate_run_status.json)
+**v4.3 완료:** 본실험 21개 학습·validation과 Teacher·원본 Student·21개 adapter의 test 1,172개 평가 완료. Fixed seed 42 시간 재현 1회는 별도이며 원본 최종 checkpoint를 유지했다. Test 이후 재학습·checkpoint 변경은 수행하지 않았다.
 <!-- main-status:end -->
 
 v3.2의 주 비교는 Hard−Fixed였다. v4.0은 **Hard−Soft를 주 비교**로 삼고 Hard−Fixed·Soft−Fixed를 핵심 대조로 둔다. Accuracy와 학습 시간을 함께 보고하되 임의의 종합 점수로 합산하지 않는다. v4.3 학습 프로토콜을 별도로 동결했으며 기존 소스·프로토콜은 유지한다. 학습·validation 완료 후 별도 test 동결 단계로 진행한다. [개정·보존 기록](../results/protocols/research_revision_v4.json)

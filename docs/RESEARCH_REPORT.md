@@ -1,9 +1,48 @@
 # 연구보고서 v4.3 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 본실험 **21/21개 학습·final validation 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. 최종 checkpoint·코드·통계 동결 후 **8/23개 모델의 test 1,172개 평가 완료**. Teacher·원본 Student·Gold SFT·Response KD의 검증을 마쳤고 Forward KL을 평가 중이다. 전체 test 결과와 주 비교의 결론은 아직 미완료다. [진행 snapshot](../results/protocols/gate_run_status.json)
+**v4.3 완료:** 본실험 21개 학습·validation과 Teacher·원본 Student·21개 adapter의 test 1,172개 평가 완료. Fixed seed 42 시간 재현 1회는 별도이며 원본 최종 checkpoint를 유지했다. Test 이후 재학습·checkpoint 변경은 수행하지 않았다.
 <!-- main-status:end -->
 
+
+<!-- gate-final-results:start -->
+## v4.3 동결 test 최종 결과
+
+Teacher 93.86%, 원본 Student 79.35%. 아래 세 seed의 SD와 paired 문항 CI는 서로 다른 불확실성이다.
+
+| 조건 | Test Accuracy 평균±SD | seed 42 / 7 / 123 | 선택지 NLL |
+|---|---|---|---|
+| Gold SFT | 84.16±0.30% | 84.13% / 83.87% / 84.47% | 1.0417 |
+| Response KD | 84.95±0.63% | 84.47% / 85.67% / 84.73% | 1.1187 |
+| Forward KL | 84.98±0.15% | 84.90% / 84.90% / 85.15% | 0.4918 |
+| Reverse KL | 85.18±0.40% | 84.73% / 85.49% / 85.32% | 0.5060 |
+| Fixed 50:50 | 84.76±0.20% | 84.64% / 84.64% / 84.98% | 0.5004 |
+| Adaptive hard gate | 85.38±0.20% | 85.49% / 85.49% / 85.15% | 0.4994 |
+| Adaptive soft gate | 85.04±0.21% | 85.07% / 85.24% / 84.81% | 0.5064 |
+
+| 비교 | Accuracy 차이 | paired 95% CI |
+|---|---|---|
+| Adaptive hard gate − Adaptive soft gate | +0.34%p | [-0.23, +0.91]%p |
+| Adaptive hard gate − Fixed 50:50 | +0.63%p | [+0.08, +1.19]%p |
+| Adaptive soft gate − Fixed 50:50 | +0.28%p | [-0.17, +0.74]%p |
+
+주 비교의 CI가 0을 포함해 Hard와 Soft의 Accuracy 우위를 확인하지 못했다. 동등성을 입증한 것은 아니다. Hard−Fixed·Soft−Fixed는 사전 지정 보조 비교이며 미조정 탐색적 CI다. 모든 CI는 관측한 세 학습 seed에 조건부이며 seed 모집단까지 포괄하지 않는다.
+
+| 측정 조건 | 학습 시간 평균±SD | seed 42 / 7 / 123 |
+|---|---|---|
+| Fixed 50:50 | 31.24±2.50분 | 28.66 / 31.42 / 33.65분 |
+| Adaptive hard gate | 29.44±2.53분 | 29.05 / 27.12 / 32.14분 |
+| Adaptive soft gate | 29.30±2.65분 | 28.03 / 27.52 / 32.34분 |
+
+시간은 모델/Teacher/cache 로딩·epoch 진단·최종 평가를 제외하고 학습 loop·로그·최종 저장을 포함한다. 기존 E1~E4 시간은 다른 날짜의 기술적 참조이며 위 동일 측정 cohort와 직접 순위를 합치지 않는다. Fixed seed 42 시간은 재현 run, 최종 성능은 기존 adapter에서 측정했다. 재현 tensor hash 일치: True; final validation 답변 불일치: 0개.
+
+![Test Accuracy와 seed](../results/gate_comparison_v4/test/accuracy.png)
+![Accuracy 차이와 paired CI](../results/gate_comparison_v4/test/paired_ci.png)
+![전체 validation 학습곡선](../results/gate_comparison_v4/test/learning_curves.png)
+![정확도와 학습 시간](../results/gate_comparison_v4/test/time_accuracy.png)
+
+전체 Teacher 준비 작업의 기존 시간은 hard 응답 생성과 soft 확률 추출을 함께 측정했으므로 소급 분리하지 않았다. 추론 지연은 고정 warmup 후 문항별 생성 측정이며 reference kernel 환경에 한정된다. 선택지 NLL·ECE·Brier·gate 분포·Teacher 오류 분모·자원 상세값은 [전체 결과](../results/gate_comparison_v4/test/comparison.json)에 보존한다. 공개 checkpoint의 ARC 사전 노출과 원문 실행 config의 scaling은 여전히 미검증이다.
+<!-- gate-final-results:end -->
 
 ## 2026-10-12 계획 개정
 
