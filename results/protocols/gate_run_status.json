@@ -6,5 +6,10 @@
   "test_models_complete": 23,
   "test_n": 1172,
   "no_post_test_selection_or_retraining": true,
-  "test_manifest_sha256": "b69b225374faed56edb595e99633ff6eda4370560e0756adeb17c619b06e50cd"
+  "test_manifest_sha256": "b69b225374faed56edb595e99633ff6eda4370560e0756adeb17c619b06e50cd",
+  "verified_at_kst": "2026-10-13T06:57:16.261094+09:00",
+  "final_verification": "results/checks/gate_final_verification.json",
+  "figures_visually_checked": 4,
+  "timing_environment_limitation": "Shared desktop workload, not isolated causal algorithm-speed measurement",
+  "timing_environment_observation": "results/checks/timing_environment_snapshot.json"
 }

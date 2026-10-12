@@ -62,7 +62,7 @@
     "official_code_config_verified": false,
     "scope_difference": "Paper gate applied to existing ARC first-answer T=2 full-vocabulary KL plus shared EOS; Revival/BALD are absent.",
     "source": "https://arxiv.org/html/2609.36734v1",
-    "status": "All three Soft seeds completed training and final validation; Eq.3 gates verified; all 23 models sealed and test evaluation started.",
+    "status": "All Soft seeds completed train, validation and frozen test; literal Eq.3 and Eq.7 implemented; official execution scaling remains unverified.",
     "paper_figure_scaling_verified": false,
     "replication_claim": "Application of literal public Eq.3 and Eq.7, not verified exact reproduction of experimental code scaling."
   },
@@ -151,7 +151,12 @@
     "total_final_test_models_scored": 23,
     "validation_analysis_passed": true,
     "validation_figures_visually_checked": 4,
-    "test_evaluation_started": true
+    "test_evaluation_started": true,
+    "final_result_verification": "results/checks/gate_final_verification.json",
+    "exact_bootstrap_reproduced": true,
+    "test_figures_visually_checked": 4,
+    "protected_original_artifacts_verified_after_test": 130,
+    "frozen_sources_verified_after_test": 12
   },
   "correction_2026_10_12": {
     "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",

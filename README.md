@@ -8,6 +8,9 @@
 **v4.3 완료:** 본실험 21개 학습·validation과 Teacher·원본 Student·21개 adapter의 test 1,172개 평가 완료. Fixed seed 42 시간 재현 1회는 별도이며 원본 최종 checkpoint를 유지했다. Test 이후 재학습·checkpoint 변경은 수행하지 않았다.
 <!-- main-status:end -->
 
+최종 test 평균은 Hard **85.38%**, Soft **85.04%**이며 Hard−Soft는 **+0.34%p, paired 95% CI [−0.23,+0.91]%p**다. 우위를 확인하지 못했으며 동등성의 증거로 해석하지 않는다. 시간은 공유 GPU 환경의 실측값이다. [최종 검증](results/checks/gate_final_verification.json)
+
+
 - [연구계획서](docs/RESEARCH_PLAN.md): 고정한 질문·조건·평가·종료 기준
 - [연구보고서](docs/RESEARCH_REPORT.md): 핵심 결과·그래프·근거
 - [전체 validation 학습곡선](results/gate_comparison_v4/validation/learning_curves.png): Fixed·Hard·Soft의 3개 seed 실측
@@ -76,7 +79,7 @@ lightjudge/
 | Adaptive Hard (기존) | Teacher confidence ≥ Student면 Forward, 아니면 Reverse |
 | Adaptive Soft (원문 수식 구현) | sigmoid(confidence 차이 − 0.05); Soft gate gradient 유지 |
 
-기존 네 KL 조건과 신규 Soft 계획은 T=2·전체 어휘 분포·공통 EOS CE를 사용한다. 모든 조건에서 Teacher는 동결하고 Student LoRA만 학습한다. [손실함수·예시·gate·논문 연결의 자세한 설명](docs/RESEARCH_PLAN.md#methods)
+KL 다섯 조건은 T=2·전체 어휘 분포·공통 EOS CE를 사용한다. 모든 조건에서 Teacher는 동결하고 Student LoRA만 학습한다. [손실함수·예시·gate·논문 연결의 자세한 설명](docs/RESEARCH_PLAN.md#methods)
 
 ## v4.3 실행 안내
 
@@ -95,13 +98,13 @@ seed 42는 Fixed→Hard→Soft, seed 7은 Hard→Soft→Fixed, seed 123은 Soft�
 
 학습 실행기는 **학습·validation 단계에서 종료**한다. 연결된 후속 실행기는 이 완료를 기다린 뒤 모든 산출물 검증 → 별도 23개 모델 test 동결·평가 → 통계·그래프·문서 갱신을 진행한다. 학습 코드 22개·후속 코드 11개, 총 33개 검사를 통과했다. Test를 보고 재학습하거나 checkpoint를 바꾸지 않는다. 원본 6조건 pipeline은 v4 실행에 사용하지 않는다. [동결 프로토콜](results/protocols/gate_training_protocol.json) · [새 학습 경로 GPU 검사](results/checks/trainer_gpu_check.json)
 
-후속 실행기는 현재 대기 중이다. 같은 명령을 추가 실행하지 않는다. 신규 환경에서 후속 단계만 연결할 때는 다음 순서로 사용한다.
+이번 학습·후속 평가 pipeline은 모두 완료됐다. 아래는 기존 cache·데이터·완료 adapter를 갖춘 환경에서의 재현 순서다.
 
 ```powershell
 .\.venv\Scripts\python.exe -B -X utf8 src/gate_evaluation.py prepare
 .\.venv\Scripts\python.exe -B -X utf8 src/gate_evaluation.py pipeline
 ```
 
-후속 실행은 예약 작업 없이 실행 프로세스 안에서 대기하며, 학습 실패·소스 변경·미완료 산출물이 있으면 test를 시작하지 않는다. [사전 평가 동결](results/protocols/gate_evaluation_protocol.json) · [학습 중간 곡선](results/gate_comparison_v4/progress/fixed_seed42_progress.png)
+후속 실행은 예약 작업 없이 실행 프로세스 안에서 대기하며, 학습 실패·소스 변경·미완료 산출물이 있으면 test를 시작하지 않는다. [사전 평가 동결](results/protocols/gate_evaluation_protocol.json) · [전체 실측 학습곡선](results/gate_comparison_v4/test/learning_curves.png)
 
 [파일럿 탐색 결과](results/pilot/index.html) · [범위 변경·원본 보존](results/protocols/scope_change.json)
