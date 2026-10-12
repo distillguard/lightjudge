@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "checked_at_kst": "2026-10-12T21:28:47.092198+09:00",
+  "steps_checked": 420,
+  "original_train_loss_grad_norm_learning_rate_sample_ids_all_match_exactly": true,
+  "original_adapter_tensor_file_sha256_matches": true,
+  "final_validation_n": 299,
+  "validation_accuracy": 0.8528428093645485,
+  "choice_nll": 0.4678755843121559,
+  "curve_prediction_mismatches": 0,
+  "measurement_only": true,
+  "used_as_additional_main_cell": false,
+  "training_seconds": 1719.7886742004193,
+  "test_evaluation": false,
+  "adapter_files_sha256": {
+    "adapter_config.json": "4970a6d0083e6c0442d70d960e944f9975f1de0e0bed72515536648d633323fe",
+    "adapter_model.safetensors": "162a9dfec09509da8ac97e4d19ed9bf65f2fc0de4bd4a6e669a12b9b1deccc14"
+  },
+  "training_protocol_sha256": "cfb7bf04ec9e185ba97aaa62f2f207a5a1fa7c96703b3efbfc9f0ad76763dac8"
+}

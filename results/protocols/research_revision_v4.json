@@ -133,7 +133,11 @@
     "v4_pipeline_running": true,
     "full_new_training_completed": 0,
     "v4_evaluation_connected": true,
-    "evaluation_protocol": "results/protocols/gate_evaluation_protocol.json"
+    "evaluation_protocol": "results/protocols/gate_evaluation_protocol.json",
+    "completed_main_training": 13,
+    "completed_final_validation": 13,
+    "timing_replay_completed": 1,
+    "fixed42_replay_weights_match_original": true
   },
   "correction_2026_10_12": {
     "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",

@@ -1,7 +1,7 @@
 # 연구보고서 v4.3 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 새 pipeline 실행 중. 첫 순서는 Fixed seed 42 시간 측정용 재현이며 기존 최종 adapter를 대체하지 않는다. 재사용 검증된 본실험 학습 13/21회·final validation 12/21회, 남은 신규 학습 8회와 별도 재현 1회. Test는 미평가다. [실행 시작 snapshot](../results/protocols/gate_run_status.json)
+**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습 13/21회·final validation 13/21회 완료. 별도 Fixed seed 42 시간 재현 1회와 원본 adapter 검증을 완료했고 Hard Gate seed 42를 실행 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 
@@ -44,6 +44,8 @@ T=2·lr=2e−4·r=8·3 epochs·3 seeds는 기존 통제값이며 원문 default�
 Fixed seed 42 시간 재현의 epoch 0·1·2 Accuracy는 **76.25% → 83.61% → 84.62%**다. 아래는 전체 validation 299개와 첫 280 steps의 관측만 포함한 진행 snapshot이며, 재현 run은 성능 비교의 새 모델로 세지 않는다. 첫 280 steps의 loss·gradient·학습률·문항 순서가 기존 Fixed 실행과 정확히 일치했다. [관측값](../results/gate_comparison_v4/progress/fixed_seed42_progress.json)
 
 ![Fixed seed 42 중간 학습곡선](../results/gate_comparison_v4/progress/fixed_seed42_progress.png)
+
+**Fixed seed 42 검증 완료:** 원본 최종 adapter의 validation Accuracy 85.28%, 선택지 NLL 0.4679. 재현의 420 step 전체 loss·gradient·학습률·문항 순서와 adapter tensor 파일 hash가 원본과 정확히 일치하며, 최종 validation 생성 답변도 299개 모두 일치했다. 재현 학습 단계 시간은 28.66분, 초기 평가 2.07분과 epoch 평가 7.24분은 별도다. 시간 재현은 본실험 학습 완료 수에 더하지 않는다.
 
 Teacher 준비의 기존 로그는 hard 응답 생성과 soft 확률 추출을 함께 측정했다. 두 비용을 소급 분리하거나 각각 실측했다고 표기하지 않는다. 학생 학습 단계 시간 비교는 별도 측정한다.
 
