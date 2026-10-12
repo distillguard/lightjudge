@@ -1,7 +1,7 @@
 # 연구보고서 v4.3 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 새 학습 프로토콜 동결 완료. 기존 학습 13회·final validation 12회의 호환성을 검증해 재사용한다. 본실험 21조건 중 남은 학습은 8회이며 Fixed seed 42 시간 측정용 재현 1회는 별도다. 신규 학습·test 결과는 아직 없다.
+**현재 v4.3 상태:** 새 pipeline 실행 중. 첫 순서는 Fixed seed 42 시간 측정용 재현이며 기존 최종 adapter를 대체하지 않는다. 재사용 검증된 본실험 학습 13/21회·final validation 12/21회, 남은 신규 학습 8회와 별도 재현 1회. Test는 미평가다. [실행 시작 snapshot](../results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 
@@ -25,7 +25,7 @@ T=2·lr=2e−4·r=8·3 epochs·3 seeds는 기존 통제값이며 원문 default�
 
 `causal_conv1d`·`flash-linear-attention` 최적화 커널이 없어 실제 실행은 PyTorch reference fallback이었다. 계산 검사는 통과했지만 시간 결과는 이 고정 환경의 비교이며 최적 배포 속도로 일반화하지 않는다. 의존성이나 backend를 바꾸려면 시간 비교군 전체의 새 측정이 필요하다.
 
-## v4.3 실행 준비·동결 완료
+## v4.3 실행 동결·재개
 
 22개 검사에서 기존 Fixed/Hard loss 호출 유지, 1,118개 문항 순서·140 steps/epoch, 마지막 6개 누적 gradient와 기존 optimizer 갱신 일치, 평가 RNG·모드 보존, 실패 run 덮어쓰기 방지를 확인했다. 새 Soft 학습 호출의 실제 GPU 검사도 8회 누적·1회 갱신을 통과했다. 검사 모델은 폐기했으며 학습 실적에 포함하지 않는다. [새 경로 검사](../results/checks/trainer_gpu_check.json)
 

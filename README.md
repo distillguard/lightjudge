@@ -1,11 +1,11 @@
 # LightJudge
 
-문서 버전 **v4.3** · 근거 점검·새 학습 프로토콜 동결 완료
+문서 버전 **v4.3** · 새 프로토콜 동결·학습 pipeline 재개
 
 공개 post-trained Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 Hard·Soft Gate의 정확도와 학습 시간**을 비교한다. Fixed 50:50은 핵심 대조군이다.
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 새 학습 프로토콜 동결 완료. 기존 학습 13회·final validation 12회의 호환성을 검증해 재사용한다. 본실험 21조건 중 남은 학습은 8회이며 Fixed seed 42 시간 측정용 재현 1회는 별도다. 신규 학습·test 결과는 아직 없다.
+**현재 v4.3 상태:** 새 pipeline 실행 중. 첫 순서는 Fixed seed 42 시간 측정용 재현이며 기존 최종 adapter를 대체하지 않는다. 재사용 검증된 본실험 학습 13/21회·final validation 12/21회, 남은 신규 학습 8회와 별도 재현 1회. Test는 미평가다. [실행 시작 snapshot](results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 - [연구계획서](docs/RESEARCH_PLAN.md): 고정한 질문·조건·평가·종료 기준

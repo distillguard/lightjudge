@@ -2,7 +2,7 @@
   "kind": "research_plan_revision",
   "version": "4.3",
   "date_kst": "2026-10-12",
-  "execution_status": "v4_training_protocol_frozen_ready_to_run",
+  "execution_status": "v4_training_validation_pipeline_running",
   "source_pdf": {
     "title": "LightJudge 지식 증류 성능 및 시간 효율성 연구보고서",
     "pages": 11,
@@ -116,7 +116,6 @@
     "unchanged_legacy_statistics": true,
     "legacy_adapter_runs_verified": 13,
     "legacy_adapter_files_verified": 26,
-    "training_still_stopped": true,
     "test_still_unevaluated": true,
     "soft_gate_math_tests_passed": 9,
     "layout_preservation_tests_passed": 5,
@@ -129,7 +128,10 @@
     "total_tests_passed": 22,
     "v4_training_protocol": "results/protocols/gate_training_protocol.json",
     "reused_training_verified": 13,
-    "reused_validation_verified": 12
+    "reused_validation_verified": 12,
+    "legacy_original_pipeline_still_stopped": true,
+    "v4_pipeline_running": true,
+    "full_new_training_completed": 0
   },
   "correction_2026_10_12": {
     "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",
@@ -144,5 +146,6 @@
   },
   "evidence_audit": "results/protocols/evidence_audit.json",
   "source_policy": "Every new numerical setting needs a source or explicitly documented control/measurement justification; method citations do not establish numerical defaults.",
-  "training_stage_boundary": "Separate driver completes training/final validation only; 23-model test sealing and evaluation follow, never during training."
+  "training_stage_boundary": "Separate driver completes training/final validation only; 23-model test sealing and evaluation follow, never during training.",
+  "reuse_status": "13 completed training runs and 12 final validation outputs verified and frozen as v4 references"
 }

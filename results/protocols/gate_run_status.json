@@ -1,0 +1,21 @@
+{
+  "status": "running",
+  "stage": "training_validation",
+  "pid": 11644,
+  "started_at_kst": "2026-10-12T20:38:30.458507+09:00",
+  "test_evaluation": false,
+  "current_action": "train",
+  "condition": "fixed_mix",
+  "seed": 42,
+  "cohort_index": 1,
+  "cohort_total": 9,
+  "updated_at_kst": "2026-10-12T20:38:30.458507+09:00",
+  "snapshot_notice": "Start snapshot only; live status is ignored local outputs/gate_comparison_v4/status.json",
+  "completed_main_training": 13,
+  "completed_final_validation": 12,
+  "new_main_training_complete": 0,
+  "measurement_replay_complete": 0,
+  "main_training_total": 21,
+  "final_validation_total": 21,
+  "legacy_artifacts_unchanged": true
+}
