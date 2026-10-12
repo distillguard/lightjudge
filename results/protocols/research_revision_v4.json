@@ -1,6 +1,6 @@
 {
   "kind": "research_plan_revision",
-  "version": "4.1",
+  "version": "4.2",
   "date_kst": "2026-10-12",
   "execution_status": "paper_soft_loss_implemented_training_pipeline_not_frozen",
   "source_pdf": {
@@ -62,31 +62,36 @@
     "official_code_config_verified": false,
     "scope_difference": "Paper gate applied to existing ARC first-answer T=2 full-vocabulary KL plus shared EOS; Revival/BALD are absent.",
     "source": "https://arxiv.org/html/2609.36734v1",
-    "status": "Loss implemented; nine CPU mathematical/gradient tests passed; no GPU or E7 training."
+    "status": "Loss implemented; nine CPU mathematical/gradient tests and isolated full-input GPU optimizer check passed; no E7 full training.",
+    "paper_figure_scaling_verified": false,
+    "replication_claim": "Application of literal public Eq.3 and Eq.7, not verified exact reproduction of experimental code scaling."
   },
   "time_to_accuracy_plan": {
-    "conditions": [
-      "fixed",
-      "hard",
-      "soft"
-    ],
-    "validation_n": 299,
-    "target_accuracy": 0.8,
-    "epochs": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "steps": [
-      0,
-      140,
-      280,
-      420
-    ],
-    "clock": "Cumulative training-loop time excluding monitoring and final scoring; first observed attainment plus previous-to-first-observed interval.",
-    "historical_e1_e4_tta": "Unmeasured; not reconstructed from 64-question diagnostics.",
-    "fixed_seed42_replay": "Separate timing-only run, never replaces original final checkpoint or adds a final-test model."
+    "status": "Deferred; unsupported 80 percent threshold withdrawn",
+    "target_accuracy": null,
+    "reason": "No ARC standard or cited paper justification for 80%; continuous observed accuracy-time tradeoff is primary instead.",
+    "active_efficiency_plan": {
+      "conditions": [
+        "fixed",
+        "hard",
+        "soft"
+      ],
+      "validation_n": 299,
+      "epochs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "steps": [
+        0,
+        140,
+        280,
+        420
+      ],
+      "quality_target": null,
+      "fixed_seed42_replay": "Isolated matched timing/curve observation; never replaces existing final checkpoint."
+    }
   },
   "frozen_legacy_protocol_sha256": "9de30c8b3ff239b6c4be79fcdb7cc815bde9d05c0ff0115bd43d8bbb0ce61d8a",
   "unchanged_by_this_revision": [
@@ -113,11 +118,14 @@
     "legacy_adapter_files_verified": 26,
     "training_still_stopped": true,
     "test_still_unevaluated": true,
-    "new_model_training_or_scoring_performed": false,
     "soft_gate_math_tests_passed": 9,
     "layout_preservation_tests_passed": 5,
     "branch": "main",
-    "source_implementation_sha256": "774069647de1daf62b752f22d99b19bf9f2fe5643c2ebd31bde7a13031f6ed17"
+    "source_implementation_sha256": "774069647de1daf62b752f22d99b19bf9f2fe5643c2ebd31bde7a13031f6ed17",
+    "soft_gate_gpu_probe": "results/checks/soft_gpu_probe.json",
+    "gpu_probe_passed": true,
+    "isolated_discarded_model_optimizer_steps": 1,
+    "new_full_experiment_training_or_scoring_performed": false
   },
   "correction_2026_10_12": {
     "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",
@@ -129,5 +137,7 @@
       "4.5 margin ablation"
     ],
     "existing_experiment_sources_unchanged": true
-  }
+  },
+  "evidence_audit": "results/protocols/evidence_audit.json",
+  "source_policy": "Every new numerical setting needs a source or explicitly documented control/measurement justification; method citations do not establish numerical defaults."
 }

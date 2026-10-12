@@ -1,0 +1,270 @@
+{
+  "kind": "research_evidence_audit",
+  "date_kst": "2026-10-12",
+  "version": "4.2",
+  "scope": "Current research plan, gate implementation, model/data provenance, inherited training controls, statistics and timing; not a claim to audit every repository line.",
+  "policy": "Support each claim at its actual scope; never turn a method citation into a numeric default. New unsupported settings are pending or withdrawn. Preserve frozen legacy artifacts.",
+  "primary_paper_pdf": {
+    "url": "https://arxiv.org/pdf/2609.36734v1",
+    "sha256": "6ad05a064eae17a94813904a37ee4d57aa6f74a8578f1360cb166c98b52ae657",
+    "pages": 32,
+    "uploaded_to_repository": false
+  },
+  "items": [
+    {
+      "item": "hard_soft_gate",
+      "classification": "primary_paper_equation",
+      "status": "verified_against_pdf_and_html",
+      "source": "https://arxiv.org/html/2609.36734v1#S2.SS1",
+      "locations": "Eq.3, Eq.7; original PDF pp.3-4; margin ablation p.9/Fig.3",
+      "decision": "Soft sigmoid confidence gap minus margin; keep selection gradient; reported best margin 0.05 is not claimed universal default."
+    },
+    {
+      "item": "official_soft_code_config",
+      "classification": "unverified",
+      "status": "official_code_config_not_verified",
+      "source": "https://parmanu.lcs2.in/papers",
+      "decision": "Claim equation implementation only; supplementary statement does not prove access to official code."
+    },
+    {
+      "item": "model_checkpoints",
+      "classification": "official_pinned_artifacts",
+      "status": "remote_config_bytes_equal_local_cache",
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3.5-9B/raw/c202236235762e1c871ad0ccb60c8ee5ba337b9a/config.json",
+        "https://huggingface.co/Qwen/Qwen3.5-2B/raw/15852e8c16360a2fea060d615a32b45270f8a8fc/config.json"
+      ],
+      "config_sha256": {
+        "9B": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+        "2B": "ed1c1723241f23f7f4e23430759cbd7dcfb4103cbdfe052bfe7626b57c2615b4"
+      },
+      "decision": "Published post-trained checkpoints; original Student means before ARC LoRA, not a pretraining-only Base. Use actual pinned text config, not series-wide MoE marketing or current renamed GitHub README."
+    },
+    {
+      "item": "dataset_split",
+      "classification": "official_card_and_local_preprocessing_evidence",
+      "status": "verified",
+      "source": "https://huggingface.co/datasets/allenai/ai2_arc/blob/210d026faf9955653af8916fad021475a3f00453/README.md",
+      "official_split_n": {
+        "train": 1119,
+        "validation": 299,
+        "test": 1172
+      },
+      "local_train_n": 1118,
+      "local_evidence": "results/protocols/data_manifest.json",
+      "decision": "One duplicate train input removed; deduplication is an explicit local preprocessing choice. Do not call 1118 the official raw train size."
+    },
+    {
+      "item": "lora_nf4",
+      "classification": "method_reference_and_local_configuration",
+      "status": "method_supported_actual_configuration_verified",
+      "sources": [
+        "https://arxiv.org/abs/2106.09685",
+        "https://arxiv.org/abs/2305.14314",
+        "https://huggingface.co/docs/transformers/main/en/quantization/bitsandbytes"
+      ],
+      "decision": "Teacher-only NF4, BF16 Student with FP32 LoRA. Do not call the Student QLoRA or assert numerical rank/lr optimality from method citations."
+    },
+    {
+      "item": "kd_temperature",
+      "classification": "inherited_frozen_control",
+      "status": "verified_in_cache_and_protocol",
+      "value": 2.0,
+      "local_evidence": "results/protocols/teacher_targets_summary.json; results/protocols/training_protocol.json",
+      "decision": "Keep 2 to compare the fixed target cache; it is not the paper Revival sampling temperature 3 and is not established as optimal."
+    },
+    {
+      "item": "optimizer_lora_budget",
+      "classification": "inherited_frozen_controls",
+      "status": "verified_in_completed_run_config",
+      "values": {
+        "learning_rate": 0.0002,
+        "weight_decay": 0,
+        "lora_rank": 8,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "epochs": 3,
+        "micro_batch": 1,
+        "gradient_accumulation": 8,
+        "warmup_steps": 10,
+        "max_grad_norm": 1.0,
+        "max_sequence_length": 1024
+      },
+      "source": "https://arxiv.org/html/2609.36734v1#S10.SS3",
+      "paper_contrast": {
+        "lora_rank": 16,
+        "learning_rate": 5e-05,
+        "epochs": "Task-specific 3/2/2 or up to 10/20; not our ARC recipe"
+      },
+      "decision": "Retain matched inherited settings for reuse; explicitly not original-paper defaults or a validated optimal ARC recipe. Changing them requires a separate all-condition retraining protocol."
+    },
+    {
+      "item": "first_token_and_eos_objective",
+      "classification": "task_specific_inherited_design",
+      "status": "verified_in_code_not_full_paper_reproduction",
+      "local_evidence": [
+        "src/logit_kd.py",
+        "src/train_student.py"
+      ],
+      "sources": [
+        "https://arxiv.org/abs/1503.02531",
+        "https://arxiv.org/abs/2306.08543"
+      ],
+      "decision": "Offline first-answer full-vocabulary KL and shared half-weight EOS are the ARC output-format adaptation. T-squared scaling has KD precedent, but exact T and EOS coefficient are control choices."
+    },
+    {
+      "item": "generation_protocol",
+      "classification": "official_mode_support_and_task_specific_control",
+      "status": "verified_in_pinned_card_and_existing_code",
+      "source": "https://huggingface.co/Qwen/Qwen3.5-2B/blob/15852e8c16360a2fea060d615a32b45270f8a8fc/README.md",
+      "local_evidence": "src/monitor_training.py",
+      "decision": "Official template supports disabling thinking; greedy, max 8 tokens and use_cache=False are matched MC-answer controls, not the model-card recommended general generation settings or official ARC leaderboard protocol."
+    },
+    {
+      "item": "repeated_seeds",
+      "classification": "literature_method_and_frozen_budget",
+      "status": "verified_limited_scope",
+      "source": "https://aclanthology.org/D17-1035/",
+      "values": [
+        42,
+        7,
+        123
+      ],
+      "decision": "Literature supports reporting run variability, not these seed numbers or the sufficiency of three repetitions."
+    },
+    {
+      "item": "paired_bootstrap",
+      "classification": "statistical_method_and_empirical_numerical_check",
+      "status": "original_calculation_reproduced",
+      "source": "https://aclanthology.org/P18-1128/",
+      "replicates": 5000,
+      "rng_seed": 42,
+      "ci_scope": "Questions paired in all conditions; observed three-seed mean; conditional on those seeds.",
+      "sensitivity": {
+        "comparison_split": "existing validation only, n=299",
+        "replicates_checked": [
+          5000,
+          20000
+        ],
+        "maximum_accuracy_ci_endpoint_difference_percentage_points": 0.11148272017837213,
+        "raw_statistics_changed": false
+      },
+      "decision": "Maintain original method and repeat count; document Monte Carlo check, not a guarantee for future test or unseen training seeds."
+    },
+    {
+      "item": "choice_nll_ece_brier",
+      "classification": "probability_quality_method_and_task_scope",
+      "status": "definition_verified",
+      "source": "https://arxiv.org/abs/1706.04599",
+      "local_evidence": "src/monitor_training.py; src/analyze_kl.py",
+      "decision": "T=1 probabilities normalized over valid answer letters; calibration uses choice argmax. Not sentence perplexity or a substitute for parsed-generation accuracy."
+    },
+    {
+      "item": "timing",
+      "classification": "official_measurement_principles_and_local_scope",
+      "status": "measurement_definition_reviewed",
+      "sources": [
+        "https://docs.pytorch.org/docs/2.11/benchmark_utils.html",
+        "https://arxiv.org/abs/1806.01427"
+      ],
+      "local_evidence": "src/train_student.py",
+      "decision": "GPU sync/warmup, separate cache/loading/monitoring, disclose inclusion of final save. Compare new matched Fixed/Hard/Soft measurements; old cross-date baseline timings descriptive only."
+    },
+    {
+      "item": "accuracy_target_80_percent",
+      "classification": "unsupported_new_threshold",
+      "status": "withdrawn_before_any_new_training",
+      "source": "https://arxiv.org/abs/1806.01427",
+      "decision": "TTA literature does not establish an ARC 80 percent target. Primary efficiency uses total time and observed accuracy-time curves; target-based analysis deferred pending justification."
+    },
+    {
+      "item": "measurement_replay_fixed42",
+      "classification": "local_missing_observation_evidence",
+      "status": "planned_not_executed",
+      "local_evidence": "outputs/kl_extension/training/full/seed_42/fixed_mix; epoch diagnostics contain only 64-question seed42 observations",
+      "decision": "One separate measurement run collects missing matched full-validation epoch curves. It does not replace the frozen final checkpoint; disclose why total physical run budget is 22 while performance cells are 21."
+    },
+    {
+      "item": "data_exposure_and_generalization",
+      "classification": "unverified_limitations",
+      "status": "explicitly_limited",
+      "decision": "Public model pretraining/posttraining ARC exposure unknown; one English dataset and model family; no gate-only causal claim without matched-weight/random controls."
+    },
+    {
+      "item": "optimized_linear_attention_kernels",
+      "classification": "observed_runtime_limitation",
+      "status": "reported_not_changed",
+      "local_evidence": "Actual probe warnings and installed module availability",
+      "decision": "Keep the frozen runtime consistent; report reference-kernel cost. Installing optimized kernels or changing platform requires a new matched timing cohort."
+    },
+    {
+      "item": "paper_equation_figure_slope",
+      "classification": "source_internal_specification_uncertainty",
+      "status": "reported_unresolved_code_scaling",
+      "sources": [
+        "https://arxiv.org/html/2609.36734v1#S2.SS1",
+        "https://arxiv.org/pdf/2609.36734v1"
+      ],
+      "locations": "Original PDF p.3, Eq.3 and Figure 2",
+      "equation_weights_for_gap_minus_point_four_to_plus_point_four": [
+        0.389360766050778,
+        0.5866175789173301
+      ],
+      "observation": "Eq.3 has unit-slope sigmoid; Figure 2 schematic appears much steeper over the displayed gap range. A schematic illustration does not supply a verified temperature/config.",
+      "decision": "Use the explicit equation and gradient derivation; do not infer a scaling factor from the plot, and do not claim exact replication of the paper soft experimental setup without official config."
+    }
+  ],
+  "open_items": [
+    "Official CaRE code/config not verified",
+    "Full seven-condition trainer/timer integration and new training freeze pending",
+    "New timing curves not collected",
+    "ARC exposure in public checkpoints unknown",
+    "Paper Fig.2 schematic steepness differs from literal unit-slope Eq.3; actual experiment scaling not verified."
+  ],
+  "gpu_probe": {
+    "status": "passed",
+    "entrypoint": "src/probe_soft_gate.py",
+    "result_path": "results/checks/soft_gpu_probe.json",
+    "result_sha256": "3e50fcf85e09300b5a4044c86d7a1bb40e9ffb93b2cdb729d04fe8fedad9a73d",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "peak_allocated_bytes": 3967398912,
+    "optimizer_steps": 1,
+    "input_prefixes_verified": 1118,
+    "trained_adapter_saved": false,
+    "probe_model_reused_for_training": false,
+    "full_training": false,
+    "test_evaluation": false
+  },
+  "verification": {
+    "previous_cpu_tests_passed": 14,
+    "original_statistics_overwritten": false,
+    "gpu_or_training_running_before_audit": false,
+    "cpu_tests_passed": 14,
+    "gpu_self_check_assertions_passed": true,
+    "probe_model_discarded": true,
+    "original_sources_after_probe": "unchanged",
+    "full_training_resumed": false,
+    "primary_pdf_equations_figures_visually_checked": [
+      3,
+      4,
+      9
+    ],
+    "protected_original_artifacts_verified": 130,
+    "completed_legacy_adapters_verified": 13,
+    "original_training_protocol_unchanged": true,
+    "original_statistics_unchanged": true,
+    "document_links_verified": true,
+    "test_still_unevaluated": true,
+    "new_probe_source_hashes_match_result": true
+  },
+  "runtime_environment": {
+    "system": "Windows-11-10.0.26200-SP0",
+    "optimized_kernel_dependencies": {
+      "causal_conv1d": false,
+      "fla": false,
+      "triton": false
+    },
+    "observed_backend": "Transformers reference PyTorch fallbacks for causal conv and gated delta rule; no optimized kernel installed during this audit.",
+    "timing_scope": "Same-runtime comparative cost only; not best achievable production inference performance."
+  }
+}

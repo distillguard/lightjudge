@@ -1,4 +1,4 @@
-# 연구계획서 v4.1
+# 연구계획서 v4.2
 
 ## 1. 연구 과제와 개정 목적
 
@@ -20,13 +20,31 @@ Forward KL과 Reverse KL은 각각 Teacher와 Student 확률로 분포 차이를
 
 | 구분 | 질문과 비교 | 판단 자료 |
 |---|---|---|
-| RQ1 주 연구 | E6 Hard와 E7 Soft는 정확도·학습 시간에서 어떤 차이를 보이는가? | 최종 test Hard−Soft Accuracy 차이·paired 95% CI, seed별 학습 시간, 목표 정확도 도달 시간 |
+| RQ1 주 연구 | E6 Hard와 E7 Soft는 정확도·학습 시간에서 어떤 차이를 보이는가? | 최종 test Hard−Soft Accuracy 차이·paired 95% CI, seed별 학습 시간·정확도–시간 곡선 |
 | RQ2 핵심 대조 | 두 적응형 방식은 E5 Fixed 50:50보다 유리한가? | Hard−Fixed·Soft−Fixed Accuracy 차이·탐색적 CI, 동일 측정 범위의 시간 차이 |
 | RQ3 보조 비교 | E1~E4 기준선 대비 성능·학습 비용은 어떠한가? | Accuracy·학습 시간과 보조 NLL·VRAM |
 
-동일 Qwen3.5 계열의 9B Teacher와 2B Student를 사용해 모델 구성 차이를 고정한다. Teacher는 NF4, Student는 BF16+LoRA로 실행한다. 기존 validation의 Teacher 92.64%와 원본 Student 76.25%는 선정 후 확인한 참조 결과이며 선정 당시의 사전 근거로 소급하지 않는다.
+동일 Qwen3.5 계열의 공개 post-trained 9B Teacher와 2B Student를 사용하고, 조건 간 모델 구성을 고정한다. 원본 Student는 사전학습만 된 Base 모델이라는 뜻이 아니라 ARC 추가 학습 전 공개 checkpoint다. Teacher는 NF4, Student는 BF16+LoRA로 실행한다. 기존 validation의 Teacher 92.64%와 원본 Student 76.25%는 선정 후 확인한 참조 결과이며 선정 당시의 사전 근거로 소급하지 않는다.
 
 연구 기여는 이 설정에서의 **출력 기반 KD와 gate 변형의 실증 비교**다. 신규 KD 알고리즘 발명·CaRE-KD 전체 재현·다른 모델 계열의 일반적 우위를 주장하지 않는다.
+
+## 근거 대조와 설정 선택 원칙
+
+수식·하이퍼파라미터·지표·결론을 **원문 근거 / 공식 자료 / 기존 통제 설정 / 실측 검증 / 미확인**으로 구분한다. 논문이나 모델 카드가 방법을 설명한다고 해서 우리의 숫자까지 정당화하는 인용을 붙이지 않는다. 새 수치는 근거·선정 절차를 먼저 기록하며, 근거가 없으면 표준값으로 생성하지 않는다. 모델 카드의 최신 설명보다 실제 사용한 revision의 config·코드를 우선 대조한다. [항목별 점검·출처·조치](../results/protocols/evidence_audit.json)
+
+| 항목 | 확인한 근거와 이번 연구의 적용 범위 |
+|---|---|
+| Hard·Soft gate / m=0.05 | CaRE-KD 원본 PDF 식 (3)·식 (7)·§4.5(Fig.3). Gate 적용 비교이며 전체 프레임워크 재현은 아님 |
+| 모델·어휘 크기·비전 분리 | 공식 고정 revision의 config가 로컬 cache와 byte 단위로 일치. 공개 checkpoint는 post-trained 모델이며 원본 Student는 ARC 추가 LoRA 전을 뜻함 |
+| ARC 분할 | 공식 고정 dataset card: 1,119/299/1,172. Train 입력 중복 제거는 로컬 manifest에 근거해 1,118개로 정리 |
+| LoRA·NF4 | 방법은 원문·공식 구현 자료로 확인. r=8·alpha=16·dropout=0.05와 Teacher-only NF4는 기존 실험 설정 |
+| T=2·lr=2e−4·3 epochs·batch·warmup·seed | 기존 동결 프로토콜과 완료 로그의 통제값. 논문 기본값·튜닝 최적값으로 주장하지 않으며 새 조건만 바꾸지 않음 |
+| 첫 위치·공통 EOS·손실 0.5 가중치 | ARC letter 출력에 맞춘 기존 과제 설계. CaRE-KD나 MiniLLM 전체 sequence 목적함수와 구분 |
+| CI·반복 | NLP 비교·반복 변동 문헌이 방법 근거. 3 seeds·5,000 bootstrap은 고정 설계값이고 이 숫자의 보편적 표준성을 주장하지 않음 |
+| 시간 | PyTorch의 warmup·GPU 동기화 원칙과 실측 구간 정의. 옛 시간 로그는 코드·환경·범위가 확인될 때만 비교 |
+| 목표 80% | 인용 문헌·ARC 공식 기준에서 확인하지 못해 철회. 정당화된 별도 목표가 생기기 전 Time-to-Accuracy를 주 지표로 쓰지 않음 |
+
+완료된 13회 결과의 재사용을 위해 기존 통제값을 유지한다. CaRE-KD의 lr=5e−5·LoRA r=16·과제별 epoch와 다르다는 점을 공개하며, 원문 숫자로 바꾸려면 모든 비교 조건을 새로 학습하는 별도 프로토콜이 필요하다. 3 seeds는 제한된 예산의 반복 수이며 학습 불확실성 전체를 충분히 추정한다는 보장은 없다.
 
 ## 3. 모델·데이터·공통 학습 조건
 
@@ -114,9 +132,11 @@ $$
 
 논문은 supplementary에 코드를 제공한다고 적었지만 이번 확인에서 공식 실행 코드의 저장소·config를 검증하지 못했다. 현재 근거는 공개 원문의 식 (3)·식 (7)·§4.5이며 코드 복제를 주장하지 않는다. `src/soft_gate.py`에 이 수식과 기존 공통 EOS 목적함수를 구현하고 selection gradient를 검사한다.
 
+**원문 명세의 미확인점:** 원본 PDF p.3의 Figure 2는 식 (3)을 문자 그대로 계산한 unit sigmoid보다 가파르게 그려져 있다. Confidence 차이 −0.4~0.4에서 식의 가중치는 약 0.389~0.587인데 개념도는 더 넓은 전환을 보인다. 그림의 표현을 실행 설정으로 간주하지 않으며 공식 코드의 scaling을 확인하기 전에는 **공개 식 (3)의 적용 비교**라고만 명명한다. 임의의 gate 온도를 역추정하지 않는다. [대조 기록](../results/protocols/evidence_audit.json)
+
 동률에서는 Hard=1이지만 Soft=σ(−0.05)≈0.4875다. Confidence가 [0,1]이면 Soft 가중치는 대략 0.259~0.721 범위여서 Hard처럼 0/1로 바뀌지 않는다. 실제 평균·SD·분위수·confidence gap을 기록하며, 50:50과 비슷해도 원문 설정을 성능 결과에 맞춰 재조정하지 않는다.
 
-이번 비교는 원문 gate를 **ARC·T=2·첫 답변 위치·공통 EOS CE**에 적용하는 연구다. Revival·BALD·on-policy 생성·원문 전체 benchmark를 재현하지 않는다. 실제 수식 구현: [Soft loss](../src/soft_gate.py), [gradient·EOS 검사](../tests/test_soft_gate.py).
+이번 비교는 원문 gate를 **ARC·T=2·첫 답변 위치·공통 EOS CE**에 적용하는 연구다. Revival·BALD·on-policy 생성·원문 전체 benchmark를 재현하지 않는다. 실제 수식 구현: [Soft loss](../src/soft_gate.py), [gradient·EOS 검사](../tests/test_soft_gate.py), [격리 GPU 검사](../src/probe_soft_gate.py).
 
 Hard가 한 방향을 선택한다는 것은 손실 가중치 선택이다. 기존 구현은 두 KL을 계산하고 혼합하므로 Hard가 반드시 연산량 절반이거나 Soft보다 빠르다고 가정하지 않는다. E5~E7의 KL 계산·로그 범위를 동일하게 유지한다.
 
@@ -131,7 +151,7 @@ Hard가 한 방향을 선택한다는 것은 손실 가중치 선택이다. 기�
 | 주 성능 | Greedy 생성 Accuracy | 개별 seed, 3-seed 평균±sample SD(ddof=1) |
 | 주 비교 | 최종 test Hard−Soft Accuracy 차이(%p)·paired 95% CI | RQ1의 단일 주 성능 비교 |
 | 핵심 대조 | Hard−Fixed·Soft−Fixed 차이·95% CI | 사전 지정 보조 비교, 미조정 탐색적 구간으로 표시 |
-| 주 효율성 | 학생 학습 단계 시간, Time-to-Accuracy | 정확도와 별도로 seed별·평균±SD, 미도달 수 표시 |
+| 주 효율성 | 학생 학습 단계 시간·정확도–시간 관측 곡선 | 정확도와 별도로 seed별·평균±SD, 고정 예산의 절충관계 |
 | 설명 분석 | 실제 gate 가중치·Teacher 오류·학습곡선 | 분모와 측정 subset을 표시, 인과적 개선을 단정하지 않음 |
 | 보조 품질·자원 | 선택지 NLL·ECE·Brier, 추론 지연·Peak VRAM | 부록; Accuracy 개선을 대신 입증하지 않음 |
 
@@ -149,14 +169,15 @@ E5~E7은 같은 GPU·드라이버·라이브러리·정밀도·입력·평가 �
 
 Peak allocated/reserved VRAM의 측정 구간을 함께 기록한다. 기존 peak가 진단 평가를 포함한 구간이면 순수 학습 peak로 바꿔 표기하지 않는다. 추론 지연은 동일 입력·warmup·batch·토큰 제한·동기화 조건에서 반복 측정해 평균·중앙값·p95를 보고하며 모델 로딩과 학습 비용은 분리한다. 모두 같은 2B Student 구조이므로 gate 자체가 배포 구조를 줄였다고 주장하지 않는다.
 
-### Time-to-Accuracy: 주 비교군 E5~E7
+### 정확도–학습 시간 곡선: E5~E7
 
-- 목표는 **전체 validation 299개 Accuracy ≥ 80%**로 계획하고 새 프로토콜 동결 전에 기록한다. 중간 결과 확인 이후 지정한 목표임을 공개하며 결과를 보고 바꾸지 않는다.
-- 세 seed 모두 epoch 0·1·2·3(step 0·140·280·420)에서 같은 전체 validation을 평가한다. 기존 64개 진단과 섞지 않는다. RNG·훈련 모드·가중치를 보존하며 최종 checkpoint 선택에 쓰지 않는다.
-- 최초로 목표를 관측한 epoch 종료 시점의 누적 학습 경과 시간을 기록한다. 진단·평가 시간은 제외하고 평가 비용은 별도 표시한다. Epoch 사이 실제 통과 시점은 알 수 없으므로 직전 미도달~최초 도달 관측 구간을 함께 제시하고 선형 보간하지 않는다.
-- Epoch 0부터 도달하면 0초, 마지막까지 도달하지 못하면 미도달·관측 한계를 기록한다. 도달한 seed만 평균해 전체 우위로 주장하지 않고 도달 seed 수/3을 함께 표시한다.
+기존 80% 목표는 공식 ARC 기준이나 CaRE-KD의 설정에서 확인되지 않아 철회했다. [DAWNBench](https://arxiv.org/abs/1806.01427)는 정해진 품질 목표까지의 시간을 평가하지만 ARC의 80%를 정당화하는 자료는 아니다. 이번 본문은 목표를 새로 만들어 순위를 매기지 않고 **최종 Accuracy·총 학습 시간·관측된 학습 곡선**으로 비교한다. Time-to-Accuracy는 별도 목표·선정 근거·탐색 예산을 사전 명시할 수 있을 때만 후속 탐색 분석으로 추가한다.
 
-기존 E1~E4는 seed 42의 고정 64개 곡선만 있으며, E5 seed 42도 전체 validation epoch 곡선이 없다. 저장되지 않은 중간 checkpoint의 도달 시간을 소급 생성하지 않는다. **E5 seed 42를 시간 측정용으로 1회 독립 재현**해 E5~E7의 3-seed Time-to-Accuracy 측정을 맞추는 계획이다. 이 adapter는 기존 E5 최종 성능 checkpoint를 대체하거나 test 모델을 추가하지 않는다. 초기화·문항 순서·설정·최종 validation 재현을 확인하고 불일치가 있으면 별도 측정 실행으로 표시한다. E1~E4의 미측정 Time-to-Accuracy는 미측정으로 둔다.
+- E5~E7의 세 seed 모두 epoch 0·1·2·3(step 0·140·280·420)에서 validation 299개 전체와 누적 학습 시간을 함께 기록한다. 4개 관측 시점은 기존 고정 epoch 설계에 맞춘 해상도이며 관측 사이 성능이나 최초 도달 시간을 추정하지 않는다.
+- GPU 동기화 뒤 누적 학습 시간을 기록하고 진단·평가 비용은 별도 표시한다. RNG·훈련 모드·가중치를 보존하며 checkpoint 선택에 쓰지 않는다. 계측·평가 주기는 비교군에서 같게 유지한다. [PyTorch 2.11 벤치마크 원칙](https://docs.pytorch.org/docs/2.11/benchmark_utils.html)
+- 기존 64개 진단 곡선은 그대로 보존하고 전체 validation 곡선과 섞지 않는다. E5 seed 42의 epoch 중간 checkpoint·전체 validation 곡선은 없으므로 소급 생성하지 않는다.
+
+**E5 seed 42의 시간·곡선 측정용 재현 1회**는 기존 기록에 없는 관측을 동일 조건으로 수집하기 위한 계획이다. 원 논문이 요구한 실험 수라는 뜻은 아니다. 기존 성능 checkpoint를 대체하거나 test 모델을 추가하지 않으며, 재현성 불일치는 별도 기록한다. 새로운 E5~E7 측정끼리 시간 비교를 우선하고 기존 E1~E4 시간은 기술적 참조로 한정한다.
 
 ### 그래프와 결과 해석
 
@@ -176,12 +197,12 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 
 기존 13회는 **v4.0 완료 실험으로 자동 재분류하지 않는다**. 원본 checkpoint·데이터·학습 설정·loss·초기화·문항 순서·평가 정의가 호환되는지 새 프로토콜에서 확인하고 참조 경로·hash로 재사용한다. 기존 프로토콜·소스·원본 103개와 Reverse 파일럿 27개 산출물은 유지하며, v4.0 출력은 별도 namespace에 저장한다. [기존 검증 결과](../results/checks/through_reverse_validation_verified.json)
 
-1. **설계 동결 준비:** E7 원문 gate·m=0.05·Soft gradient 유지·80% 목표·시간 구간·관측 주기·비교 우선순위를 코드/설정에 명시한다. 현재 코드는 6조건·18회 전용이므로 문서 변경만으로 7조건 pipeline을 실행하지 않는다.
-2. **구현 검증:** E7 수식·gradient·g 범위, confidence 동률에서 Soft=σ(−0.05)/Hard=1, 식 (7)의 selection gradient와 공통 EOS·Student KL gradient 유지, finite loss·EOS·누적 batch·RNG 보존·GPU 메모리를 확인한다. 수치 오차로 sigmoid가 0/1에 포화되는 비율도 기록한다.
+1. **설계 동결 준비:** E7 원문 gate·m=0.05·Soft gradient 유지·시간 구간·관측 주기·비교 우선순위를 코드/설정에 명시한다. 현재 코드는 6조건·18회 전용이므로 문서 변경만으로 7조건 pipeline을 실행하지 않는다.
+2. **구현 검증:** E7 수식·gradient·g 범위, confidence 동률에서 Soft=σ(−0.05)/Hard=1, 식 (7)의 selection gradient와 공통 EOS·Student KL gradient 유지, finite loss·EOS·누적 batch·RNG 보존·GPU 메모리를 확인한다. 확인된 confidence 범위에 따라 Soft 가중치 범위도 검사한다.
 3. **프로토콜 개정:** 소스·공통 설정·원문 margin·gradient 설정·타이머 정의·초기 adapter·데이터·target cache의 hash와 기존 실행 재사용 근거를 별도 고정한다. 기존 동결 hash를 덮어쓰지 않는다.
 4. **학습·validation:** 남은 본실험 8회와 시간 재현 1회를 수행한다. 모든 조건의 epoch 3 final validation을 검증하고, E5~E7의 3-seed 시간·전체 validation 곡선·실제 gate 분포를 수집한다.
-5. **test 동결·평가:** 21개 최종 adapter와 분석 코드를 동결한 뒤 23개 모델의 test 1,172개를 평가한다. Time-to-Accuracy는 validation에서만 측정하며 test를 학습 도중 호출하지 않는다.
-6. **보고 종료:** RQ1·RQ2·RQ3의 표·그림·불확실성·시간 포함 범위·미도달·한계를 작성한다. Test를 보고 gate 설정·조건·seed·checkpoint를 다시 선택하거나 재학습하지 않는다.
+5. **test 동결·평가:** 21개 최종 adapter와 분석 코드를 동결한 뒤 23개 모델의 test 1,172개를 평가한다. 학습 곡선은 validation에서만 측정하며 test를 학습 도중 호출하지 않는다.
+6. **보고 종료:** RQ1·RQ2·RQ3의 표·그림·불확실성·시간 포함 범위·한계를 작성한다. Test를 보고 gate 설정·조건·seed·checkpoint를 다시 선택하거나 재학습하지 않는다.
 
 이미 확인한 중간 결과는 v3.2 기록으로 보존하며 E6·E7 결과를 추정해 채우지 않는다. [기존 연구보고서](RESEARCH_REPORT.md) · [기존 통계 원본](../results/main/comparison.json)
 
@@ -199,14 +220,14 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 
 한국디지털콘텐츠학회 공식 안내를 2026-10-12에 확인했다. 논문 접수는 **10/26 마감**, 대학생 원고는 **2단 1~2쪽**, 개최는 **11/19~20 수원컨벤션센터**다. 제출 시 최신 대학생 전용 양식과 접수 요건을 다시 확인한다. [학회 공식 안내](https://dcs.or.kr/homepage/custom/submit)
 
-원고는 서론 → 방법(모델·7조건·gate) → 결과(Hard·Soft·Fixed의 Accuracy·CI·학습 시간/도달 시간) → 논의(가중치·확률 품질·절충) → 결론·참고문헌 순서로 구성한다. 상세 E1~E4 비교·로그·재현 기록은 저장소에 둔다. 제출·등록 자체는 이번 계획서 작성 범위에 포함하지 않는다.
+원고는 서론 → 방법(모델·7조건·gate) → 결과(Hard·Soft·Fixed의 Accuracy·CI·학습 시간/곡선) → 논의(가중치·확률 품질·절충) → 결론·참고문헌 순서로 구성한다. 상세 E1~E4 비교·로그·재현 기록은 저장소에 둔다. 제출·등록 자체는 이번 계획서 작성 범위에 포함하지 않는다.
 
 ## 8. 한계·향후 연구·종료 기준
 
 - 영어 ARC·단일 Qwen 조합·첫 답변 위치·고정 예산에 한정된다. 공개 모델의 ARC 사전 노출은 확인하지 못했다.
 - 전체 어휘 entropy는 정답 confidence가 아니다. Soft와 Hard의 평균 Forward 기여율 차이가 성능을 설명할 수 있으며 가중치 일치 Fixed/Random 대조군 없이 gate 정보의 인과 효과를 단정하지 않는다.
-- 원문 gate를 ARC에 적용한 비교다. 원문 실험 전체를 재현하지 않으며 공개 실행 코드 config는 미검증이다.
-- 3 seeds와 희소한 Teacher 오류 subset은 강한 일반화에 부족하다. 시간은 GPU 부하·I/O·캐시·실행 순서의 영향을 받으며 실측 환경을 함께 보고한다.
+- 원문 gate를 ARC에 적용한 비교다. 원문 실험 전체를 재현하지 않으며 공개 실행 코드 config는 미검증이다. 원문 PDF와 HTML을 대조했으며, 실제 GPU 검사 결과도 따로 기록한다.
+- 3 seeds와 희소한 Teacher 오류 subset은 강한 일반화에 부족하다. 시간은 GPU 부하·I/O·캐시·실행 순서의 영향을 받으며 실측 환경을 함께 보고한다. 현재 reference kernel 환경이므로 최적 배포 성능으로 일반화하지 않는다.
 
 평균 가중치 일치 Fixed/Random Gate, Feature/Relation KD, 다른 모델 계열·데이터·양자화·Reasoning KD는 **후속 연구**로 둔다. 이번에는 21개 성능 조건, 명시한 시간 측정, 동결 test, 핵심 표·그림·한계 보고를 완료하면 종료한다.
 
@@ -218,3 +239,7 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 - [Hinton 외(2015)](https://arxiv.org/abs/1503.02531): soft-target 지식 증류.
 - [Reimers·Gurevych(2017)](https://aclanthology.org/D17-1035/) · [Dror 외(2018)](https://aclanthology.org/P18-1128/): 반복 성능 변동·NLP 통계 비교.
 - [Guo 외(2017)](https://arxiv.org/abs/1706.04599): confidence calibration과 보조 품질 평가.
+
+- [공식 9B revision](https://huggingface.co/Qwen/Qwen3.5-9B/tree/c202236235762e1c871ad0ccb60c8ee5ba337b9a) · [공식 2B revision](https://huggingface.co/Qwen/Qwen3.5-2B/tree/15852e8c16360a2fea060d615a32b45270f8a8fc) · [ARC dataset card](https://huggingface.co/datasets/allenai/ai2_arc/tree/210d026faf9955653af8916fad021475a3f00453): 모델·분할 원본 대조.
+- [LoRA](https://arxiv.org/abs/2106.09685) · [QLoRA/NF4](https://arxiv.org/abs/2305.14314) · [공식 bitsandbytes 설명](https://huggingface.co/docs/transformers/main/en/quantization/bitsandbytes): 방법 근거이며 우리 수치의 최적성 근거는 아님.
+- [DAWNBench](https://arxiv.org/abs/1806.01427) · [PyTorch 2.11 Benchmark Utils](https://docs.pytorch.org/docs/2.11/benchmark_utils.html): 시간–품질 비교와 계측 원칙.

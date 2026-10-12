@@ -1,8 +1,8 @@
 # LightJudge
 
-문서 버전 **v4.1** · PDF 기반 연구계획 개정, 새 실험은 실행 전
+문서 버전 **v4.2** · PDF 기반 연구계획 개정, 새 실험은 실행 전
 
-Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 Hard·Soft Gate의 정확도와 학습 시간**을 비교한다. Fixed 50:50은 핵심 대조군이다.
+공개 post-trained Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 Hard·Soft Gate의 정확도와 학습 시간**을 비교한다. Fixed 50:50은 핵심 대조군이다.
 
 <!-- main-status:start -->
 **진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](results/protocols/status.json)
@@ -16,16 +16,20 @@ Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반
 |---|---|
 | 데이터 | ARC-Challenge train 1,118 / validation 299 / test 1,172 |
 | 개정 본실험 계획 | Gold·Response·Forward·Reverse·Fixed·Hard·Soft × 3 seeds = 21조건 |
-| 시간 측정 계획 | E5~E7 전체 validation 도달 시간, 기존 Fixed seed 42 측정용 재현 1회 별도 |
+| 시간 측정 계획 | E5~E7 전체 validation 정확도–시간 곡선, 기존 Fixed seed 42 측정용 재현 1회 별도 |
 | 공통 학습 | 원본 Student부터 3 epochs·420 steps, LoRA rank 8, T=2 |
-| 주 결과 | Hard−Soft Accuracy 차이·paired CI, 개별 seed·평균±SD, 학습 시간·Time-to-Accuracy |
+| 주 결과 | Hard−Soft Accuracy 차이·paired CI, 개별 seed·평균±SD, 학습 시간·정확도–시간 곡선 |
 | 해석 분석 | 실제 gate 분기·Teacher 오류 패턴·학습곡선 |
 | 보조 지표 | 선택지 NLL·Brier·ECE·추론 지연·VRAM은 부록 |
 | 개정 최종 test 계획 | 동결 후 Teacher·원본 Student·21개 adapter = 23개 모델 |
 
 **실제 코드와 결과는 기존 6조건 v3.2 상태다. E7 원문 수식은 구현했고 본학습은 미수행이다. 전체 7조건 실행·시간 계측과 새 학습 프로토콜은 아직 준비 중이다.** 기존 13/18·12/18을 새 21조건의 진행률로 표시하지 않는다. [개정 이력](results/protocols/research_revision_v4.json)
 
-완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. 기존 epoch 진단은 seed 42의 train/validation 각 64개이며, 개정안의 E5~E7 도달 시간은 세 seed 모두 validation 299개 전체에서 관측할 계획이다. **CI는 별도 성능 지표가 아니라 차이의 불확실성**이며, seed SD와 구분한다. 선택지 NLL은 확률 품질을 보는 보조 지표로 유지한다. [개정 평가·시간 정의](docs/RESEARCH_PLAN.md#evaluation) · [재정리한 중간 결과·그래프](results/main/index.html)
+완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. 기존 epoch 진단은 seed 42의 train/validation 각 64개이며, 개정안의 E5~E7 정확도–시간 곡선은 세 seed 모두 validation 299개 전체에서 관측할 계획이다. **CI는 별도 성능 지표가 아니라 차이의 불확실성**이며, seed SD와 구분한다. 선택지 NLL은 확률 품질을 보는 보조 지표로 유지한다. [개정 평가·시간 정의](docs/RESEARCH_PLAN.md#evaluation) · [재정리한 중간 결과·그래프](results/main/index.html)
+
+**근거 정책:** 원문 식·공식 자료·기존 통제값·실측 검증·미확인을 구분한다. T=2·학습률·rank·epoch·seed를 논문의 표준값으로 표기하지 않는다. 근거가 없던 80% 목표는 철회했으며 기존 결과는 그대로다. [항목별 근거 점검](results/protocols/evidence_audit.json)
+
+Soft 수식 CPU 검사 9개·동결 회귀 검사 5개와 격리 GPU 검사가 통과했다. GPU 검사에서는 1회 갱신 후 모델을 폐기했고 본학습은 미수행이다. [GPU 검증 결과](results/checks/soft_gpu_probe.json)
 
 ## 디렉토리 구성
 
@@ -52,6 +56,7 @@ lightjudge/
 | `src/train_student.py` | Student LoRA 학습·CE |
 | `src/logit_kd.py` | 기존 확률분포 cache·4가지 KL 손실·Hard gate |
 | `src/soft_gate.py` | 원문 Soft gate·margin 0.05·selection gradient |
+| `src/probe_soft_gate.py` | 본학습과 분리한 실제 GPU 검사 |
 | `src/monitor_training.py` | epoch 진단·생성 평가·신뢰도 지표 |
 | `src/teacher_quantization.py` | Teacher NF4 로딩·모델 설정 검사 |
 | `src/analyze_kl.py`, `src/analyze_training.py`, `src/plot_diagnostics.py` | 통계·학습곡선·그래프 |
@@ -72,7 +77,7 @@ lightjudge/
 
 ## 기존 v3.2 코드의 실행 안내
 
-아래 명령은 **기존 6조건 프로토콜 전용**이다. E7·새 시간 계측·21조건/23 test 지원을 구현하고 별도 프로토콜을 동결하기 전에는 v4.0 실행 명령으로 쓰지 않는다. 모델 cache·데이터·학습 준비 산출물을 갖춘 기존 로컬 환경용이다. 저장소의 중간 결과 snapshot만으로 전체 pipeline을 바로 재개할 수는 없다. 현재 실험은 사용자 요청으로 중단돼 있으며 문서·보고 정리 중 추가 학습·test 평가는 수행하지 않았다.
+아래 명령은 **기존 6조건 프로토콜 전용**이다. E7 학습 연결·새 시간 계측·21조건/23 test 지원을 구현하고 별도 프로토콜을 동결하기 전에는 v4.0 실행 명령으로 쓰지 않는다. 모델 cache·데이터·학습 준비 산출물을 갖춘 기존 로컬 환경용이다. 저장소의 중간 결과 snapshot만으로 전체 pipeline을 바로 재개할 수는 없다. 현재 실험은 사용자 요청으로 중단돼 있으며 문서·보고 정리 중 추가 학습·test 평가는 수행하지 않았다.
 
 ```powershell
 # 의존성 목록
