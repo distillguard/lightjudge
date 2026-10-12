@@ -1,0 +1,76 @@
+{
+  "status": "passed_soft123_experiment_ongoing",
+  "checked_at_kst": "2026-10-13T01:33:12.707160+09:00",
+  "completed_main_training": 19,
+  "completed_final_validation": 19,
+  "main_total": 21,
+  "optimizer_steps": 420,
+  "training_forwards": 3354,
+  "partial_accumulation_group_sizes": [
+    6,
+    6,
+    6
+  ],
+  "same_initialization_sample_order_learning_rates_as_forward123": true,
+  "validation_n": 299,
+  "correct": 252,
+  "accuracy": 0.842809364548495,
+  "choice_nll": 0.5009780641054404,
+  "training_seconds": 1940.493476299569,
+  "checkpoint_reload_prediction_mismatches": 0,
+  "initial_adapter_sha256": "a94ae0b692c0894dce159f6e38948d14ee37a5ca52ea4071b5fbf12990a18f53",
+  "adapter_files_sha256": {
+    "adapter_config.json": "ae328871ab9045fd72bfbcd95497a0a4764965037288f13f9334c1498d8f3a0d",
+    "adapter_model.safetensors": "091a42e16bf01026342bf692d9d06912bfc0cb7693c2f8a9408d978ff6459b5c"
+  },
+  "training_signals": {
+    "n_training_forwards": 3354,
+    "forward_weight_mean": 0.4868125774601633,
+    "forward_weight_sd": 0.02624860614372783,
+    "forward_weight_quantiles_0_25_50_75_100": [
+      0.34285569190979004,
+      0.4737488850951195,
+      0.4877399504184723,
+      0.5007363706827164,
+      0.6343345046043396
+    ],
+    "confidence_gap_mean": -0.002918999857609657,
+    "counterfactual_hard_forward_fraction": 0.505664877757901,
+    "scope": "T=2 full-vocabulary entropy during training including dropout; not answer correctness confidence"
+  },
+  "observed_validation_curves": [
+    {
+      "epoch": 0,
+      "optimizer_step": 0,
+      "training_seconds": 0.0,
+      "accuracy": 0.7625418060200669,
+      "gold_ce": 0.2971840117649988
+    },
+    {
+      "epoch": 1,
+      "optimizer_step": 140,
+      "training_seconds": 623.2494707000442,
+      "accuracy": 0.8361204013377926,
+      "gold_ce": 0.25237744721601735
+    },
+    {
+      "epoch": 2,
+      "optimizer_step": 280,
+      "training_seconds": 1259.070713700261,
+      "accuracy": 0.8461538461538461,
+      "gold_ce": 0.2957660372994967
+    },
+    {
+      "epoch": 3,
+      "optimizer_step": 420,
+      "training_seconds": 1940.3387034996413,
+      "accuracy": 0.842809364548495,
+      "gold_ce": 0.24839261653660805
+    }
+  ],
+  "protected_artifacts_verified": 130,
+  "training_protocol_sha256": "cfb7bf04ec9e185ba97aaa62f2f207a5a1fa7c96703b3efbfc9f0ad76763dac8",
+  "evaluation_protocol_sha256": "c11b4e7180e001a5d0946075ec4bcd5b78a0175d600e508e6cce05052d80795f",
+  "test_evaluation": false,
+  "timing_environment_limitation": "Shared desktop GPU measurements; no isolated causal algorithm-speed claim"
+}

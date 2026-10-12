@@ -2,7 +2,7 @@
   "kind": "research_plan_revision",
   "version": "4.3",
   "date_kst": "2026-10-12",
-  "execution_status": "seed42_seed7_cohorts_complete_seed123_soft_training_running",
+  "execution_status": "soft_all_seeds_complete_fixed123_training_running",
   "source_pdf": {
     "title": "LightJudge 지식 증류 성능 및 시간 효율성 연구보고서",
     "pages": 11,
@@ -62,7 +62,7 @@
     "official_code_config_verified": false,
     "scope_difference": "Paper gate applied to existing ARC first-answer T=2 full-vocabulary KL plus shared EOS; Revival/BALD are absent.",
     "source": "https://arxiv.org/html/2609.36734v1",
-    "status": "Full Soft seed42 training running; actual logged gates match Eq.3, same initial adapter as Hard/Fixed; remaining seeds pending.",
+    "status": "All three Soft seeds completed training and final validation; actual gates match Eq.3; test not yet evaluated.",
     "paper_figure_scaling_verified": false,
     "replication_claim": "Application of literal public Eq.3 and Eq.7, not verified exact reproduction of experimental code scaling."
   },
@@ -90,7 +90,7 @@
         420
       ],
       "quality_target": null,
-      "fixed_seed42_replay": "Isolated matched timing/curve observation; never replaces existing final checkpoint."
+      "fixed_seed42_replay": "Matched timing/curve replay in shared desktop environment; never replaces existing final checkpoint."
     }
   },
   "frozen_legacy_protocol_sha256": "9de30c8b3ff239b6c4be79fcdb7cc815bde9d05c0ff0115bd43d8bbb0ce61d8a",
@@ -131,18 +131,20 @@
     "reused_validation_verified": 12,
     "legacy_original_pipeline_still_stopped": true,
     "v4_pipeline_running": true,
-    "full_new_training_completed": 5,
+    "full_new_training_completed": 6,
     "v4_evaluation_connected": true,
     "evaluation_protocol": "results/protocols/gate_evaluation_protocol.json",
-    "completed_main_training": 18,
-    "completed_final_validation": 18,
+    "completed_main_training": 19,
+    "completed_final_validation": 19,
     "timing_replay_completed": 1,
     "fixed42_replay_weights_match_original": true,
     "soft_full_training_started": true,
     "seed42_cohort_complete": true,
     "hard_seed7_complete": true,
     "soft_seed7_complete": true,
-    "seed7_cohort_complete": true
+    "seed7_cohort_complete": true,
+    "soft_seed123_complete": true,
+    "soft_all_seeds_complete": true
   },
   "correction_2026_10_12": {
     "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",
