@@ -1,12 +1,19 @@
-# 연구보고서 v3.2
+# 연구보고서 v4.0 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
 **진행 상태:** 사용자 요청으로 실험 중단. 전체 train 학습 13/18회 완료, validation 검증·집계 12/18회 완료. 고정 혼합 seed 42는 학습 완료·validation 미완료이며 최종 test는 미평가다. [중단 상태 기록](../results/protocols/status.json)
 <!-- main-status:end -->
 
-## 핵심 설계
 
-주 질문은 **confidence 기반 적응형 KL 혼합이 고정 50:50 혼합보다 정답률을 높이는가**다. 본문은 생성 Accuracy·개별 seed·평균±SD와 **적응형−고정 혼합의 Accuracy 차이·paired 95% CI**를 중심으로 구성한다. Gate 분기·Teacher 오류·학습곡선은 해석 분석, 선택지 NLL은 보조 성능, ECE·Brier·비용은 부록이다. [평가 정의·필요성·동결 원칙](RESEARCH_PLAN.md#평가와-보고)
+## 2026-10-12 계획 개정
+
+사용자 제공 PDF에 따라 [연구계획서 v4.0](RESEARCH_PLAN.md)은 **Hard−Soft의 Accuracy·시간 효율성**을 주 연구로 하고 E7을 추가한 7조건×3 seeds로 개정했다. Fixed 대비 두 비교는 핵심 대조다. E7은 미구현·미학습이며 현재 실행 코드는 기존 6조건 전용이다. 온도 산정·detach·시간 범위·목표 80%의 전체 validation 도달 관측을 새 동결 대상에 포함했다.
+
+아래 실험·수치·그래프는 **기존 v3.2의 6조건 기록**이다. 기존 13/18 학습·12/18 검증을 새 21회 진행률로 표시하지 않는다. 호환성 확인 시 남은 본실험 학습은 8회, 시간 측정용 Fixed seed 42 재현은 별도 1회다. 기존 최종 adapter를 바꾸지 않고 원본 프로토콜과 산출물을 보존한다. [계획 변경 이력](../results/protocols/research_revision_v4.json)
+
+## 기존 v3.2의 핵심 설계
+
+기존 v3.2의 주 질문은 **confidence 기반 적응형 KL 혼합이 고정 50:50 혼합보다 정답률을 높이는가**였다. 본문은 생성 Accuracy·개별 seed·평균±SD와 **적응형−고정 혼합의 Accuracy 차이·paired 95% CI**를 중심으로 구성한다. Gate 분기·Teacher 오류·학습곡선은 해석 분석, 선택지 NLL은 보조 성능, ECE·Brier·비용은 부록이다. [개정 평가 정의·동결 원칙](RESEARCH_PLAN.md#evaluation)
 
 | 항목 | 실험 설정 |
 |---|---|
@@ -75,7 +82,7 @@ SD는 세 학습 seed의 표본 표준편차(ddof=1)다. 그림의 오차 막대
 
 ### 2. 비교 판단: Accuracy 차이와 paired CI
 
-**주 비교인 적응형−고정 혼합은 아직 미완료**다. 고정 혼합 seed 42는 학습만 완료됐고 validation은 미완료다. 아래 세 비교는 기존에 지정한 탐색적 중간 비교다.
+**기존 주 비교인 적응형−고정 혼합은 아직 미완료**다. 고정 혼합 seed 42는 학습만 완료됐고 validation은 미완료다. 아래 세 비교는 기존에 지정한 탐색적 중간 비교다.
 
 | 비교 | 평균 차이 (%p) | paired 95% CI (%p) | 해석 |
 |---|---:|---:|---|
@@ -98,7 +105,7 @@ SD는 세 학습 seed의 표본 표준편차(ddof=1)다. 그림의 오차 막대
 | Forward KL | 0.4475±0.0263 |
 | Reverse KL | 0.4738±0.0287 |
 
-Forward는 Gold·Response보다 세 seed 모두 NLL이 낮고 기존 탐색적 차이 CI도 개선 방향이다. 그러나 Accuracy 우위는 미확인이다. Gold·Response는 원본 Student보다 Accuracy가 높지만 NLL은 나빠졌다. **정답률과 확률 품질을 구분하는 근거**이며 NLL 개선을 주 연구 질문의 성공으로 대체하지 않는다. NLL은 T=1 첫 step의 유효 선택지 확률로 계산하며 calibration만 측정하는 값이 아니다. [정의·한계](RESEARCH_PLAN.md#선택지-nll-보조-지표로-유지) · [기존 NLL·Brier·ECE와 모든 탐색적 CI](../results/main/comparison.json)
+Forward는 Gold·Response보다 세 seed 모두 NLL이 낮고 기존 탐색적 차이 CI도 개선 방향이다. 그러나 Accuracy 우위는 미확인이다. Gold·Response는 원본 Student보다 Accuracy가 높지만 NLL은 나빠졌다. **정답률과 확률 품질을 구분하는 근거**이며 NLL 개선을 주 연구 질문의 성공으로 대체하지 않는다. NLL은 T=1 첫 step의 유효 선택지 확률로 계산하며 calibration만 측정하는 값이 아니다. [정의·한계](RESEARCH_PLAN.md#evaluation) · [기존 NLL·Brier·ECE와 모든 탐색적 CI](../results/main/comparison.json)
 
 ### 4. 해석 분석: gate와 Teacher 오류
 

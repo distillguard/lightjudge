@@ -1,0 +1,113 @@
+{
+  "kind": "research_plan_revision",
+  "version": "4.0",
+  "date_kst": "2026-10-12",
+  "execution_status": "planned_not_implemented_not_frozen",
+  "source_pdf": {
+    "title": "LightJudge 지식 증류 성능 및 시간 효율성 연구보고서",
+    "pages": 11,
+    "sha256": "a82e72e81e2281a91eb3dee74e1e7bfdb9f38b59b15ce8e7bbb7e86cb9a8e5c5",
+    "uploaded_to_repository": false
+  },
+  "previous_plan_sha256": "0eb5aa536387c1b07f46d1ec95f7835d8f7c5c66954277b2bca9ffa7d3203f97",
+  "previous_plan_git_revision": "054ee3b64f7c4cab696aeb920c9a3b4f889e8f49",
+  "interim_validation_seen_before_revision": true,
+  "test_seen_before_revision": false,
+  "old_primary": "adaptive_mix minus fixed_mix generation accuracy",
+  "new_primary": "adaptive_hard minus adaptive_soft final-test generation accuracy",
+  "supporting_comparisons": [
+    "hard minus fixed",
+    "soft minus fixed"
+  ],
+  "supporting_ci_scope": "Prespecified exploratory, unadjusted 95% intervals; not additional confirmatory primary tests.",
+  "performance_conditions": [
+    "gold_sft",
+    "response_kd",
+    "forward_kl",
+    "reverse_kl",
+    "fixed_mix",
+    "adaptive_hard",
+    "adaptive_soft"
+  ],
+  "seeds": [
+    42,
+    7,
+    123
+  ],
+  "main_training_cells": 21,
+  "planned_test_models": 23,
+  "legacy_status": {
+    "protocol_version": "3.2",
+    "completed_training": 13,
+    "completed_final_validation": 12,
+    "denominator": 18,
+    "automatically_reclassified_as_v4": false
+  },
+  "conditional_reuse_budget": {
+    "legacy_training_cells": 13,
+    "new_main_training_cells": 8,
+    "remaining_final_validation_cells": 9,
+    "extra_fixed_seed42_timing_replay": 1,
+    "total_training_executions_including_legacy_and_timing": 22
+  },
+  "soft_gate_plan": {
+    "formula": "detach(sigmoid((c_teacher-c_student)/tau_g))",
+    "margin": 0,
+    "temperature_selection": "max(1e-4, median absolute initial confidence gap over 1118 train questions / ln(3))",
+    "tau_numeric_value": null,
+    "temperature_selection_uses_labels_or_heldout_accuracy": false,
+    "status": "New operational proposal in plan, not measured or implemented",
+    "paper_difference": "CaRE-KD Eq.3 uses sigmoid confidence gap minus margin; original soft gradient analysis includes selection gradients. This temperature-scaled detached variant is not a literal reproduction."
+  },
+  "time_to_accuracy_plan": {
+    "conditions": [
+      "fixed",
+      "hard",
+      "soft"
+    ],
+    "validation_n": 299,
+    "target_accuracy": 0.8,
+    "epochs": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "steps": [
+      0,
+      140,
+      280,
+      420
+    ],
+    "clock": "Cumulative training-loop time excluding monitoring and final scoring; first observed attainment plus previous-to-first-observed interval.",
+    "historical_e1_e4_tta": "Unmeasured; not reconstructed from 64-question diagnostics.",
+    "fixed_seed42_replay": "Separate timing-only run, never replaces original final checkpoint or adds a final-test model."
+  },
+  "frozen_legacy_protocol_sha256": "9de30c8b3ff239b6c4be79fcdb7cc815bde9d05c0ff0115bd43d8bbb0ce61d8a",
+  "unchanged_by_this_revision": [
+    "training source code",
+    "existing protocol/source hash guards",
+    "model/data revisions",
+    "existing adapters and scores",
+    "130 protected original artifacts",
+    "legacy statistical results",
+    "stopped training state"
+  ],
+  "references": [
+    "https://arxiv.org/html/2609.36734v1#S2.SS1",
+    "https://dcs.or.kr/homepage/custom/submit"
+  ],
+  "verification": {
+    "markdown_file_links": "passed",
+    "planned_budget_arithmetic": "passed",
+    "original_preservation_hashes_checked": 130,
+    "unchanged_frozen_compatible_sources": 7,
+    "unchanged_legacy_protocol": true,
+    "unchanged_legacy_statistics": true,
+    "legacy_adapter_runs_verified": 13,
+    "legacy_adapter_files_verified": 26,
+    "training_still_stopped": true,
+    "test_still_unevaluated": true,
+    "new_model_training_or_scoring_performed": false
+  }
+}
