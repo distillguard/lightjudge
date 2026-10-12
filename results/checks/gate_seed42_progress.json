@@ -1,0 +1,62 @@
+{
+  "status": "passed_partial_experiment",
+  "checked_at_kst": "2026-10-12T22:11:20.917542+09:00",
+  "completed_main_training": 14,
+  "completed_final_validation": 14,
+  "main_total": 21,
+  "measurement_replay_complete": 1,
+  "hard_seed42": {
+    "optimizer_steps": 420,
+    "validation_n": 299,
+    "accuracy": 0.8729096989966555,
+    "choice_nll": 0.45115749077972866,
+    "training_seconds": 1742.9957598000765,
+    "checkpoint_reload_predictions_match": true,
+    "adapter_files_sha256": {
+      "adapter_config.json": "29d08ffd51f4b5fd749909e00abbab52c036a6c23c6599dfcc1db08d47cb705e",
+      "adapter_model.safetensors": "acddf066d95713f7101e970dbbbe935876c028a6eb36b6edf381b8646fb101e1"
+    },
+    "training_signals": {
+      "n_training_forwards": 3354,
+      "forward_weight_mean": 0.49463327370304117,
+      "forward_weight_sd": 0.5000457476615967,
+      "forward_weight_quantiles_0_25_50_75_100": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "confidence_gap_mean": -0.006247369267077551,
+      "counterfactual_hard_forward_fraction": 0.49463327370304117,
+      "scope": "T=2 full-vocabulary entropy during training including dropout; not answer correctness confidence"
+    }
+  },
+  "soft_seed42": {
+    "status": "running",
+    "optimizer_steps_reported": 120,
+    "signals_verified": 984,
+    "initial_adapter_matches_hard_and_original": true,
+    "margin": 0.05,
+    "gate_detached": false,
+    "gate_formula_matches_logged_values": true,
+    "partial_signal_summary": {
+      "n_training_forwards": 984,
+      "forward_weight_mean": 0.4895350904605253,
+      "forward_weight_sd": 0.03369925827103008,
+      "forward_weight_quantiles_0_25_50_75_100": [
+        0.3803955614566803,
+        0.4702630862593651,
+        0.4888180196285248,
+        0.5087271481752396,
+        0.5925073027610779
+      ],
+      "confidence_gap_mean": 0.007935180714944513,
+      "counterfactual_hard_forward_fraction": 0.516260162601626,
+      "scope": "T=2 full-vocabulary entropy during training including dropout; not answer correctness confidence"
+    }
+  },
+  "test_evaluation": false,
+  "training_protocol_sha256": "cfb7bf04ec9e185ba97aaa62f2f207a5a1fa7c96703b3efbfc9f0ad76763dac8",
+  "evaluation_protocol_sha256": "c11b4e7180e001a5d0946075ec4bcd5b78a0175d600e508e6cce05052d80795f"
+}
