@@ -5,66 +5,27 @@
   "started_at_kst": "2026-10-12T20:38:30.458507+09:00",
   "test_evaluation": false,
   "current_action": "train",
-  "condition": "fixed_mix",
-  "seed": 7,
-  "cohort_index": 6,
+  "condition": "adaptive_soft",
+  "seed": 123,
+  "cohort_index": 7,
   "cohort_total": 9,
-  "updated_at_kst": "2026-10-12T23:58:08.490049+09:00",
-  "snapshot_at_kst": "2026-10-13T00:01:43.404000+09:00",
-  "completed_main_training": 17,
-  "completed_final_validation": 17,
+  "updated_at_kst": "2026-10-13T00:42:47.637296+09:00",
+  "snapshot_at_kst": "2026-10-13T00:53:52.317535+09:00",
+  "completed_main_training": 18,
+  "completed_final_validation": 18,
   "main_training_total": 21,
   "final_validation_total": 21,
   "measurement_replay_complete": 1,
-  "new_main_training_complete": 4,
-  "current_steps_reported": 13,
-  "seed42_validation_accuracy": {
-    "fixed_mix": 0.8528428093645485,
-    "adaptive_mix": 0.8729096989966555,
-    "adaptive_soft": 0.8662207357859532
+  "new_main_training_complete": 5,
+  "current_steps_reported": 110,
+  "seed7_validation_accuracy": {
+    "fixed_mix": 0.862876254180602,
+    "adaptive_mix": 0.8662207357859532,
+    "adaptive_soft": 0.8561872909698997
   },
-  "verification": "results/checks/gate_seed42_progress.json",
+  "verification": "results/gate_comparison_v4/progress/seed7_validation_curves.json",
   "snapshot_notice": "Observed milestone snapshot; live status is local outputs/gate_comparison_v4/status.json and training summaries.",
-  "latest_completed_run": {
-    "condition": "adaptive_soft",
-    "seed": 7,
-    "status": "passed",
-    "optimizer_steps": 420,
-    "training_forwards": 3354,
-    "validation_n": 299,
-    "accuracy": 0.8561872909698997,
-    "choice_nll": 0.4426805934129525,
-    "training_seconds": 1651.2028166004457,
-    "checkpoint_reload_prediction_mismatches": 0,
-    "initialization_data_order_lr_finite_gradients_and_gate_verified": true,
-    "training_signals": {
-      "n_training_forwards": 3354,
-      "forward_weight_mean": 0.4862775279694394,
-      "forward_weight_sd": 0.025888748239782017,
-      "forward_weight_quantiles_0_25_50_75_100": [
-        0.3691924512386322,
-        0.4719846397638321,
-        0.4871959984302521,
-        0.5015084892511368,
-        0.5963465571403503
-      ],
-      "confidence_gap_mean": -0.005071187897246013,
-      "counterfactual_hard_forward_fraction": 0.49552772808586765,
-      "scope": "T=2 full-vocabulary entropy during training including dropout; not answer correctness confidence"
-    },
-    "observed_epoch_validation_accuracy": [
-      0.7625418060200669,
-      0.842809364548495,
-      0.8762541806020067,
-      0.8561872909698997
-    ],
-    "adapter_files_sha256": {
-      "adapter_config.json": "2d015725d94f09c87c67cc058c237a052ee9d02a28e8f1e2823b51f9d13f6709",
-      "adapter_model.safetensors": "d6bd637a741bb4cafc954d47789f04cb085190595df8efebffc6620b5b55b055"
-    },
-    "training_summary_sha256": "43fe35d5aaaccf3175f43ee789a0296a3663277cf135fd674627cfca15d9ea9b",
-    "validation_summary_sha256": "ec9e081e6c223f84ec7330a596ac2f81e9fe6508493d67822d43fd4d122a4670",
-    "verified_at_kst": "2026-10-13T00:01:43.404000+09:00"
-  },
-  "latest_verification": "420 steps/3354 forwards, same initialization/order/LR, finite gradients, literal soft gate formula, final adapter hashes and all 299 reload predictions verified; 130 protected artifacts unchanged"
+  "seed7_cohort_verification": "results/gate_comparison_v4/progress/seed7_validation_curves.json",
+  "timing_environment_limitation": "Non-exclusive desktop GPU workload observed; no causal algorithmic speed superiority claim",
+  "timing_environment_observation": "results/checks/timing_environment_snapshot.json"
 }

@@ -5,7 +5,7 @@
 공개 post-trained Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 Hard·Soft Gate의 정확도와 학습 시간**을 비교한다. Fixed 50:50은 핵심 대조군이다.
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **17/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 7의 Hard 86.62%·Soft 85.62%를 검증했고 Fixed seed 7을 학습 중이다. Test는 미평가다. [진행 snapshot](results/protocols/gate_run_status.json)
+**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **18/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 42·7의 Fixed·Hard·Soft 검증을 마쳤고 Soft seed 123을 학습 중이다. Test는 미평가다. [진행 snapshot](results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 - [연구계획서](docs/RESEARCH_PLAN.md): 고정한 질문·조건·평가·종료 기준

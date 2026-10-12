@@ -9,7 +9,7 @@ Performance and Time-Efficiency Comparison of Confidence-Based Hard and Soft Gat
 작성일: 2026-10-12. 사용자 제공 「LightJudge 지식 증류 성능 및 시간 효율성 연구보고서」(11쪽)의 개정안을 바탕으로 작성했다. 기존 6조건의 중간 validation을 확인한 뒤 연구 질문을 개정한 **실행 전 설계안**으로 작성했다. 이후 진행 상태는 상단 snapshot과 연구보고서에 반영한다.
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **17/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 7의 Hard 86.62%·Soft 85.62%를 검증했고 Fixed seed 7을 학습 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
+**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **18/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 42·7의 Fixed·Hard·Soft 검증을 마쳤고 Soft seed 123을 학습 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 v3.2의 주 비교는 Hard−Fixed였다. v4.0은 **Hard−Soft를 주 비교**로 삼고 Hard−Fixed·Soft−Fixed를 핵심 대조로 둔다. Accuracy와 학습 시간을 함께 보고하되 임의의 종합 점수로 합산하지 않는다. v4.3 학습 프로토콜을 별도로 동결했으며 기존 소스·프로토콜은 유지한다. 학습·validation 완료 후 별도 test 동결 단계로 진행한다. [개정·보존 기록](../results/protocols/research_revision_v4.json)
@@ -235,6 +235,7 @@ Teacher full-cache 준비의 기존 시간은 hard 응답과 soft 확률 추출�
 ## 8. 한계·향후 연구·종료 기준
 
 - 영어 ARC·단일 Qwen 조합·첫 답변 위치·고정 예산에 한정된다. 공개 모델의 ARC 사전 노출은 확인하지 못했다.
+- 시간은 공유 데스크톱에서 관측한 값이다. 2026-10-13 다른 앱의 GPU 엔진 활동을 한 번 확인했으며 이전 run 전체의 영향은 미측정이다. 알고리즘 자체의 속도 차이나 전용 GPU 성능으로 해석하지 않는다. [관측값](../results/checks/timing_environment_snapshot.json)
 - 전체 어휘 entropy는 정답 confidence가 아니다. Soft와 Hard의 평균 Forward 기여율 차이가 성능을 설명할 수 있으며 가중치 일치 Fixed/Random 대조군 없이 gate 정보의 인과 효과를 단정하지 않는다.
 - 원문 gate를 ARC에 적용한 비교다. 원문 실험 전체를 재현하지 않으며 공개 실행 코드 config는 미검증이다. 원문 PDF와 HTML을 대조했으며, 실제 GPU 검사 결과도 따로 기록한다.
 - 3 seeds와 희소한 Teacher 오류 subset은 강한 일반화에 부족하다. 시간은 GPU 부하·I/O·캐시·실행 순서의 영향을 받으며 실측 환경을 함께 보고한다. 현재 reference kernel 환경이므로 최적 배포 성능으로 일반화하지 않는다.

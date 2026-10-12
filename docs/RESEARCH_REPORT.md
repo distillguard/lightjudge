@@ -1,7 +1,7 @@
 # 연구보고서 v4.3 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **17/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 7의 Hard 86.62%·Soft 85.62%를 검증했고 Fixed seed 7을 학습 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
+**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **18/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 42·7의 Fixed·Hard·Soft 검증을 마쳤고 Soft seed 123을 학습 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 
@@ -55,7 +55,19 @@ Fixed 시간은 원본 adapter와 tensor hash가 일치하는 재현 run에서 �
 
 이 표와 그림은 **한 seed의 validation 중간 결과**다. 최종 test 결과·3-seed 평균·통계적 우위를 의미하지 않으며 설정·epoch 3 checkpoint는 변경하지 않았다. 시간은 모델·cache 로딩과 epoch 평가를 제외한 학생 학습 loop·로그·최종 저장 구간이다.
 
-**Seed 7 진행 관측:** 고정한 epoch 3 adapter의 Hard validation Accuracy 86.62%, 선택지 NLL 0.4441, 학생 학습 단계 시간 27.12분이다. Soft는 Accuracy 85.62%, 선택지 NLL 0.4427, 학습 시간 27.52분이다. 두 조건 모두 420 step·3,354 forward의 초기화·문항 순서·학습률·수치·gate 검사와 저장 후 299개 답변 일치를 통과했다. Soft의 epoch 0~3 Accuracy는 76.25% → 84.28% → 87.63% → 85.62%다. 사전에 고정한 epoch 3 checkpoint를 유지했으며, Fixed seed 7은 진행 중이다. 한 seed의 validation 관측으로 최종 우열을 판단하지 않는다. [검증 snapshot](../results/protocols/gate_run_status.json)
+### v4.3 seed 7 완료 관측
+
+| seed 7 조건 | Validation Accuracy | 선택지 NLL | 학생 학습 단계 시간 |
+|---|---|---|---|
+| Fixed | 86.29% | 0.4386 | 31.42분 |
+| Hard | 86.62% | 0.4441 | 27.12분 |
+| Soft | 85.62% | 0.4427 | 27.52분 |
+
+세 조건 모두 같은 초기 adapter·문항 순서·학습률에서 420 steps·3,354 forward를 수행했고 gate·finite gradient·마지막 6개 batch 검사와 저장 후 299개 생성 답변 일치를 통과했다. Epoch 2에서 3으로 Accuracy가 Hard 86.96%→86.62%, Soft 87.63%→85.62%, Fixed 87.63%→86.29%로 내려갔지만, 사전에 고정한 epoch 3 checkpoint를 유지했다. 한 seed의 validation 관측으로 최종 우열을 판단하지 않는다. [전체 관측·hash 검증](../results/gate_comparison_v4/progress/seed7_validation_curves.json)
+
+![Seed 7 전체 validation 학습곡선](../results/gate_comparison_v4/progress/seed7_validation_curves.png)
+
+**시간 해석 한계:** 2026-10-13 학습 중 같은 GPU의 Windows 3D 엔진에서 다른 앱 fm.exe 활동 2%와 학습 Python 활동 57%를 한 번 관측했다. 이전 run 전체의 GPU 사용 이력과 이 활동이 시간에 미친 영향은 측정하지 않았다. 학습·추론 시간은 공유 데스크톱의 실측값이며, 알고리즘 자체의 속도 차이를 분리한 결과로 주장하지 않는다. 실제 시간과 모든 완료 산출물은 보존하고 학습 조건·최종 checkpoint는 유지한다. [관측값·표본 한계](../results/checks/timing_environment_snapshot.json)
 
 Teacher 준비의 기존 로그는 hard 응답 생성과 soft 확률 추출을 함께 측정했다. 두 비용을 소급 분리하거나 각각 실측했다고 표기하지 않는다. 학생 학습 단계 시간 비교는 별도 측정한다.
 

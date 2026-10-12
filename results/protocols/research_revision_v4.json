@@ -2,7 +2,7 @@
   "kind": "research_plan_revision",
   "version": "4.3",
   "date_kst": "2026-10-12",
-  "execution_status": "hard_soft_seed7_validation_complete_fixed_seed7_training_running",
+  "execution_status": "seed42_seed7_cohorts_complete_seed123_soft_training_running",
   "source_pdf": {
     "title": "LightJudge 지식 증류 성능 및 시간 효율성 연구보고서",
     "pages": 11,
@@ -131,17 +131,18 @@
     "reused_validation_verified": 12,
     "legacy_original_pipeline_still_stopped": true,
     "v4_pipeline_running": true,
-    "full_new_training_completed": 4,
+    "full_new_training_completed": 5,
     "v4_evaluation_connected": true,
     "evaluation_protocol": "results/protocols/gate_evaluation_protocol.json",
-    "completed_main_training": 17,
-    "completed_final_validation": 17,
+    "completed_main_training": 18,
+    "completed_final_validation": 18,
     "timing_replay_completed": 1,
     "fixed42_replay_weights_match_original": true,
     "soft_full_training_started": true,
     "seed42_cohort_complete": true,
     "hard_seed7_complete": true,
-    "soft_seed7_complete": true
+    "soft_seed7_complete": true,
+    "seed7_cohort_complete": true
   },
   "correction_2026_10_12": {
     "reason": "User requested paper-supported settings instead of an ad hoc gate temperature.",
@@ -157,5 +158,6 @@
   "evidence_audit": "results/protocols/evidence_audit.json",
   "source_policy": "Every new numerical setting needs a source or explicitly documented control/measurement justification; method citations do not establish numerical defaults.",
   "training_stage_boundary": "Training driver ends after all 21 final validations; connected evaluation process waits, verifies all cells, seals 23 models and evaluates, analyzes and publishes. No heartbeat or scheduled task.",
-  "reuse_status": "13 completed training runs and 12 final validation outputs verified and frozen as v4 references"
+  "reuse_status": "13 completed training runs and 12 final validation outputs verified and frozen as v4 references",
+  "timing_limit": "Desktop GPU workload not isolated; observed times retained without attributing differences to algorithm alone."
 }

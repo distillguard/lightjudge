@@ -1,0 +1,26 @@
+{
+  "source": "Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine",
+  "sample_scope": "one observed Windows WDDM 3D-engine sample, not continuous monitoring of previous runs",
+  "model_process": {
+    "pid": 8760,
+    "engine": "3D",
+    "utilization_percentage": 57
+  },
+  "other_process": {
+    "pid": 37088,
+    "executable": "fm.exe",
+    "application": "Football Manager 26",
+    "engine": "3D",
+    "utilization_percentage": 2
+  },
+  "observation": "GPU resources were not exclusively isolated to training at this observation",
+  "effect_on_prior_run_times": "not established; previous workload history was not recorded",
+  "time_interpretation": "observed desktop training-phase times; do not claim isolated algorithmic speed superiority",
+  "training_configuration_changed": false,
+  "other_process_modified_or_closed": false,
+  "accuracy_protocol_and_final_epoch_unchanged": true,
+  "test_still_unevaluated": true,
+  "recorded_at_kst": "2026-10-13T00:46:48.842823+09:00",
+  "observation_timestamp_available": false,
+  "observation_date_kst": "2026-10-13"
+}
