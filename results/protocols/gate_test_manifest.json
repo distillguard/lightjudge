@@ -1,0 +1,504 @@
+{
+  "status": "passed",
+  "frozen_at_kst": "2026-10-13T03:02:33.027484+09:00",
+  "code_sha256": {
+    "kl_experiment.py": "e6465c3bf443d990d6c2d2fbcd1efe4c2e41324498d586fb83c12b1544af5061",
+    "analyze_kl.py": "627850a5e93e062d8f0249dd9b5775a37593fe095a4eab6db5c62337f8705b66",
+    "train_student.py": "d51f0db5d1cf4a047794b7763d55680abdf709ae0fcab8933b2f60eb99aa9eef",
+    "logit_kd.py": "546e15489a8adba7c26cb5cd89756f3fe42679a34feacd8782f2ad58a53abd50",
+    "monitor_training.py": "939b12c96df146030d310a61b7a8f44041586a763b86bd71764811c0a6620751",
+    "pilot.py": "415594b568171f08721a72b9f2a89ebb0f8b118063ab6c908c8a2cc6f6fb7817",
+    "teacher_quantization.py": "4160cfa15099dcc144eab089f157b6d32bb92665c162111a1ba203f820aba439",
+    "soft_gate.py": "774069647de1daf62b752f22d99b19bf9f2fe5643c2ebd31bde7a13031f6ed17",
+    "probe_soft_gate.py": "ce4732d64b2a51cf334b1a1d5ffd2a6b5c97930a210a631b375a44d0eddca69a",
+    "gate_experiment.py": "ba855f263553516b5026f4b2fda90e854890e7cbf15579d2003beac2060a0806",
+    "gate_evaluation.py": "4a8ae868dde999db84ce03154493c80d5de2fcad747341be2c60fe03c57b2f38",
+    "gate_reporting.py": "53e420a2815c982183707a6045285468372fc56639ae6bdfc4f30c79e7356e86"
+  },
+  "training_protocol_sha256": "cfb7bf04ec9e185ba97aaa62f2f207a5a1fa7c96703b3efbfc9f0ad76763dac8",
+  "evaluation_protocol_sha256": "c11b4e7180e001a5d0946075ec4bcd5b78a0175d600e508e6cce05052d80795f",
+  "test_data_sha256": "e571dbd881b787a10b03ebfb3d6e993daac9cbf4ac491d1dfdaf37e674a5c7f3",
+  "test_n": 1172,
+  "test_seen_before_freeze": false,
+  "models": {
+    "gold_sft_42": {
+      "role": "student",
+      "condition": "gold_sft",
+      "seed": 42,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_42\\gold_sft\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_42\\gold_sft\\adapter\\adapter_config.json": "e9aee51e7f87c967544b11b707aaf46f5ff311aef2b9922b83f2b64af648f652",
+        "outputs\\kl_extension\\training\\full\\seed_42\\gold_sft\\adapter\\adapter_model.safetensors": "271ff3e6dfccde4b1a64e56bd49bf6293b54e1a2e9bdca88f8d14aaddc878408",
+        "outputs\\kl_extension\\training\\full\\seed_42\\gold_sft\\summary.json": "b1617ff44861c2532e4d503e487cfcffc16fdd000dd8467401014e2688882668"
+      }
+    },
+    "gold_sft_7": {
+      "role": "student",
+      "condition": "gold_sft",
+      "seed": 7,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_7\\gold_sft\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_7\\gold_sft\\adapter\\adapter_config.json": "ec860c9523542ae6ac11bcb109c5081fd695821c58c2f4c0dec3457deca37159",
+        "outputs\\kl_extension\\training\\full\\seed_7\\gold_sft\\adapter\\adapter_model.safetensors": "b6c330ffddee345447b6b1d31e81affe1b860e4b12f31493ff09724c8e8ac0ba",
+        "outputs\\kl_extension\\training\\full\\seed_7\\gold_sft\\summary.json": "61af634fe60ce5e59782c9dc45229d5d39728b7522ba8094482d9f5ffdc3753a"
+      }
+    },
+    "gold_sft_123": {
+      "role": "student",
+      "condition": "gold_sft",
+      "seed": 123,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_123\\gold_sft\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_123\\gold_sft\\adapter\\adapter_config.json": "f7f44f93bd017cf43b802f59f9ec475bd75d7049af57ce163a3053cbb789f155",
+        "outputs\\kl_extension\\training\\full\\seed_123\\gold_sft\\adapter\\adapter_model.safetensors": "3f6ee6bbe686f0a4169420155f6ff9fe2ee93257175ce43f627bf56f0bc719a2",
+        "outputs\\kl_extension\\training\\full\\seed_123\\gold_sft\\summary.json": "de71c790ec56e70dd798e5a05b6f0e4ed2700f1ac8d10241a65e1afc744824a5"
+      }
+    },
+    "response_kd_42": {
+      "role": "student",
+      "condition": "response_kd",
+      "seed": 42,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_42\\response_kd\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_42\\response_kd\\adapter\\adapter_config.json": "1a6f8c4acae307b92571da0c9728b6f1ceec3458723fc6792e9ec72ff7279953",
+        "outputs\\kl_extension\\training\\full\\seed_42\\response_kd\\adapter\\adapter_model.safetensors": "1b98fe92a8cfc258cd0afe1a9ff3d63563eeee25c608f7f5798cd3af26e7fd4f",
+        "outputs\\kl_extension\\training\\full\\seed_42\\response_kd\\summary.json": "ba12a851cfc8f3cf76f195c1a45700a5436a31028a968cc4ba9edf43df1427b3"
+      }
+    },
+    "response_kd_7": {
+      "role": "student",
+      "condition": "response_kd",
+      "seed": 7,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_7\\response_kd\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_7\\response_kd\\adapter\\adapter_config.json": "957b68cd2f8cf3c2270e72626063655ee39e71a7c3d1dbb46ceaae5090a410ae",
+        "outputs\\kl_extension\\training\\full\\seed_7\\response_kd\\adapter\\adapter_model.safetensors": "f9b15f52efe427d0e35e244ba69c976e87a2deced03e25aeada01a50da9e5114",
+        "outputs\\kl_extension\\training\\full\\seed_7\\response_kd\\summary.json": "eae4e30bbb2e8b1082f203a3a0b3e7f88ae859fa6c5d67db9c8e7f0dad8bdfe6"
+      }
+    },
+    "response_kd_123": {
+      "role": "student",
+      "condition": "response_kd",
+      "seed": 123,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_123\\response_kd\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_123\\response_kd\\adapter\\adapter_config.json": "d85110d44c1fb15fe264af8f49a94a7864e477ec8dc72918597ca0a955ee1a5e",
+        "outputs\\kl_extension\\training\\full\\seed_123\\response_kd\\adapter\\adapter_model.safetensors": "d9b8fbad73e38559f8e8083698d900679c41c51a2263d3dd185889076f0af364",
+        "outputs\\kl_extension\\training\\full\\seed_123\\response_kd\\summary.json": "46b99aee2c80f3d75e3c1ea76991233904d790ef96378b62f112f37a28e6cb9a"
+      }
+    },
+    "logit_kd_42": {
+      "role": "student",
+      "condition": "logit_kd",
+      "seed": 42,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_42\\logit_kd\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_42\\logit_kd\\adapter\\adapter_config.json": "71bef5c168ce2fdea3c6f8316e319e75070a064881817977deffb116e32a12c7",
+        "outputs\\kl_extension\\training\\full\\seed_42\\logit_kd\\adapter\\adapter_model.safetensors": "fc8135bb315743e3a3031f58937ed1391162e00cf973e5b4f3a36adfdc4a98ef",
+        "outputs\\kl_extension\\training\\full\\seed_42\\logit_kd\\summary.json": "fac6ca0a20dee283397a1c9ac3d9c7b753e3e3f4664d7eb999f663748221467c"
+      }
+    },
+    "logit_kd_7": {
+      "role": "student",
+      "condition": "logit_kd",
+      "seed": 7,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_7\\logit_kd\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_7\\logit_kd\\adapter\\adapter_config.json": "a7af33ec94e06cd941276c67c084b571a059cfef52f86ca953bd0c2ef02347a9",
+        "outputs\\kl_extension\\training\\full\\seed_7\\logit_kd\\adapter\\adapter_model.safetensors": "adf510502ce69e08e6115cf4c2c455de74f63d17c4c231cfc14337160e516632",
+        "outputs\\kl_extension\\training\\full\\seed_7\\logit_kd\\summary.json": "ca76de5146fb097fbf7e9001c9689d7ffc63ecd51039683889cc36d3f881b738"
+      }
+    },
+    "logit_kd_123": {
+      "role": "student",
+      "condition": "logit_kd",
+      "seed": 123,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_123\\logit_kd\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_123\\logit_kd\\adapter\\adapter_config.json": "0dd9b067107ee4f0775f2b8963a85f117d14da831ecb7862eb0193355817e190",
+        "outputs\\kl_extension\\training\\full\\seed_123\\logit_kd\\adapter\\adapter_model.safetensors": "90a46f7a8d3b0f226f5b60c7b234e3a87830fadde43c34926edb6aea3a63bb39",
+        "outputs\\kl_extension\\training\\full\\seed_123\\logit_kd\\summary.json": "c807b670dcd8f0341e19e95edda14412cbefde89ed6889368bf609dde38a8a5a"
+      }
+    },
+    "reverse_kl_42": {
+      "role": "student",
+      "condition": "reverse_kl",
+      "seed": 42,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_42\\reverse_kl\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_42\\reverse_kl\\adapter\\adapter_config.json": "57e39deac33d798ecfb73229acd6a1e52f3f5f1e5ea245b7cc4fdce9efeef425",
+        "outputs\\kl_extension\\training\\full\\seed_42\\reverse_kl\\adapter\\adapter_model.safetensors": "c07b2b208cf5d6b8bb3acce88b78bf2ea362a7cf4792d105575f77a019b86550",
+        "outputs\\kl_extension\\training\\full\\seed_42\\reverse_kl\\summary.json": "0fc24b35247223184bdf0a7597965b772602471ca2463e8d38ae9cb46e9d5109"
+      }
+    },
+    "reverse_kl_7": {
+      "role": "student",
+      "condition": "reverse_kl",
+      "seed": 7,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_7\\reverse_kl\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_7\\reverse_kl\\adapter\\adapter_config.json": "f53b77f9b09f7a70e67e9bb80dd3bdbcd90367b8c7cade945a561e84efcde96e",
+        "outputs\\kl_extension\\training\\full\\seed_7\\reverse_kl\\adapter\\adapter_model.safetensors": "118715e67bdeef0d41d07a0e9738ac869d47cd23d6f949d3f1e760599ca5f0bc",
+        "outputs\\kl_extension\\training\\full\\seed_7\\reverse_kl\\summary.json": "6a32f58a5f3e29cb99d544b3b4ccb8bdc90c8f686edaad8cf71d75553f6f0b80"
+      }
+    },
+    "reverse_kl_123": {
+      "role": "student",
+      "condition": "reverse_kl",
+      "seed": 123,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_123\\reverse_kl\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_123\\reverse_kl\\adapter\\adapter_config.json": "ffdacfe7b145a72ef004d9a859b53f0dc28991c53a824b660ded242c768e3845",
+        "outputs\\kl_extension\\training\\full\\seed_123\\reverse_kl\\adapter\\adapter_model.safetensors": "eb26305dcc2be88265050a36a4df9d5c3746c814ba9a0e5de5c905309e354e2e",
+        "outputs\\kl_extension\\training\\full\\seed_123\\reverse_kl\\summary.json": "57318c0c7c2df26b5c0256fe8aabf27ba0cbe080a012eabc94482acd8239e5ec"
+      }
+    },
+    "fixed_mix_42": {
+      "role": "student",
+      "condition": "fixed_mix",
+      "seed": 42,
+      "adapter": "outputs\\kl_extension\\training\\full\\seed_42\\fixed_mix\\adapter",
+      "files_sha256": {
+        "outputs\\kl_extension\\training\\full\\seed_42\\fixed_mix\\adapter\\adapter_config.json": "ae390fc17fa6cfa8dccd1fcb1d22197f6a7afdd1f56f1449adaee2c6c94087a9",
+        "outputs\\kl_extension\\training\\full\\seed_42\\fixed_mix\\adapter\\adapter_model.safetensors": "162a9dfec09509da8ac97e4d19ed9bf65f2fc0de4bd4a6e669a12b9b1deccc14",
+        "outputs\\kl_extension\\training\\full\\seed_42\\fixed_mix\\summary.json": "efd2a372de33b2df461e7d61024b2b617bc72d3416f9bded007c83c44eecc4f2"
+      }
+    },
+    "fixed_mix_7": {
+      "role": "student",
+      "condition": "fixed_mix",
+      "seed": 7,
+      "adapter": "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\adapter",
+      "files_sha256": {
+        "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\adapter\\adapter_config.json": "ec9c4b8ac32c77af352c06587ec07169a37bc0761d0832da17eb83bdc86beb8d",
+        "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\adapter\\adapter_model.safetensors": "e4d8b88d953d12593631746f8edb426ee7bd0b794838d42b3e73cd1455cb9b62",
+        "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\summary.json": "375684dbf3c36bec813906ff3cfb83963bd440292d963eb484d6c0eef038fa0d"
+      }
+    },
+    "fixed_mix_123": {
+      "role": "student",
+      "condition": "fixed_mix",
+      "seed": 123,
+      "adapter": "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\adapter",
+      "files_sha256": {
+        "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\adapter\\adapter_config.json": "61576ebf29fca2108b0d9dd0b0d5a2ea6c02c9f5713a84ad2f75c7bd2e72bebe",
+        "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\adapter\\adapter_model.safetensors": "b278d485612d549a4510e86199ac4676bda3db0ad4c25dca7a8e31410e247239",
+        "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\summary.json": "23747b5f60e4251e13e3d1f0267d4ee4f222a6f7d52ca45b5b3cf63432e00ee0"
+      }
+    },
+    "adaptive_mix_42": {
+      "role": "student",
+      "condition": "adaptive_mix",
+      "seed": 42,
+      "adapter": "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\adapter",
+      "files_sha256": {
+        "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\adapter\\adapter_config.json": "29d08ffd51f4b5fd749909e00abbab52c036a6c23c6599dfcc1db08d47cb705e",
+        "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\adapter\\adapter_model.safetensors": "acddf066d95713f7101e970dbbbe935876c028a6eb36b6edf381b8646fb101e1",
+        "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\summary.json": "015ce837b28dbcc86d8685f598d16b6c42c987fd332d1d7363bb5840a0f0ff43"
+      }
+    },
+    "adaptive_mix_7": {
+      "role": "student",
+      "condition": "adaptive_mix",
+      "seed": 7,
+      "adapter": "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\adapter",
+      "files_sha256": {
+        "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\adapter\\adapter_config.json": "e031778c221a98c420ff5969f6198aa23809b4a12993da4826c2cb77579b773a",
+        "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\adapter\\adapter_model.safetensors": "734578e8c3fe5eeb45c010ef83b82dc8b230a4ce1e43839b71d70014d3ed3767",
+        "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\summary.json": "a5d2192658ff88fe1d0c680adf0542e022f572ae929ecc10cc42ad93eccb84d7"
+      }
+    },
+    "adaptive_mix_123": {
+      "role": "student",
+      "condition": "adaptive_mix",
+      "seed": 123,
+      "adapter": "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\adapter",
+      "files_sha256": {
+        "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\adapter\\adapter_config.json": "d9b3270dee68de0e0be04ab4a4b4e860223bc0b7a27494f589fa9d2c186319e6",
+        "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\adapter\\adapter_model.safetensors": "c05f91a19ba964c2355a7e6ab08143fa9553acd7a1aab0b6cbaf077663d2888e",
+        "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\summary.json": "711c4cb2c584f7590453fc3c0379aa0fa4ad4de8d059d82d094d00fe44499584"
+      }
+    },
+    "adaptive_soft_42": {
+      "role": "student",
+      "condition": "adaptive_soft",
+      "seed": 42,
+      "adapter": "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\adapter",
+      "files_sha256": {
+        "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\adapter\\adapter_config.json": "3c45493f201a5496fe33392c706cdeacbb2bafcccac65ba8a456e04c7fd70154",
+        "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\adapter\\adapter_model.safetensors": "fe5546138a4cdc86285450278df8c5718561b105697a53e0f223f5ed95f73bf6",
+        "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\summary.json": "ff2086b583be70e4f99b4f68ea23c8d80de67c67aee499f42bbe205f1742673f"
+      }
+    },
+    "adaptive_soft_7": {
+      "role": "student",
+      "condition": "adaptive_soft",
+      "seed": 7,
+      "adapter": "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\adapter",
+      "files_sha256": {
+        "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\adapter\\adapter_config.json": "2d015725d94f09c87c67cc058c237a052ee9d02a28e8f1e2823b51f9d13f6709",
+        "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\adapter\\adapter_model.safetensors": "d6bd637a741bb4cafc954d47789f04cb085190595df8efebffc6620b5b55b055",
+        "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\summary.json": "43fe35d5aaaccf3175f43ee789a0296a3663277cf135fd674627cfca15d9ea9b"
+      }
+    },
+    "adaptive_soft_123": {
+      "role": "student",
+      "condition": "adaptive_soft",
+      "seed": 123,
+      "adapter": "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\adapter",
+      "files_sha256": {
+        "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\adapter\\adapter_config.json": "ae328871ab9045fd72bfbcd95497a0a4764965037288f13f9334c1498d8f3a0d",
+        "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\adapter\\adapter_model.safetensors": "091a42e16bf01026342bf692d9d06912bfc0cb7693c2f8a9408d978ff6459b5c",
+        "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\summary.json": "3da018c00732f6ba092ce27cf7ab4c2441de30af403e6b82d16e89c218eb240f"
+      }
+    },
+    "teacher_baseline": {
+      "role": "teacher",
+      "condition": null,
+      "seed": 42,
+      "adapter": null,
+      "model_id": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+      "files_sha256": {}
+    },
+    "student_baseline": {
+      "role": "student",
+      "condition": null,
+      "seed": 42,
+      "adapter": null,
+      "model_id": "Qwen/Qwen3.5-2B",
+      "revision": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+      "files_sha256": {}
+    }
+  },
+  "main_models": 21,
+  "timing_replay_used_as_test_model": false,
+  "analysis_spec": {
+    "primary": "adaptive_mix_minus_adaptive_soft",
+    "pairs": [
+      [
+        "adaptive_mix",
+        "adaptive_soft"
+      ],
+      [
+        "adaptive_mix",
+        "fixed_mix"
+      ],
+      [
+        "adaptive_soft",
+        "fixed_mix"
+      ]
+    ],
+    "bootstrap_replicates": 5000,
+    "bootstrap_seed": 42,
+    "ci_scope": "paired evaluation questions conditional on the three observed training seeds",
+    "secondary_comparisons": "prespecified exploratory unadjusted intervals; no equivalence claim",
+    "final_epoch": 3,
+    "generation": "thinking=False, greedy, max_new_tokens=8, batch=1, use_cache=False",
+    "warmup_questions": 3,
+    "choice_probabilities": "T=1 normalized over valid first-step answer letters",
+    "time_cohort": "nine newly matched Fixed/Hard/Soft runs; Fixed42 replay is measurement only",
+    "quality_target": null,
+    "no_post_test_selection_or_retraining": true
+  },
+  "validation_files_sha256": {
+    "outputs\\kl_extension\\scores\\validation\\teacher_baseline_summary.json": "ea79d81a7455a7ec4b56679732249e6f6f9f139aa853ef271f7bf6969b7b05f3",
+    "outputs\\kl_extension\\scores\\validation\\teacher_baseline.jsonl": "6f2e2f5f455431031a142d53d04200daa7e053a82da7d7be501df388ae6ccbaa",
+    "outputs\\kl_extension\\scores\\validation\\student_baseline_summary.json": "42960eb052a7ec21607ec8d004b973fd979af651b3c451d60867c9336cad77e6",
+    "outputs\\kl_extension\\scores\\validation\\student_baseline.jsonl": "d7de1c2c2b8929a71f798a9a2a6cf20140aecaee306294f588290016838b3e70",
+    "outputs\\kl_extension\\scores\\validation\\full_gold_sft_42_summary.json": "99469888723c8477a08869083830ca61782e4365a26e28e6c2b5b931b477e500",
+    "outputs\\kl_extension\\scores\\validation\\full_gold_sft_42.jsonl": "d5fb58feaec844c62c3984e0ead88afc289a52cc5c5fe1d63d9532f0a751f210",
+    "outputs\\kl_extension\\scores\\validation\\full_gold_sft_7_summary.json": "1f431bc23fb970195cffef32b35b98d318b80ff2db85d05893f7a372c5fffc2c",
+    "outputs\\kl_extension\\scores\\validation\\full_gold_sft_7.jsonl": "402e7a18438311850ab047dad4208edfd19f5f9a4c471177b169cf534bee3158",
+    "outputs\\kl_extension\\scores\\validation\\full_gold_sft_123_summary.json": "a5a705ed424eebbf579c49a8e9995d8bf59cff85f468d8a28bf8b917b55d1c3c",
+    "outputs\\kl_extension\\scores\\validation\\full_gold_sft_123.jsonl": "fb14b2314d3e2a88ae89da41ca29aa6f4a4eab595310fec84f59571a8e824d5b",
+    "outputs\\kl_extension\\scores\\validation\\full_response_kd_42_summary.json": "19a78711fadaf55aab136e4e5bbab7f30b968f69a7fcee28950b70982a66409a",
+    "outputs\\kl_extension\\scores\\validation\\full_response_kd_42.jsonl": "d22fe0b98f33f45e14e506e042d37529ae8e9875523fa3372e9f826461e34019",
+    "outputs\\kl_extension\\scores\\validation\\full_response_kd_7_summary.json": "49551c567236666b8eac955d763b0a85b2fa9dc2bfcf5ce58fb57eb7dd20b6b2",
+    "outputs\\kl_extension\\scores\\validation\\full_response_kd_7.jsonl": "246535e4a71a4d15970ed131ca1eabff2a911654da62e6c210ece2d66ee65450",
+    "outputs\\kl_extension\\scores\\validation\\full_response_kd_123_summary.json": "a46609c58f4ec7a737f34aad0b88c2f68abfc9011ebb1be6305459ab196cfc93",
+    "outputs\\kl_extension\\scores\\validation\\full_response_kd_123.jsonl": "08c9e13547c148bbfe9554706aa0b6d4ef1c97160d5ed2276e916883f2222540",
+    "outputs\\kl_extension\\scores\\validation\\full_logit_kd_42_summary.json": "19d76f092db8863e12228bb19339af417b241bd5e955976d682a83913c03072c",
+    "outputs\\kl_extension\\scores\\validation\\full_logit_kd_42.jsonl": "94c0e8a1dee2857ac39d228b0df23b1a19673ff573e1f910bd8ea58839783113",
+    "outputs\\kl_extension\\scores\\validation\\full_logit_kd_7_summary.json": "de8004f5e7cc4e8e44987efbdbf7133064ea75a9db0828bda07e39a8b8fa4bcc",
+    "outputs\\kl_extension\\scores\\validation\\full_logit_kd_7.jsonl": "c0c833bac5644ccf7a3433a1723f27ea881fa02a339b099c2fad61d4a3fc3fbd",
+    "outputs\\kl_extension\\scores\\validation\\full_logit_kd_123_summary.json": "98892f7d34f1d9a3fa7b9167a9ab92ba705a4985f197b30bc3910e6a00476cef",
+    "outputs\\kl_extension\\scores\\validation\\full_logit_kd_123.jsonl": "f1c067a01ed70f6a4d71cb4d8045367197b5464d8504d7f5a3f9c684feff9826",
+    "outputs\\kl_extension\\scores\\validation\\full_reverse_kl_42_summary.json": "c3a3c1d57b720ea27266ca04d5cc2b70b3d49b219820cca696cfb5b7841276e2",
+    "outputs\\kl_extension\\scores\\validation\\full_reverse_kl_42.jsonl": "a279a11fa972886f48745d6dc68a9b139ca4f2eb64397a6139d79c3cf700260d",
+    "outputs\\kl_extension\\scores\\validation\\full_reverse_kl_7_summary.json": "fb25079c5709f74db76960084784f915ff36385355d61feca6e3f7e544bab4cb",
+    "outputs\\kl_extension\\scores\\validation\\full_reverse_kl_7.jsonl": "e28a501bfd2f1de13c66287e498eb71d21c8392fa5c68cbe5ff5e17e56054a61",
+    "outputs\\kl_extension\\scores\\validation\\full_reverse_kl_123_summary.json": "6ceb40dffb9e2623995667678683d81444a56005937a8d4792b27d04bf4d9766",
+    "outputs\\kl_extension\\scores\\validation\\full_reverse_kl_123.jsonl": "e8b8513752c655cf92edbcfa6a241339e13bded358aeb5b6ab4e2bcf11b8282e",
+    "outputs\\gate_comparison_v4\\scores\\validation\\fixed_mix_42_summary.json": "82eea2252fb793024abe8acfc3199d572272c1c682afbc9cb13cb8c6f85ae83a",
+    "outputs\\gate_comparison_v4\\scores\\validation\\fixed_mix_42.jsonl": "c22c74181e5c7fa90bc251fee7cdc61f2fc2cd52a02351da06b66bd7882ead1c",
+    "outputs\\gate_comparison_v4\\scores\\validation\\fixed_mix_7_summary.json": "137bdbee5b7de6d29c82b8f1dd88c6222f9a720f49d5161e98d3e909a23420fc",
+    "outputs\\gate_comparison_v4\\scores\\validation\\fixed_mix_7.jsonl": "6156127dba3bd26832c5c936bfccb6bb2d78a8fa2729cc0e19ca112a6f626e2f",
+    "outputs\\gate_comparison_v4\\scores\\validation\\fixed_mix_123_summary.json": "335aeb54286fea86d030bfff3029d55144b7e2c3dfa001fa26b467a4656b6258",
+    "outputs\\gate_comparison_v4\\scores\\validation\\fixed_mix_123.jsonl": "4860378a50ffd5486949eb0dd56366166f61a54abb2ff32d4fbe1e29b52a52ce",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_mix_42_summary.json": "d77b16b739fc783929db62ed738e26a9633ab66fc6c08b10e1561a79250c82cc",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_mix_42.jsonl": "67f329458fae404fa06f9e01ced00718dd98f98c07baf932813e17a40efd83f2",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_mix_7_summary.json": "51297e06ce7a30e299b93dfb93c597ead89d319645b6fd195e72d4b4ec9d66f3",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_mix_7.jsonl": "d29bda81b04a1ef4ac35828df86c9de36e5c742b2e59cd994a5f11de7274373a",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_mix_123_summary.json": "7b5629a6c4f31eeb6a85c259744d2c134407178dcd270b8051e7ca4237e27740",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_mix_123.jsonl": "ed92aa3599ee00358af4e2b0f883c493d1c62cafeb5143972cfb0f9e44180ea5",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_soft_42_summary.json": "73ac0325dac16789d0ae7ec0e37c1be86daac064121be6fa2a2606910bbfeb1a",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_soft_42.jsonl": "9b48c1d3b7c74f17df6a39f3093bf7ae8de33cb11c70fddbc8abc93b99c5d6d3",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_soft_7_summary.json": "ec9e081e6c223f84ec7330a596ac2f81e9fe6508493d67822d43fd4d122a4670",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_soft_7.jsonl": "556e1d3444441ff689f72cca139ee6cd3148b92766366c8bed13132c4d85011a",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_soft_123_summary.json": "00a9df167bf570caaf39a8bba0459ca77e3ede063283a9ff57a866e8a873d8ea",
+    "outputs\\gate_comparison_v4\\scores\\validation\\adaptive_soft_123.jsonl": "8bcd9a4b78690f1c150945db2a6efdabef48c87465fe3c7ddf4d1a4b4460e484"
+  },
+  "timing_files_sha256": {
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\summary.json": "31f009416329f13c4a524e8f6e9423950a49a50fa654f39afe79df619cc0da92",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\train_log.jsonl": "563a617bfe4863fbf72e28ee790b49d9ac704fb79d413b3d7f937b9dd3df38eb",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\signal_log.jsonl": "6d734064130228f85d405dd2965f44c3dc38adc9a2963ae6f452d1aafa19269b",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\epoch_0.json": "b1dbc35d281c325f7814e4a2c7ab5e9c949b078330e082d3e7df2ccf2c8aea6f",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\epoch_0_validation.jsonl": "c1c271e6503fa6d6202faa16e8002f96a815f5ff386197997143f08abe25f054",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\epoch_1.json": "dfa54f27afe76dad4a5a8f7f279d5fa966b3e945c8620d852c6f7823f86d48f9",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\epoch_1_validation.jsonl": "12f43aece46717fd0015116e5269cf9c3b1850ad87577e8783fb974e71641b95",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\epoch_2.json": "185fab4aca34245a909bb3309d87326978c8a291d0d834bea5bbd8c4e79749eb",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\epoch_2_validation.jsonl": "b0ee5a66a357c5a09f63d9dda2b5fcd3308c23adaf9251775e81f4b2b747109f",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\epoch_3.json": "eaa1ab3ce6ad705ff4223d51919f42053a72a02da3f36909e66bc8f043ab52c1",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\epoch_3_validation.jsonl": "dd24d95ffb93ab9b359f7dfd24b8303f010b618ca9c1ea4a32e0fa175a04b4f2",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\adapter\\adapter_config.json": "4970a6d0083e6c0442d70d960e944f9975f1de0e0bed72515536648d633323fe",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\fixed_mix\\adapter\\adapter_model.safetensors": "162a9dfec09509da8ac97e4d19ed9bf65f2fc0de4bd4a6e669a12b9b1deccc14",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\summary.json": "015ce837b28dbcc86d8685f598d16b6c42c987fd332d1d7363bb5840a0f0ff43",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\train_log.jsonl": "e481bca486ff9c7fabc8ab9ac384a64252c7b661bee48161bf6803bbf35ee96c",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\signal_log.jsonl": "9decf7f7443e476dda81d6ad27111880caae20d9ce33b78d26f434f3cacc5366",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\epoch_0.json": "65fc878005ec7f7adf4bbae1e4c90659143c2168e0d2301239e0bd17bcbedc53",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\epoch_0_validation.jsonl": "c9e2dcd4c28f780ee998e213261b2809b1767d279aeca8a056681aa893c54ea3",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\epoch_1.json": "9e04f1a021c7f5a320892049e7b78c94800ba02180bff3965f674c0125011bcc",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\epoch_1_validation.jsonl": "358db653568a9a6b156cc2d3187b0129410f619a2fdddca66c276b9a3db74fed",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\epoch_2.json": "15d4ace85cd6ba5ff5bee55487680891c214275b2912193cf0506d9daaed7aff",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\epoch_2_validation.jsonl": "9ecbba148d7f1ed1552472e2f5db8aaf23e2a99b5544b1250629ff82a85e724d",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\epoch_3.json": "16f68bb0afd15e0d34c6ffa77afaf51fcdb53b4a7b6f232f5d415a838c3e3f38",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\epoch_3_validation.jsonl": "228e9f7c23c3552746164499fb6ca8f67ef544410366506d5fc27505641c5f76",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\adapter\\adapter_config.json": "29d08ffd51f4b5fd749909e00abbab52c036a6c23c6599dfcc1db08d47cb705e",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_mix\\adapter\\adapter_model.safetensors": "acddf066d95713f7101e970dbbbe935876c028a6eb36b6edf381b8646fb101e1",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\summary.json": "ff2086b583be70e4f99b4f68ea23c8d80de67c67aee499f42bbe205f1742673f",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\train_log.jsonl": "d509ceb94e2357c9a8af3a37e8d2c5ac99003315eaf9d33748084b4bc9bca725",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\signal_log.jsonl": "6f36adb704056d485daf03d4c952cfd855ad5b3a57f01511b61392322d7bb5e0",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\epoch_0.json": "e291a6489a2a704a11f491a2dbb93651b2fe1a92450cbb4893fbfbd6e352e7df",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\epoch_0_validation.jsonl": "c5dbc53704d6c8fb254da0f3669423cb4182b1add76f3d43377c33a084531ef7",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\epoch_1.json": "f5b8f8e02d7a22f6ff9172927371346024b5483f278922037f50c192d1a7310e",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\epoch_1_validation.jsonl": "916e80f6e867087e2095f298a9fedcb165afaf371f12cf0e9447e3a7e977a8f3",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\epoch_2.json": "f401667fb84c2d2927f5f347b342d96474ea3b84a12ddda4cafae52c72220a33",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\epoch_2_validation.jsonl": "2b7d56a195c185169bc3a0c3949e5677100929b64f7803145d135d2d2e8b622b",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\epoch_3.json": "2763b9da156bb0f3dc535cf572840ff5bc809614816616c5409455f6830cb013",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\epoch_3_validation.jsonl": "9c5eac9da1e413f95d2b14fe2d1b9acfbe5bb7831218d0df8d633b9f5455d3ff",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\adapter\\adapter_config.json": "3c45493f201a5496fe33392c706cdeacbb2bafcccac65ba8a456e04c7fd70154",
+    "outputs\\gate_comparison_v4\\training\\seed_42\\adaptive_soft\\adapter\\adapter_model.safetensors": "fe5546138a4cdc86285450278df8c5718561b105697a53e0f223f5ed95f73bf6",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\summary.json": "a5d2192658ff88fe1d0c680adf0542e022f572ae929ecc10cc42ad93eccb84d7",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\train_log.jsonl": "802f19d3be9f454780e0d1f3cd78100eefd65ddca5bf5f822314aa64ee3893d7",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\signal_log.jsonl": "04b849918c1e0dd599ab2c2fc16049bae2ba04d2c4dbde39ebb6644e2d7db564",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\epoch_0.json": "d43d79da4fdd9b44edaedd8c740b02013edf7d96c6e2f93776d5c58058e61dba",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\epoch_0_validation.jsonl": "25f1ddd8aec3e6f713acde7f6e968e60b13143a0d8c5b371456a2d5f5f0f9283",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\epoch_1.json": "4f95520abff298ffaaf09c0bf9384ca53b3ef273f6593fe822c15f95673cbdee",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\epoch_1_validation.jsonl": "ebae6ab535a5ba86a2b4647e687b17ead1c52f29df70c276360627d499473bfa",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\epoch_2.json": "fd80685dfd3f5a878a859385cc3577a117f45c1965ad4f337e45a8e295d2df27",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\epoch_2_validation.jsonl": "ae89475c4e17fe3098aed72488bb131cc2e9779f5130fd659d32da7c15b30ebb",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\epoch_3.json": "44e08a4a9703e07149eb940a715b4b23b2f47321f6ccdd91dbb35702f06cd48a",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\epoch_3_validation.jsonl": "013f2321f4a6014215b2182093b9ad77e0450b4a3b1bc3e62450ba6a967e407e",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\adapter\\adapter_config.json": "e031778c221a98c420ff5969f6198aa23809b4a12993da4826c2cb77579b773a",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_mix\\adapter\\adapter_model.safetensors": "734578e8c3fe5eeb45c010ef83b82dc8b230a4ce1e43839b71d70014d3ed3767",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\summary.json": "43fe35d5aaaccf3175f43ee789a0296a3663277cf135fd674627cfca15d9ea9b",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\train_log.jsonl": "3e968b1aeda54fb1db8d484c54be8bc0c73054a90fa4710301cc6ba5d52a9127",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\signal_log.jsonl": "cad02875c551f42f523e0d2b673595804356b2015737fbeaee4969fb33de72a6",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\epoch_0.json": "4dfcb16cb462aeea9a47151ffef9c13769f76866db3036ac8faac5109cca1cbf",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\epoch_0_validation.jsonl": "a4b04f51ff1ff692084481503b314701c16efd9ec30ffe83091556d51fac59cc",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\epoch_1.json": "bb3c5fa9a2bd5d70a3ed303627b5b6b8a4289c4bddfdbcfde87bad5c84394a9b",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\epoch_1_validation.jsonl": "ac29ab3b5644a66e6160466995fcfa4e5429a3df1a5278733787a562c6588ce5",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\epoch_2.json": "3b3b695714bbfcde8bcef432badc183a3b102219bbed203be4e14a6ea9258a74",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\epoch_2_validation.jsonl": "f2418a9b82c3483136133d6153adc74fcca397e84a41349a80d98fd4ed209d52",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\epoch_3.json": "c6d2c22ef4bf3ed9e4108424ee034392f60b0bf7e900ab664ea7e82f7b9ca2e8",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\epoch_3_validation.jsonl": "f3c23bc39ceb555097651eb7842237a296428e89a940ea24101bb5277ebcf8e3",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\adapter\\adapter_config.json": "2d015725d94f09c87c67cc058c237a052ee9d02a28e8f1e2823b51f9d13f6709",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\adaptive_soft\\adapter\\adapter_model.safetensors": "d6bd637a741bb4cafc954d47789f04cb085190595df8efebffc6620b5b55b055",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\summary.json": "375684dbf3c36bec813906ff3cfb83963bd440292d963eb484d6c0eef038fa0d",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\train_log.jsonl": "9a4a04e8ba2d278f731b7bd2ad4614658d126fbc21de9bab97978087403949a7",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\signal_log.jsonl": "7382e94bd75d1fc3e9cbe5e2ce41367c83474a15859d7901d5443859be50601d",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\epoch_0.json": "57910da110df94ed118554dbf9598de222f5bbc6f0f829b2bcd64ebbe5673755",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\epoch_0_validation.jsonl": "b65b3013f9ffada193ce1f1ef0338f1efe162a66b29f6dbe87df52a1d3681eff",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\epoch_1.json": "f449ace1a309a19d003844e7d5003dc35e297d2389e7bd75374d9d582b2e5c4f",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\epoch_1_validation.jsonl": "c322cec95f835a47140e51aa3d9a7ae9e1580bc15518fc174eb90c326ba86022",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\epoch_2.json": "56ba4f69d4159321ed9f9d5513b506605b6b9eb559a286bd220d7aa9ca3fe99c",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\epoch_2_validation.jsonl": "794b1bf079adf52af83d53414ed144a792eb75b53f634275ecd9c4cd289e3b1c",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\epoch_3.json": "9e9f26d6055ba8923b9e89cd971044b9fc166f72c0f0f4b0a166d9e29dbb6fb9",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\epoch_3_validation.jsonl": "6983c8f8d9b2a081838fcd4d398f21f64cef9743ea82dade6b607d968c8b81cc",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\adapter\\adapter_config.json": "ec9c4b8ac32c77af352c06587ec07169a37bc0761d0832da17eb83bdc86beb8d",
+    "outputs\\gate_comparison_v4\\training\\seed_7\\fixed_mix\\adapter\\adapter_model.safetensors": "e4d8b88d953d12593631746f8edb426ee7bd0b794838d42b3e73cd1455cb9b62",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\summary.json": "3da018c00732f6ba092ce27cf7ab4c2441de30af403e6b82d16e89c218eb240f",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\train_log.jsonl": "bb883882d4109856f8fafd504272bab6c655355a608e6aa39d06d5de7921fe72",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\signal_log.jsonl": "1de5e6e9ead3cbf84b5beaa3ac79c56921cf930b3681c13a880bd49b6fd484c1",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\epoch_0.json": "f42f0f40551b916073fa7541c6dc9ec889aa24f7c8a766278dcc40fee1a80be5",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\epoch_0_validation.jsonl": "324f63def7e43f65699edd284c3f68fdd9e4fa835571e0e2420578265019137c",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\epoch_1.json": "b552e5f787e4fcf2f2aba2b3ccf11f9d87a86f4e6eeb95325e511c875974554d",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\epoch_1_validation.jsonl": "ba10fdc9066515be88346d877c1a55af0b6ed6445af145eeee09590aad74d165",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\epoch_2.json": "f3270b7c5a007dc83bb017c2700e667671300ed916c3dc9f3e03e27a8117255f",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\epoch_2_validation.jsonl": "e13b1571057d4e3fcc75ca3401b75fd0646920e46cfe9a9489c892bab142b1f8",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\epoch_3.json": "b7a80ffd7d4b8efc3d8747f11758d914f21ea68f4684a7cdfceaaf0e3223a555",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\epoch_3_validation.jsonl": "b0db05beaeea54fccd2cd286c538795d20d4514567fb39c7d97931384f60c7e0",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\adapter\\adapter_config.json": "ae328871ab9045fd72bfbcd95497a0a4764965037288f13f9334c1498d8f3a0d",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_soft\\adapter\\adapter_model.safetensors": "091a42e16bf01026342bf692d9d06912bfc0cb7693c2f8a9408d978ff6459b5c",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\summary.json": "23747b5f60e4251e13e3d1f0267d4ee4f222a6f7d52ca45b5b3cf63432e00ee0",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\train_log.jsonl": "b3c2d9ac788511962443199f157dadbb8303e8d052f3ff5cf85d4cf3b408598b",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\signal_log.jsonl": "546af7e0fe2db58149d5cbbc0a7c2abc6cca898165fed5f9e29c6c7e492e38df",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\epoch_0.json": "d11e5434905b69f323f928cdf429601f2eacaa6da4f341a8468d98a746e691b6",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\epoch_0_validation.jsonl": "b1e718279bead1da5ea4fba6622f1596e985141c1cf770879da01ddab67fd09f",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\epoch_1.json": "ead0cc94ef05a4c13c6caec8e6843e3caa1615b83a06008b5e1181772ad92246",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\epoch_1_validation.jsonl": "ac49510c638ac46baee9cd1a7e8dc3163d3288308b1d2c10ee53ab3608149520",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\epoch_2.json": "d5cc4ff9cf0c8490c6af158cda223762fef5c98ee2d24276a7053812ea1d305c",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\epoch_2_validation.jsonl": "3bf311a18e5c248e89778b593729bd928b466a3864b3483273a36f6915e5b618",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\epoch_3.json": "47e63f5fd285e15a3e1466af3f84c5ae8925b42619e78de5cca780c50f5e7ee6",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\epoch_3_validation.jsonl": "2e18968f54d80fa8ad9fc177e5969dd1d58d6dcf55189d621a7956769a151fe9",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\adapter\\adapter_config.json": "61576ebf29fca2108b0d9dd0b0d5a2ea6c02c9f5713a84ad2f75c7bd2e72bebe",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\fixed_mix\\adapter\\adapter_model.safetensors": "b278d485612d549a4510e86199ac4676bda3db0ad4c25dca7a8e31410e247239",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\summary.json": "711c4cb2c584f7590453fc3c0379aa0fa4ad4de8d059d82d094d00fe44499584",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\train_log.jsonl": "5fc2f9ffd7909cb8e1824eada0cf0fd50e479ac383c4ce112963ebd9d6dabf09",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\signal_log.jsonl": "21eda9b7605e2246891717943c2ac53669bde1931ff9d9462ea308b386496396",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\epoch_0.json": "f2ae08df68eace99144aaf9e7b0eb259ab70d7f381609c8be53ff169ce74a1ba",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\epoch_0_validation.jsonl": "66d509eb4b698ce7d1abe245f0889c40a97b6256a2a10b794e17f7672b575d83",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\epoch_1.json": "254dd194572e5d853d518e98545dc877eb38dd937e70b6d231c6464916bb0263",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\epoch_1_validation.jsonl": "b1fa5a40f4f5eb5674fcaab500c9c7accdbb3090fd99e0353050da41e2242da1",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\epoch_2.json": "5739aa8b9773214f45fffdd7999398a6ed157e9db98d02f89fbe401283459f6d",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\epoch_2_validation.jsonl": "acff6ab6804371c933d34672d4ba6a9fe3349efe4965d3cc0b0f2bedf5451ee3",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\epoch_3.json": "f48e82b500d4242c3e1d958cd4de4cdfcceb7c083c0cf9b66e3ffa5ab65bd912",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\epoch_3_validation.jsonl": "7c88c2f8ba4b977e053acbfe5cf8895b24bc6f18eae1e453b0d65dee3f41f307",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\adapter\\adapter_config.json": "d9b3270dee68de0e0be04ab4a4b4e860223bc0b7a27494f589fa9d2c186319e6",
+    "outputs\\gate_comparison_v4\\training\\seed_123\\adaptive_mix\\adapter\\adapter_model.safetensors": "c05f91a19ba964c2355a7e6ab08143fa9553acd7a1aab0b6cbaf077663d2888e"
+  },
+  "public_checkpoint_files_sha256": {
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\config.json": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\merges.txt": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\model.safetensors-00001-of-00004.safetensors": "db6f444b43d318c92f360a13a25561a6a65b10c0631b8ed305a426dbaa6c380e",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\model.safetensors-00002-of-00004.safetensors": "31c7d7e2dd5d207840b31cc59083c8f4c4718959149e0358c0364052bb9a0330",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\model.safetensors-00003-of-00004.safetensors": "7ec36ba3a4176a44c3c0876ad80c56a2f70c84bf008d82e9501df642f17dadec",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\model.safetensors-00004-of-00004.safetensors": "b62b0c4cd7e44edee103ee8f4fe225f246d5e768e07bfd5f25b63a8aa1fdd0c6",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\model.safetensors.index.json": "26d3539b516be613f39563617cb9d33b3f83d401298125be392c80cefb8f7fe5",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\tokenizer_config.json": "316230d6a809701f4db5ea8f8fc862bc3a6f3229c937c174e674ff3ca0a64ac8",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\video_preprocessor_config.json": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-9B\\snapshots\\c202236235762e1c871ad0ccb60c8ee5ba337b9a\\vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\chat_template.jinja": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\config.json": "ed1c1723241f23f7f4e23430759cbd7dcfb4103cbdfe052bfe7626b57c2615b4",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\model.safetensors-00001-of-00001.safetensors": "aa33250c4fc64891ddfaba3a314fd9542ea371843c387178b425fbcc5ed680b1",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\model.safetensors.index.json": "aca8afed9da75b0f050b408d270766fd77627f1af401e240f61c3b47d0db02f9",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\tokenizer_config.json": "49e2b6e395f959f077f1e992b338919c0d4a9732fc6e613995e06557f843500c",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\video_preprocessor_config.json": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13",
+    ".cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc\\vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+  },
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.19.0",
+    "peft": "0.21.2",
+    "bitsandbytes": "0.50.2",
+    "accelerate": "1.15.0",
+    "numpy": "2.5.3",
+    "matplotlib": "3.11.2"
+  }
+}
