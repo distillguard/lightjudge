@@ -5,24 +5,66 @@
   "started_at_kst": "2026-10-12T20:38:30.458507+09:00",
   "test_evaluation": false,
   "current_action": "train",
-  "condition": "adaptive_mix",
+  "condition": "adaptive_soft",
   "seed": 7,
-  "cohort_index": 4,
+  "cohort_index": 5,
   "cohort_total": 9,
-  "updated_at_kst": "2026-10-12T22:40:18.980209+09:00",
-  "snapshot_at_kst": "2026-10-12T22:40:55.105319+09:00",
-  "completed_main_training": 15,
-  "completed_final_validation": 15,
+  "updated_at_kst": "2026-10-12T23:18:31.318128+09:00",
+  "snapshot_at_kst": "2026-10-12T23:21:41.954296+09:00",
+  "completed_main_training": 16,
+  "completed_final_validation": 16,
   "main_training_total": 21,
   "final_validation_total": 21,
   "measurement_replay_complete": 1,
-  "new_main_training_complete": 2,
-  "current_steps_reported": 0,
+  "new_main_training_complete": 3,
+  "current_steps_reported": 12,
   "seed42_validation_accuracy": {
     "fixed_mix": 0.8528428093645485,
     "adaptive_mix": 0.8729096989966555,
     "adaptive_soft": 0.8662207357859532
   },
   "verification": "results/checks/gate_seed42_progress.json",
-  "snapshot_notice": "Observed milestone snapshot; live status is local outputs/gate_comparison_v4/status.json and training summaries."
+  "snapshot_notice": "Observed milestone snapshot; live status is local outputs/gate_comparison_v4/status.json and training summaries.",
+  "latest_completed_run": {
+    "condition": "adaptive_mix",
+    "seed": 7,
+    "status": "passed",
+    "optimizer_steps": 420,
+    "training_forwards": 3354,
+    "validation_n": 299,
+    "accuracy": 0.8662207357859532,
+    "choice_nll": 0.4440714282972717,
+    "training_seconds": 1627.1005730992183,
+    "checkpoint_reload_prediction_mismatches": 0,
+    "initialization_data_order_finite_gradients_and_gate_verified": true,
+    "training_signals": {
+      "n_training_forwards": 3354,
+      "forward_weight_mean": 0.49850924269528923,
+      "forward_weight_sd": 0.500072331843403,
+      "forward_weight_quantiles_0_25_50_75_100": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "confidence_gap_mean": -0.005738888706703163,
+      "counterfactual_hard_forward_fraction": 0.49850924269528923,
+      "scope": "T=2 full-vocabulary entropy during training including dropout; not answer correctness confidence"
+    },
+    "observed_epoch_validation_accuracy": [
+      0.7625418060200669,
+      0.8394648829431438,
+      0.8695652173913043,
+      0.8662207357859532
+    ],
+    "adapter_files_sha256": {
+      "adapter_config.json": "e031778c221a98c420ff5969f6198aa23809b4a12993da4826c2cb77579b773a",
+      "adapter_model.safetensors": "734578e8c3fe5eeb45c010ef83b82dc8b230a4ce1e43839b71d70014d3ed3767"
+    },
+    "training_summary_sha256": "a5d2192658ff88fe1d0c680adf0542e022f572ae929ecc10cc42ad93eccb84d7",
+    "validation_summary_sha256": "51297e06ce7a30e299b93dfb93c597ead89d319645b6fd195e72d4b4ec9d66f3",
+    "verified_at_kst": "2026-10-12T23:21:41.954296+09:00"
+  },
+  "latest_verification": "420 updates, 3354 forwards, same initialization/data order, finite gradients, gate formula and all 299 reload predictions verified; 130 protected artifacts unchanged"
 }

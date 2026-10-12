@@ -1,7 +1,7 @@
 # 연구보고서 v4.3 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **15/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Seed 42의 Fixed·Hard·Soft 검증을 모두 마쳤고 다음 seed를 진행한다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
+**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **16/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Hard seed 7 최종 validation 86.62%를 검증했고 Soft seed 7을 학습 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 
@@ -54,6 +54,8 @@ Fixed 시간은 원본 adapter와 tensor hash가 일치하는 재현 run에서 �
 ![Seed 42 전체 validation 학습곡선](../results/gate_comparison_v4/progress/seed42_validation_curves.png)
 
 이 표와 그림은 **한 seed의 validation 중간 결과**다. 최종 test 결과·3-seed 평균·통계적 우위를 의미하지 않으며 설정·epoch 3 checkpoint는 변경하지 않았다. 시간은 모델·cache 로딩과 epoch 평가를 제외한 학생 학습 loop·로그·최종 저장 구간이다.
+
+**Seed 7 진행 관측:** Hard의 고정 epoch 3 adapter에서 validation Accuracy 86.62%, 선택지 NLL 0.4441, 학생 학습 단계 시간 27.12분을 확인했다. 전체 420 step·3,354 forward의 초기화·문항 순서·수치·gate 검사와 저장 후 299개 답변 일치를 통과했다. Epoch 0~3 Accuracy는 76.25% → 83.95% → 86.96% → 86.62%다. 사전에 고정한 epoch 3 checkpoint를 유지하며, Soft·Fixed seed 7은 계속 진행한다. [검증 snapshot](../results/protocols/gate_run_status.json)
 
 Teacher 준비의 기존 로그는 hard 응답 생성과 soft 확률 추출을 함께 측정했다. 두 비용을 소급 분리하거나 각각 실측했다고 표기하지 않는다. 학생 학습 단계 시간 비교는 별도 측정한다.
 
