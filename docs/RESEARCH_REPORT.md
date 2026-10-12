@@ -35,6 +35,18 @@ T=2·lr=2e−4·r=8·3 epochs·3 seeds는 기존 통제값이며 원문 default�
 
 현재 GPU는 RTX 5060 Ti 16GB 1개, CPU는 Ryzen 5 7500F 6코어·12스레드다. 학습 시간의 비교 가능성을 위해 GPU 학습은 동시에 실행하지 않는다. 새 실행기는 학습·validation 완료에서 종료하며, 아직 test 동결·23개 모델 test는 수행하지 않았다.
 
+## v4.3 후속 평가 준비·학습 중간 관측
+
+전체 33개 검사에서 test 조기 실행 차단, 21개 최종 adapter 검증·23개 평가 모델 구성, Fixed seed 42 재현 제외, 문항별 paired bootstrap, 보고서 재실행과 원본 보존을 확인했다. Test manifest 저장 경로 오류는 시험용 파일 검사에서 발견해 수정했으며 실제 baseline 기록은 변경되지 않았다. [후속 코드 검증](../results/checks/gate_evaluation_check.json)
+
+후속 프로세스는 현재 학습·validation 완료를 기다린다. 모든 조건 완료 후 checkpoint·소스·통계를 별도 동결하고 23개 모델 test → 통계·그림 → 문서 3개·Git 갱신 순으로 진행한다. 예약 작업이나 heartbeat는 생성하지 않았다. 아직 test 데이터의 모델 평가와 최종 checkpoint 동결은 수행하지 않았다. [평가·분석 사전 동결](../results/protocols/gate_evaluation_protocol.json)
+
+Fixed seed 42 시간 재현의 epoch 0·1·2 Accuracy는 **76.25% → 83.61% → 84.62%**다. 아래는 전체 validation 299개와 첫 280 steps의 관측만 포함한 진행 snapshot이며, 재현 run은 성능 비교의 새 모델로 세지 않는다. 첫 280 steps의 loss·gradient·학습률·문항 순서가 기존 Fixed 실행과 정확히 일치했다. [관측값](../results/gate_comparison_v4/progress/fixed_seed42_progress.json)
+
+![Fixed seed 42 중간 학습곡선](../results/gate_comparison_v4/progress/fixed_seed42_progress.png)
+
+Teacher 준비의 기존 로그는 hard 응답 생성과 soft 확률 추출을 함께 측정했다. 두 비용을 소급 분리하거나 각각 실측했다고 표기하지 않는다. 학생 학습 단계 시간 비교는 별도 측정한다.
+
 ## 기존 v3.2의 핵심 설계
 
 기존 v3.2의 주 질문은 **confidence 기반 적응형 KL 혼합이 고정 50:50 혼합보다 정답률을 높이는가**였다. 본문은 생성 Accuracy·개별 seed·평균±SD와 **적응형−고정 혼합의 Accuracy 차이·paired 95% CI**를 중심으로 구성한다. Gate 분기·Teacher 오류·학습곡선은 해석 분석, 선택지 NLL은 보조 성능, ECE·Brier·비용은 부록이다. [개정 평가 정의·동결 원칙](RESEARCH_PLAN.md#evaluation)

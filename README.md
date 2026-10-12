@@ -53,6 +53,7 @@ lightjudge/
 |---|---|
 | `src/kl_experiment.py` | 보존한 기존 6조건 실행·공통 평가 helper |
 | `src/gate_experiment.py` | v4.3 동결·Fixed/Hard/Soft 학습·전체 validation·시간 계측 |
+| `src/gate_evaluation.py`, `src/gate_reporting.py` | 학습 완료 후 23개 모델 test 동결·평가·paired 통계·그래프·문서 갱신 |
 | `src/pilot.py` | 데이터 준비·프롬프트·기준 모델 평가 |
 | `src/train_student.py` | Student LoRA 학습·CE |
 | `src/logit_kd.py` | 기존 확률분포 cache·4가지 KL 손실·Hard gate |
@@ -91,6 +92,15 @@ lightjudge/
 
 seed 42는 Fixed→Hard→Soft, seed 7은 Hard→Soft→Fixed, seed 123은 Soft→Fixed→Hard 순서다. 모든 측정 run은 epoch 0·1·2·3에서 validation 299개를 평가하고 평가 시간을 학습 시간에서 제외한다. Fixed seed 42 재현은 기존 최종 checkpoint를 대체하지 않는다. 각 최종 adapter를 다시 로딩해 final validation을 검증한다.
 
-이번 실행기는 **학습·validation 단계에서 종료**한다. 그 뒤 별도 23개 모델의 test manifest·분석 코드를 동결하고 test를 평가한다. Test를 보고 재학습하거나 checkpoint를 바꾸지 않는다. 원본 6조건 pipeline은 v4 실행에 사용하지 않는다. [동결 프로토콜](results/protocols/gate_training_protocol.json) · [새 학습 경로 GPU 검사](results/checks/trainer_gpu_check.json)
+학습 실행기는 **학습·validation 단계에서 종료**한다. 연결된 후속 실행기는 이 완료를 기다린 뒤 모든 산출물 검증 → 별도 23개 모델 test 동결·평가 → 통계·그래프·문서 갱신을 진행한다. 학습 코드 22개·후속 코드 11개, 총 33개 검사를 통과했다. Test를 보고 재학습하거나 checkpoint를 바꾸지 않는다. 원본 6조건 pipeline은 v4 실행에 사용하지 않는다. [동결 프로토콜](results/protocols/gate_training_protocol.json) · [새 학습 경로 GPU 검사](results/checks/trainer_gpu_check.json)
+
+후속 실행기는 현재 대기 중이다. 같은 명령을 추가 실행하지 않는다. 신규 환경에서 후속 단계만 연결할 때는 다음 순서로 사용한다.
+
+```powershell
+.\.venv\Scripts\python.exe -B -X utf8 src/gate_evaluation.py prepare
+.\.venv\Scripts\python.exe -B -X utf8 src/gate_evaluation.py pipeline
+```
+
+후속 실행은 예약 작업 없이 실행 프로세스 안에서 대기하며, 학습 실패·소스 변경·미완료 산출물이 있으면 test를 시작하지 않는다. [사전 평가 동결](results/protocols/gate_evaluation_protocol.json) · [학습 중간 곡선](results/gate_comparison_v4/progress/fixed_seed42_progress.png)
 
 [파일럿 탐색 결과](results/pilot/index.html) · [범위 변경·원본 보존](results/protocols/scope_change.json)

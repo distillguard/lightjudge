@@ -1,0 +1,40 @@
+{
+  "status": "partial_observation",
+  "recorded_at_kst": "2026-10-12T21:11:14.691500+09:00",
+  "condition": "fixed_mix",
+  "seed": 42,
+  "measurement_only": true,
+  "optimizer_steps_verified": 280,
+  "planned_steps": 420,
+  "first_280_step_loss_gradient_lr_sample_ids_match_original_exactly": true,
+  "validation_n": 299,
+  "points": [
+    {
+      "epoch": 0,
+      "step": 0,
+      "training_seconds": 0.0,
+      "accuracy": 0.7625418060200669,
+      "gold_ce": 0.2971840117649988
+    },
+    {
+      "epoch": 1,
+      "step": 140,
+      "training_seconds": 559.6599610000849,
+      "accuracy": 0.8361204013377926,
+      "gold_ce": 0.3294777778322786
+    },
+    {
+      "epoch": 2,
+      "step": 280,
+      "training_seconds": 1143.0472818003036,
+      "accuracy": 0.8461538461538461,
+      "gold_ce": 0.27091166723335014
+    }
+  ],
+  "test_evaluation": false,
+  "completed_main_training": 13,
+  "completed_final_validation": 12,
+  "training_protocol_sha256": "cfb7bf04ec9e185ba97aaa62f2f207a5a1fa7c96703b3efbfc9f0ad76763dac8",
+  "final_checkpoint_saved": false,
+  "checkpoint_selection": "fixed epoch 3; no validation-based selection"
+}

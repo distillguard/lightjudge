@@ -212,6 +212,10 @@ Accuracy 상승·시간 감소는 관측 설정에서 양쪽 개선, Accuracy �
 
 9개 시간 측정 run의 순서는 seed 42 Fixed→Hard→Soft, seed 7 Hard→Soft→Fixed, seed 123 Soft→Fixed→Hard로 고정한다. 하나의 GPU에서 순차 실행하며 CPU 코어 증가나 GPU 동시 학습으로 시간 비교 조건을 바꾸지 않는다. 새 실행기는 학습·validation 검증 완료에서 멈추고 별도 test 동결을 기다린다.
 
+**후속 평가 준비:** 평가·분석 소스와 기존 5,000회 paired bootstrap(seed 42)·동일 generation·warmup 정의를 test 전에 사전 고정했다. 별도 test manifest는 학습 21회·final validation 21회·시간 측정 9회 검증 후에만 생성한다. Teacher·원본 Student·최종 adapter 21개를 평가하며 Fixed seed 42 재현은 제외한다. [평가 사전 동결](../results/protocols/gate_evaluation_protocol.json)
+
+Teacher full-cache 준비의 기존 시간은 hard 응답과 soft 확률 추출의 합산 구간이다. 기존 기록에서 두 비용을 분리할 수 없어 공유 준비 비용으로 보고하고, 독립 조건별 hard/soft 준비 비용 비교는 수행하지 않는다.
+
 ## 7. 일정·논문 산출물
 
 아래는 2026-10-12 기준 목표 일정이며 실행 완료를 뜻하지 않는다. 결과의 부호·유의성에 따라 제출 범위를 바꾸거나 미완료 결과를 완성된 것처럼 기록하지 않는다.

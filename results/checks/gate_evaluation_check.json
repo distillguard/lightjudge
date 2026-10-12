@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "checked_at_kst": "2026-10-12T21:13:41.488363+09:00",
+  "total_cpu_tests_passed": 33,
+  "evaluation_tests_passed": 11,
+  "successful_23_model_seal": "synthetic temporary fixture only; no actual test seal yet",
+  "missing_final_validation_blocks_seal": true,
+  "fixed42_original_adapter_reference_verified": true,
+  "baseline_summary_bytes_preserved_in_seal_test": true,
+  "prepared_sources_match": true,
+  "training_sources_match_frozen_protocol": true,
+  "protected_legacy_artifacts_verified": 130,
+  "legacy_adapters_verified": 13,
+  "legacy_validation_verified": 12,
+  "test_still_unevaluated": true,
+  "automatic_retraining_or_checkpoint_selection": false,
+  "layout_fixture_figures_only": "not published as research results",
+  "actual_partial_progress_plot": "results/gate_comparison_v4/progress/fixed_seed42_progress.png",
+  "evaluation_protocol_sha256": "c11b4e7180e001a5d0946075ec4bcd5b78a0175d600e508e6cce05052d80795f"
+}

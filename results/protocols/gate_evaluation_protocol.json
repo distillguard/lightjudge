@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "prepared_at_kst": "2026-10-12T21:05:56.052199+09:00",
+  "code_sha256": {
+    "kl_experiment.py": "e6465c3bf443d990d6c2d2fbcd1efe4c2e41324498d586fb83c12b1544af5061",
+    "analyze_kl.py": "627850a5e93e062d8f0249dd9b5775a37593fe095a4eab6db5c62337f8705b66",
+    "train_student.py": "d51f0db5d1cf4a047794b7763d55680abdf709ae0fcab8933b2f60eb99aa9eef",
+    "logit_kd.py": "546e15489a8adba7c26cb5cd89756f3fe42679a34feacd8782f2ad58a53abd50",
+    "monitor_training.py": "939b12c96df146030d310a61b7a8f44041586a763b86bd71764811c0a6620751",
+    "pilot.py": "415594b568171f08721a72b9f2a89ebb0f8b118063ab6c908c8a2cc6f6fb7817",
+    "teacher_quantization.py": "4160cfa15099dcc144eab089f157b6d32bb92665c162111a1ba203f820aba439",
+    "soft_gate.py": "774069647de1daf62b752f22d99b19bf9f2fe5643c2ebd31bde7a13031f6ed17",
+    "probe_soft_gate.py": "ce4732d64b2a51cf334b1a1d5ffd2a6b5c97930a210a631b375a44d0eddca69a",
+    "gate_experiment.py": "ba855f263553516b5026f4b2fda90e854890e7cbf15579d2003beac2060a0806",
+    "gate_evaluation.py": "4a8ae868dde999db84ce03154493c80d5de2fcad747341be2c60fe03c57b2f38",
+    "gate_reporting.py": "53e420a2815c982183707a6045285468372fc56639ae6bdfc4f30c79e7356e86"
+  },
+  "analysis_spec": {
+    "primary": "adaptive_mix_minus_adaptive_soft",
+    "pairs": [
+      [
+        "adaptive_mix",
+        "adaptive_soft"
+      ],
+      [
+        "adaptive_mix",
+        "fixed_mix"
+      ],
+      [
+        "adaptive_soft",
+        "fixed_mix"
+      ]
+    ],
+    "bootstrap_replicates": 5000,
+    "bootstrap_seed": 42,
+    "ci_scope": "paired evaluation questions conditional on the three observed training seeds",
+    "secondary_comparisons": "prespecified exploratory unadjusted intervals; no equivalence claim",
+    "final_epoch": 3,
+    "generation": "thinking=False, greedy, max_new_tokens=8, batch=1, use_cache=False",
+    "warmup_questions": 3,
+    "choice_probabilities": "T=1 normalized over valid first-step answer letters",
+    "time_cohort": "nine newly matched Fixed/Hard/Soft runs; Fixed42 replay is measurement only",
+    "quality_target": null,
+    "no_post_test_selection_or_retraining": true
+  },
+  "test_seen": false,
+  "final_checkpoint_seal": "awaiting all 21 final validations",
+  "training_protocol_sha256": "cfb7bf04ec9e185ba97aaa62f2f207a5a1fa7c96703b3efbfc9f0ad76763dac8",
+  "setting_basis": "same 5000 paired question bootstrap/RNG42 and three-question warmup as the original evaluation; no new gate/target settings"
+}
