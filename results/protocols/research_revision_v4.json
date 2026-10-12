@@ -148,7 +148,7 @@
     "timing_runs_complete": 9,
     "seed123_cohort_complete": true,
     "test_checkpoint_seal_passed": true,
-    "total_final_test_models_scored": 0,
+    "total_final_test_models_scored": 8,
     "validation_analysis_passed": true,
     "validation_figures_visually_checked": 4,
     "test_evaluation_started": true
