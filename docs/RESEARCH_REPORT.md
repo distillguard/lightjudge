@@ -1,7 +1,7 @@
 # 연구보고서 v4.3 · 계획 개정 및 기존 결과 기록
 
 <!-- main-status:start -->
-**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습 13/21회·final validation 13/21회 완료. 별도 Fixed seed 42 시간 재현 1회와 원본 adapter 검증을 완료했고 Hard Gate seed 42를 실행 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
+**현재 v4.3 상태:** 순차 pipeline 실행 중. 본실험 학습·final validation **14/21회 완료**, 별도 Fixed seed 42 시간 재현 1회 완료. Hard seed 42 최종 validation은 87.29%이며 Soft seed 42를 학습 중이다. Test는 미평가다. [진행 snapshot](../results/protocols/gate_run_status.json)
 <!-- main-status:end -->
 
 
@@ -46,6 +46,8 @@ Fixed seed 42 시간 재현의 epoch 0·1·2 Accuracy는 **76.25% → 83.61% →
 ![Fixed seed 42 중간 학습곡선](../results/gate_comparison_v4/progress/fixed_seed42_progress.png)
 
 **Fixed seed 42 검증 완료:** 원본 최종 adapter의 validation Accuracy 85.28%, 선택지 NLL 0.4679. 재현의 420 step 전체 loss·gradient·학습률·문항 순서와 adapter tensor 파일 hash가 원본과 정확히 일치하며, 최종 validation 생성 답변도 299개 모두 일치했다. 재현 학습 단계 시간은 28.66분, 초기 평가 2.07분과 epoch 평가 7.24분은 별도다. 시간 재현은 본실험 학습 완료 수에 더하지 않는다.
+
+**Hard seed 42 완료·Soft 시작:** Hard의 고정 epoch 3 adapter를 다시 로딩한 전체 validation Accuracy는 87.29%, 선택지 NLL은 0.4512, 학생 학습 단계 시간은 29.05분이다. 메모리 모델과 저장 후 생성 답변은 299개 모두 일치했다. 전체 3,354회 학습 forward에서 Hard는 Forward 49.46%·Reverse 50.54%로 양쪽을 사용했으며 confidence 비교식과 일치했다. Soft seed 42는 같은 초기 adapter에서 시작했고 실제 로그의 가중치가 σ(confidence gap−0.05)와 일치한다. 한 seed의 validation 관측이며 통계적 우위나 최종 test 결과를 의미하지 않는다. [실행 검증](../results/checks/gate_seed42_progress.json)
 
 Teacher 준비의 기존 로그는 hard 응답 생성과 soft 확률 추출을 함께 측정했다. 두 비용을 소급 분리하거나 각각 실측했다고 표기하지 않는다. 학생 학습 단계 시간 비교는 별도 측정한다.
 
