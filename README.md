@@ -1,137 +1,48 @@
 # LightJudge
 
-문서 버전 **v4.3** · 학습·동결 test·결과 검증 완료
-
-공개 post-trained Qwen3.5-9B NF4 Teacher와 Qwen3.5-2B BF16 LoRA Student에서 **confidence 기반 Hard·Soft Gate의 정확도와 학습 시간**을 비교한다. Fixed 50:50은 핵심 대조군이다.
+Qwen3.5-9B Teacher와 Qwen3.5-2B Student에서 **Hard의 이진 선택·Soft의 연속 가중·Fixed 50:50**을 비교하는 지식 증류 연구다. 정답률과 학습 시간을 함께 평가한다. 갱신: 2026-10-13.
 
 <!-- main-status:start -->
 **v4.3 완료:** 본실험 21개 학습·validation과 Teacher·원본 Student·21개 adapter의 test 1,172개 평가 완료. Fixed seed 42 시간 재현 1회는 별도이며 원본 최종 checkpoint를 유지했다. Test 이후 재학습·checkpoint 변경은 수행하지 않았다.
 <!-- main-status:end -->
 
-최종 test 평균은 Hard **85.38%**, Soft **85.04%**이며 Hard−Soft는 **+0.34%p, paired 95% CI [−0.23,+0.91]%p**다. 우위를 확인하지 못했으며 동등성의 증거로 해석하지 않는다. 시간은 공유 GPU 환경의 실측값이다. [최종 검증](results/checks/gate_final_verification.json)
+## 현재 상태
 
+| 단계 | 상태 | 확인한 범위 |
+|---|---|---|
+| ARC 본실험 | 완료 | 7조건×3 seeds, 별도 시간 재현 1회, 23개 모델의 test 평가 |
+| 베이지안 후속 분석 | 완료 | 3가지 prior·paired Bayesian bootstrap; 모형 적합성 한계 있음 |
+| 새 데이터 | 준비·초기 진단 완료 | OpenBookQA·HellaSwag 확보, 각 train 128문항에서 gate 진단 |
+| 새 데이터 증류 학습 | 미실행 | 같은 Qwen에서 Fixed·Hard·Soft의 6회 탐색 학습 계획 |
+| 다른 Student 계열 | 준비·GPU 검사 완료 | SmolLM2·Granite 본학습은 새 데이터 비교 뒤에 진행 |
 
-- [연구계획서](docs/RESEARCH_PLAN.md): 고정한 질문·조건·평가·종료 기준
-- [연구보고서](docs/RESEARCH_REPORT.md): 핵심 결과·그래프·근거
-- [전체 validation 학습곡선](results/gate_comparison_v4/validation/learning_curves.png): Fixed·Hard·Soft의 3개 seed 실측
-- [중단 상태 기록](results/protocols/status.json)
+ARC test는 Hard **85.38%**, Soft **85.04%**다. 차이 +0.34%p의 paired 95% CI는 [−0.23,+0.91]%p로, 우위와 동등성을 확정하지 못했다. 학습된 Soft의 평균 가중치 **0.4866**은 50:50에 가깝지만 문항별 변화와 selection gradient가 있어 Fixed와 동일하다고 단정하지 않는다.
 
-| 항목 | 범위 |
-|---|---|
-| 데이터 | ARC-Challenge train 1,118 / validation 299 / test 1,172 |
-| 개정 본실험 계획 | Gold·Response·Forward·Reverse·Fixed·Hard·Soft × 3 seeds = 21조건 |
-| 시간 측정 계획 | E5~E7 전체 validation 정확도–시간 곡선, 기존 Fixed seed 42 측정용 재현 1회 별도 |
-| 공통 학습 | 원본 Student부터 3 epochs·420 steps, LoRA rank 8, T=2 |
-| 주 결과 | Hard−Soft Accuracy 차이·paired CI, 개별 seed·평균±SD, 학습 시간·정확도–시간 곡선 |
-| 해석 분석 | 실제 gate 분기·Teacher 오류 패턴·학습곡선 |
-| 보조 지표 | 선택지 NLL·Brier·ECE·추론 지연·VRAM은 부록 |
-| 개정 최종 test 계획 | 동결 후 Teacher·원본 Student·21개 adapter = 23개 모델 |
+## 문서·결과
 
-**7조건 학습·validation 실행기를 별도로 구현하고 동결했다.** 기존 7개 소스·원본 프로토콜·130개 보호 산출물은 유지한다. 재사용 가능한 13회 학습과 12회 검증은 hash·설정·초기화·문항 순서로 확인했다. [v4.3 동결 기록](results/protocols/gate_training_protocol.json)
+- [연구계획서](docs/RESEARCH_PLAN.md): 연구 질문, 7조건 수식, 통제·평가 설계, 다음 단계.
+- [연구보고서](docs/RESEARCH_REPORT.md): 실제 결과표, 그래프, Bayesian 해석, 새 데이터 진단.
+- [ARC 최종 결과](results/gate_comparison_v4/test/comparison.json) · [Bayesian 결과](results/bayesian_v1/summary.json) · [새 데이터·gate 진단](results/gate_continuity/train_screening.json).
 
-완료된 256개 파일럿은 탐색 기록으로 보존한다. 남은 파일럿 반복·파일럿 test·다른 모델/데이터 확장은 제외했다. 기존 epoch 진단은 seed 42의 train/validation 각 64개이며, 개정안의 E5~E7 정확도–시간 곡선은 세 seed 모두 validation 299개 전체에서 관측한다. **CI는 별도 성능 지표가 아니라 차이의 불확실성**이며, seed SD와 구분한다. 선택지 NLL은 확률 품질을 보는 보조 지표로 유지한다. [개정 평가·시간 정의](docs/RESEARCH_PLAN.md#evaluation) · [재정리한 중간 결과·그래프](results/main/index.html)
-
-**근거 정책:** 원문 식·공식 자료·기존 통제값·실측 검증·미확인을 구분한다. T=2·학습률·rank·epoch·seed를 논문의 표준값으로 표기하지 않는다. 근거가 없던 80% 목표는 철회했으며 기존 결과는 그대로다. [항목별 근거 점검](results/protocols/evidence_audit.json)
-
-수식·기존 누적 갱신과의 일치·평가 RNG 보존·덮어쓰기 방지 등 **22개 검사**와 새 실행 경로의 격리 GPU 검사가 통과했다. GPU 검사 모델은 저장·재사용하지 않았다. [GPU 검증 결과](results/checks/soft_gpu_probe.json)
-
-## 디렉토리 구성
+## 디렉토리
 
 ```text
-lightjudge/
-├── README.md
-├── src/                 # 실행·모델·데이터·학습·평가·분석 코드
-├── docs/                # 연구계획서·연구보고서
-├── requirements/        # base.txt·gpu.txt
-├── results/
-│   ├── main/            # 전체 train 본실험의 중간 결과·그래프
-│   ├── pilot/           # 256개 파일럿 결과·그래프
-│   ├── checks/          # 수식·학습·보존 검증 결과
-│   └── protocols/       # 고정 설정·데이터 기록·중단 상태
-└── tests/               # 경로 변경과 동결 검증의 회귀 검사
+src/          모델·데이터·학습·평가·분석 코드
+docs/         연구계획서·연구보고서
+results/      공유용 결과·그림·동결 프로토콜·검증 기록
+requirements/ GPU 학습 환경과 별도 Bayesian 환경의 의존성
+tests/        수식·데이터·학습·보존 검사
 ```
 
-로컬의 `data/`·`outputs/`·`.cache/`·`.venv/`·`_archive/`는 실행용이며 Git에서 제외한다. `results/`는 검토·공유용 snapshot이고 실행 중인 로그가 아니다. 모델·adapter 가중치와 전체 확률분포 cache는 포함하지 않는다.
+`data/`, `outputs/`, `.cache/`, `.venv/`는 로컬 실행용이다. 원본 데이터·모델/adapter 가중치·전체 확률 cache·실시간 로그는 Git에서 제외한다. `results/`는 기록 시점의 결과다.
 
-| 코드 | 역할 |
-|---|---|
-| `src/kl_experiment.py` | 보존한 기존 6조건 실행·공통 평가 helper |
-| `src/gate_experiment.py` | v4.3 동결·Fixed/Hard/Soft 학습·전체 validation·시간 계측 |
-| `src/gate_evaluation.py`, `src/gate_reporting.py` | 학습 완료 후 23개 모델 test 동결·평가·paired 통계·그래프·문서 갱신 |
-| `src/pilot.py` | 데이터 준비·프롬프트·기준 모델 평가 |
-| `src/train_student.py` | Student LoRA 학습·CE |
-| `src/logit_kd.py` | 기존 확률분포 cache·4가지 KL 손실·Hard gate |
-| `src/soft_gate.py` | 원문 Soft gate·margin 0.05·selection gradient |
-| `src/probe_soft_gate.py` | 본학습과 분리한 실제 GPU 검사 |
-| `src/monitor_training.py` | epoch 진단·생성 평가·신뢰도 지표 |
-| `src/teacher_quantization.py` | Teacher NF4 로딩·모델 설정 검사 |
-| `src/analyze_kl.py`, `src/analyze_training.py`, `src/plot_diagnostics.py` | 통계·학습곡선·그래프 |
-| `src/bayesian_analysis.py`, `src/report_bayesian.py` | 완료 결과의 계층모형·민감도·Bayesian bootstrap·모형 검사 |
+## 현재 진단 재현
 
-## 학습 방식: 7조건
-
-| 방식 | 핵심 알고리즘 |
-|---|---|
-| Gold SFT | 실제 정답 + EOS에 CE 적용; Teacher 없는 기준선 |
-| Response KD | Teacher 답변 + EOS에 CE 적용; hard label 증류 |
-| Forward KL | Teacher → Student KL; Teacher 확률로 불일치 가중 |
-| Reverse KL | Student → Teacher KL; Student 확률로 불일치 가중 |
-| 고정 혼합 | Forward·Reverse 손실을 항상 50:50 평균 |
-| Adaptive Hard (기존) | Teacher confidence ≥ Student면 Forward, 아니면 Reverse |
-| Adaptive Soft (원문 수식 구현) | sigmoid(confidence 차이 − 0.05); Soft gate gradient 유지 |
-
-KL 다섯 조건은 T=2·전체 어휘 분포·공통 EOS CE를 사용한다. 모든 조건에서 Teacher는 동결하고 Student LoRA만 학습한다. [손실함수·예시·gate·논문 연결의 자세한 설명](docs/RESEARCH_PLAN.md#methods)
-
-## v4.3 실행 안내
-
-기존 cache·데이터·완료 adapter가 있는 로컬 환경용이다. 실행기는 별도 `outputs/gate_comparison_v4/`에 저장하며, 미완료 run은 보존하고 자동 덮어쓰지 않는다. **GPU 학습이 이미 실행 중이면 같은 명령을 다시 실행하지 않는다.** Git의 `results/`는 기록 시점의 snapshot이다.
+기존 로컬 cache·고정 입력이 있는 환경에서 실행한다. `screen`은 완료 추론을 검증·재사용하며, `prepare`는 완료 준비를 덮어쓰지 않는다.
 
 ```powershell
-# 구현·기존 결과 보존 검사
-.\.venv\Scripts\python.exe -B -X utf8 -m unittest discover -s tests
-# 기존 동결이 있으면 동일 소스·환경·재사용 hash 검증만 수행
-.\.venv\Scripts\python.exe -B -X utf8 src/gate_experiment.py freeze
-# Fixed·Hard·Soft 9회 순차 실행: 신규 본실험 8회 + 시간 재현 1회
-.\.venv\Scripts\python.exe -B -X utf8 src/gate_experiment.py pipeline
+.\.venv\Scripts\python.exe -B -X utf8 src/gate_continuity.py screen
+.\.venv\Scripts\python.exe -B -X utf8 src/report_gate_continuity.py
 ```
 
-seed 42는 Fixed→Hard→Soft, seed 7은 Hard→Soft→Fixed, seed 123은 Soft→Fixed→Hard 순서다. 모든 측정 run은 epoch 0·1·2·3에서 validation 299개를 평가하고 평가 시간을 학습 시간에서 제외한다. Fixed seed 42 재현은 기존 최종 checkpoint를 대체하지 않는다. 각 최종 adapter를 다시 로딩해 final validation을 검증한다.
-
-학습 실행기는 **학습·validation 단계에서 종료**한다. 연결된 후속 실행기는 이 완료를 기다린 뒤 모든 산출물 검증 → 별도 23개 모델 test 동결·평가 → 통계·그래프·문서 갱신을 진행한다. 학습 코드 22개·후속 코드 11개, 총 33개 검사를 통과했다. Test를 보고 재학습하거나 checkpoint를 바꾸지 않는다. 원본 6조건 pipeline은 v4 실행에 사용하지 않는다. [동결 프로토콜](results/protocols/gate_training_protocol.json) · [새 학습 경로 GPU 검사](results/checks/trainer_gpu_check.json)
-
-이번 학습·후속 평가 pipeline은 모두 완료됐다. 아래는 기존 cache·데이터·완료 adapter를 갖춘 환경에서의 재현 순서다.
-
-```powershell
-.\.venv\Scripts\python.exe -B -X utf8 src/gate_evaluation.py prepare
-.\.venv\Scripts\python.exe -B -X utf8 src/gate_evaluation.py pipeline
-```
-
-후속 실행은 예약 작업 없이 실행 프로세스 안에서 대기하며, 학습 실패·소스 변경·미완료 산출물이 있으면 test를 시작하지 않는다. [사전 평가 동결](results/protocols/gate_evaluation_protocol.json) · [전체 실측 학습곡선](results/gate_comparison_v4/test/learning_curves.png)
-
-[파일럿 탐색 결과](results/pilot/index.html) · [범위 변경·원본 보존](results/protocols/scope_change.json)
-
-## 베이지안 후속 분석 완료
-
-기존 Qwen 3-seed 결과의 계층모형·3가지 prior 민감도·paired Bayesian bootstrap과 그림 5개를 완료했다. Hard−Soft는 기본 prior에서 +0.332%p, 95% 사후 구간 [−0.304,+0.964]%p이고 prior별 우위 확률은 85.0~85.9%다. 우위나 동등성을 확정하지 못했으며, 세 prior 모두 방법 간 정오 겹침의 후방 예측 한계가 남아 탐색적 참고로 보고한다. Gold/Response NLL의 약 99%는 오답 손실에서 나왔고 이 사실만으로 과적합을 단정하지 않는다. **새 모델의 9회 학습은 후속 일반화로 보류**하며 준비된 모델·tokenizer는 유지한다. 기존 test 관측 후의 탐색 분석이고 LLM 재학습·checkpoint 변경은 하지 않는다. [분석 명세](results/protocols/bayesian_analysis_protocol.json) · [결과·그림](docs/RESEARCH_REPORT.md#베이지안-후속-분석-2026-10-13) · [검증](results/checks/bayesian_final_verification.json)
-
-통계 환경은 원래 GPU 학습 환경과 분리한다. 로컬 raw score·완료 posterior가 있으면 다음 명령으로 검사·그림을 재생성할 수 있다. 새 fit은 완료 경로 덮어쓰기를 거부하며 동결 분석 명세와 일치해야 한다.
-
-```powershell
-# 별도 .cache/bayes-venv에 requirements/bayesian.txt 설치
-.\.cache\bayes-venv\Scripts\python.exe -B -X utf8 -m unittest discover -s tests -p test_bayesian_analysis.py
-.\.cache\bayes-venv\Scripts\python.exe -B -X utf8 src/report_bayesian.py posterior
-```
-
-## 다른 계열 확장 준비
-
-기존 Qwen 텍스트 1.882B를 기준으로 SmolLM2-1.711B·Granite-2.534B를 준비했고 가까운 StableLM2/BLOOMZ도 후보에 기록했다. 모델별 공식 tokenizer·native template를 유지하면서 출력만 공통 A~E 선택지 확률로 대응한다. 전체 1,417개 train/validation 입력·Teacher cache 변환·41개 CPU 검사와 세 모델의 Fixed/Hard/Soft GPU 갱신 검사를 통과했다. [후보·토크나이저·GPU 기록](results/protocols/choice_kd_setup.json) · [논문 근거·확장안](docs/RESEARCH_PLAN.md#9-다른-계열-확장-후보토크나이저-준비-2026-10-13)
-
-베이지안 분석 이후의 일반화 계획은 **3모델×Fixed/Hard/Soft×seed 42 = 9회 탐색 학습**이며 기존 21회와 별도다. 초기 validation 성능·독립 본학습·새 test는 아직 실행하지 않았다. 입력·손실 준비는 src/choice_kd.py prepare, 저장하지 않는 GPU 선행 검사는 probe --student qwen2b|smollm2|granite2b로 재현한다. 기존 준비 cache가 있으면 덮어쓰기를 거부한다.
-
-## 현재 후속 단계: 이진 Hard·연속 Soft와 다른 데이터
-
-기존 Soft의 전체 train 평균은 **0.4866**, 가운데 90%는 **0.442~0.527**로 50:50 부근에 집중됐다. 연속적으로 변하는 수식·selection gradient가 있으므로 Fixed와 동일하다고 단정하지 않는다. OpenBookQA·HellaSwag의 train/validation을 확보하고, 중복·겹침·정답 충돌을 제외한 학습 후보 **4,907·39,905개**를 준비했다. 원본 Parquet은 두 데이터 합계 약 29.79 MiB다.
-
-기존 Teacher·원본 Student의 각 train 128문항 진단에서 Soft 평균/SD는 ARC **0.5520/0.0343**, OpenBookQA **0.5245/0.0402**, HellaSwag **0.5093/0.0315**였다. 다른 데이터에서도 변화 폭이 일관되게 커지지는 않았다. 이것은 학습 전 진단이며 새 데이터 증류 학습·test는 아직 수행하지 않았다. 같은 모델·같은 수식의 데이터 비교를 먼저 하고 다른 Student 일반화는 뒤에 진행한다. [이진 선택·연속 가중 그림](results/gate_continuity/hard_soft_data_screening.png) · [보고서·데이터·샘플](docs/RESEARCH_REPORT.md#이진-hard연속-soft와-다른-데이터-진단-2026-10-13) · [후속 계획](docs/RESEARCH_PLAN.md#11-다른-데이터에서-이진-선택과-연속-가중의-비교-후속-탐색)
-
-로컬 cache와 고정 입력이 있으면 `src/gate_continuity.py screen`으로 완료 추론을 검증·재사용하고 `src/report_gate_continuity.py`로 그림을 재생성한다. `prepare`는 완료 준비를 덮어쓰지 않는다. 원본 데이터·model weights·raw score는 Git에 올리지 않는다.
+Bayesian 분석은 별도 `.cache/bayes-venv`와 [requirements/bayesian.txt](requirements/bayesian.txt)를 사용한다. 완료 posterior의 그림은 `src/report_bayesian.py posterior`로 재생성한다. 기존 ARC 학습·평가 경로는 [학습 프로토콜](results/protocols/gate_training_protocol.json)과 [test manifest](results/protocols/gate_test_manifest.json)에 보존한다. GPU 작업은 순차 실행하며 완료 checkpoint를 변경하지 않는다.
