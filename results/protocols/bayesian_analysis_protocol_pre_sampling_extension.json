@@ -1,0 +1,167 @@
+{
+  "status": "prepared_posthoc",
+  "test_already_seen": true,
+  "model": "crossed hierarchical Bernoulli-logit / Rasch extension with question intercept, question-by-method effects, seed intercept and seed-by-method effects",
+  "likelihood": "Y[q,s,m] ~ Bernoulli(sigmoid(location*sqrt(1+sigma_q^2)+question[q]+beta[m]+item_method[q,m]+seed[s]+seed_method[s,m]))",
+  "methods": [
+    "fixed_mix",
+    "adaptive_mix",
+    "adaptive_soft"
+  ],
+  "seeds": [
+    42,
+    7,
+    123
+  ],
+  "n_questions": 1172,
+  "priors": {
+    "location": "Normal(0,2); standardized ability location",
+    "method_effect": "Normal(0,1*scale) Hard/Soft relative to Fixed",
+    "sigma_question": "HalfStudentT(df=3,scale=5*scale)",
+    "sigma_item_method": "HalfNormal(2*scale), one per Hard/Soft contrast",
+    "sigma_seed": "HalfNormal(.5*scale)",
+    "sigma_seed_method": "HalfNormal(.5*scale)",
+    "random_effects": "non-centered standard Normal; item effects and shared seed intercept centered for identification",
+    "justification": "proper regularizing scale choices for this Rasch/logit extension, not literature defaults; zero-centered treatment effects; broad baseline prior and heavy-tailed item scale; sensitivity is mandatory"
+  },
+  "prior_profiles": {
+    "base": 1.0,
+    "narrow": 0.5,
+    "wide": 2.0
+  },
+  "sampling_seed": 20261013,
+  "sampling_attempts": [
+    {
+      "draws": 1000,
+      "tune": 1500,
+      "target_accept": 0.95
+    },
+    {
+      "draws": 2000,
+      "tune": 2500,
+      "target_accept": 0.99
+    }
+  ],
+  "sampling": "four chains sequentially on one CPU worker; nutpie/PyMC; isolated runtime",
+  "checks": {
+    "max_rank_rhat": 1.01,
+    "min_bulk_ess": 400,
+    "min_tail_ess": 400,
+    "divergences": 0,
+    "posterior_predictive": "all-agree fractions, within-method seed disagreements and matched-method disagreements"
+  },
+  "RQ": [
+    "posterior expected Accuracy differences and P(delta>0) for original three observed seeds",
+    "same average Accuracy versus paired item-level gains/losses and heterogeneity",
+    "conditional-choice NLL decomposition and high-confidence errors"
+  ],
+  "primary_pair": "Hard minus Soft; Hard/Soft minus Fixed supporting and exploratory",
+  "effect_threshold": "no user-defined ROPE; report curves over 0..2 percentage points without declaring practical equivalence",
+  "scope": "post-hoc reanalysis of existing completed test; no new model predictions/checkpoint choices/retraining; later external generalization is separate",
+  "source_comparison_sha256": "a63bb106dc687fba2a20f80f480d311a3d9ddba507d733844f4fa00547f32b4b",
+  "score_files_sha256": {
+    "outputs\\gate_comparison_v4\\scores\\test\\teacher_baseline_summary.json": "8167f93032cd2765ff71b7698dd9e6661bc0709ef2011c9dd9f35ab08ec009d7",
+    "outputs\\gate_comparison_v4\\scores\\test\\teacher_baseline.jsonl": "317ab0492b3cf974d1a04db10579103e2892771c659667d7084545162c98c1bf",
+    "outputs\\gate_comparison_v4\\scores\\test\\student_baseline_summary.json": "d13b8cfd2f7008760c74db57f2ab7984423b5efb57bffd3d6becd3046005d290",
+    "outputs\\gate_comparison_v4\\scores\\test\\student_baseline.jsonl": "a654cb62df22ed9e43c7fa88f47dccd84116089483893dad4a55477873d843bd",
+    "outputs\\gate_comparison_v4\\scores\\test\\gold_sft_42_summary.json": "9a6af95a01a65d5925b941f860ea1421fde6c2a95cfcbe9f4bfeae00960cb2da",
+    "outputs\\gate_comparison_v4\\scores\\test\\gold_sft_42.jsonl": "a8c22bc5e76da1dd34d0c2d4e8cceb9f6cedec15b1c31515281b9c609512e0ca",
+    "outputs\\gate_comparison_v4\\scores\\test\\gold_sft_7_summary.json": "afa0ebe4c8f0b0581c11bc9c42a28b8bddd45ef893d5c549b7f5726fd0d4fe97",
+    "outputs\\gate_comparison_v4\\scores\\test\\gold_sft_7.jsonl": "f43201a678426be360a59cfdce549f80fcc124f0e2b59df92334a2712c3337ac",
+    "outputs\\gate_comparison_v4\\scores\\test\\gold_sft_123_summary.json": "4a60c1112e10ec57f8cbd3547de198a1b7d921265e47e15bf78b7923260c3b1e",
+    "outputs\\gate_comparison_v4\\scores\\test\\gold_sft_123.jsonl": "22d223c8622b8f7f7b4b573e0eb559107744aead93832f7072a2e1fb6774e700",
+    "outputs\\gate_comparison_v4\\scores\\test\\response_kd_42_summary.json": "d1ab0a8afac8c936eb7b2691e859f970fa4f92110b5158a8b585802b782b61e5",
+    "outputs\\gate_comparison_v4\\scores\\test\\response_kd_42.jsonl": "e28a1357e486e8c5bd41d0b2820cfc8a83c8d637cad73c0828ee17269692f155",
+    "outputs\\gate_comparison_v4\\scores\\test\\response_kd_7_summary.json": "8b2e03b28739f4165b28ddd732493d746740373dd3212c28ca65028e48039616",
+    "outputs\\gate_comparison_v4\\scores\\test\\response_kd_7.jsonl": "97c8a472126431d2a90e586d5f9a4d2c3c99383266a2eda271c97740348486c1",
+    "outputs\\gate_comparison_v4\\scores\\test\\response_kd_123_summary.json": "52bbf1be1b9aa7f7ca0874ab725d47a32334912457a51e8eee6aedf39858bb16",
+    "outputs\\gate_comparison_v4\\scores\\test\\response_kd_123.jsonl": "f0a89d1abf2b7c76a9c75f944c06aa0ed59ae3b357f3df499d060a9e90f1165f",
+    "outputs\\gate_comparison_v4\\scores\\test\\logit_kd_42_summary.json": "9e7b2e1119c95b89c13d48e4875e77f8185c5e5be509e77d09cd56fe6634fa64",
+    "outputs\\gate_comparison_v4\\scores\\test\\logit_kd_42.jsonl": "3f1c51b51d3472e4bef3ccd43a0eace960f13da4348782eb08e7c864111ab281",
+    "outputs\\gate_comparison_v4\\scores\\test\\logit_kd_7_summary.json": "3a780287188f94864f06f790cbe66ce6f461a8b1e6ba0a0a20626ede3a2f8cd1",
+    "outputs\\gate_comparison_v4\\scores\\test\\logit_kd_7.jsonl": "5fb80725d6787850a11a3c31683fe61ce96fca85da251b433f5d3930f9a42b92",
+    "outputs\\gate_comparison_v4\\scores\\test\\logit_kd_123_summary.json": "ae7efc6a6177f2774bf57d9df9c896ef260e6fd35c8b46bc77358d3c34da3d7b",
+    "outputs\\gate_comparison_v4\\scores\\test\\logit_kd_123.jsonl": "ea866c05c10789a20c16855c9b767af586a9153cb171bc1e4992c4ee00ab30e3",
+    "outputs\\gate_comparison_v4\\scores\\test\\reverse_kl_42_summary.json": "398b048f5769ca821663e33c2e0fc2c2ae9860643c48ecba99f2b1d38bb8d1a2",
+    "outputs\\gate_comparison_v4\\scores\\test\\reverse_kl_42.jsonl": "6f2c82dcef1e318c9d8cd73904ad787e3df38a642d4c9d17ccb91dcbadfd280f",
+    "outputs\\gate_comparison_v4\\scores\\test\\reverse_kl_7_summary.json": "992829aea26205d6f136c9736dd8749df35d5697e377c6cb596408ce45e97a16",
+    "outputs\\gate_comparison_v4\\scores\\test\\reverse_kl_7.jsonl": "a00c62bcac7fa578121db75030ec7ec1f4d133a9e2fcb3f0732e33325d9052ea",
+    "outputs\\gate_comparison_v4\\scores\\test\\reverse_kl_123_summary.json": "2d08aa9de48b65cb410a6d238bf604942f9223f2a99b61fbcc7297e02fc7d179",
+    "outputs\\gate_comparison_v4\\scores\\test\\reverse_kl_123.jsonl": "0f016d12fc15add69ed0170098359cbbfa2cc75ae356216c2c7bf7cb4a10a329",
+    "outputs\\gate_comparison_v4\\scores\\test\\fixed_mix_42_summary.json": "9f3e9d958258ee61d2e61d59f12837ae1bb385fdf82a95a06235ebdb843def42",
+    "outputs\\gate_comparison_v4\\scores\\test\\fixed_mix_42.jsonl": "6d422ce744c92d3dc7b3c1048ce0fee934cff8400bc8760188b52517fa16265d",
+    "outputs\\gate_comparison_v4\\scores\\test\\fixed_mix_7_summary.json": "f5901d4784d224dbc69d20d66569b96de811711b95d4918b94b3ba468689806e",
+    "outputs\\gate_comparison_v4\\scores\\test\\fixed_mix_7.jsonl": "9fe315b50117c6bfa783ccbb51c91b88dcae5a1958d1f3dea36c6d442b2f43a8",
+    "outputs\\gate_comparison_v4\\scores\\test\\fixed_mix_123_summary.json": "a0b85f3085463ae99e1562c876a7b812b9a64b9c8b00c8e2de1af7a594b4a358",
+    "outputs\\gate_comparison_v4\\scores\\test\\fixed_mix_123.jsonl": "bd04bc5c59b50ad93f8ab9b4dbe0a41c094e841705a0224a101eb4606a67b38d",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_mix_42_summary.json": "b3fe1a2991604c452a030590327b0bf89b44f48b2de7c30680c10474b51db75d",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_mix_42.jsonl": "beae604981baf531173734d3077076c22ceeec5a300b3e1b60c3ab101d3730c0",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_mix_7_summary.json": "231004e481f1759ea9d62da7248418f17ff4f4002657d11914a07ac6209bd1d3",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_mix_7.jsonl": "228413483b4f766e017f655e22d4509198e0ff10cb8e84559bdf0bc23469b9ef",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_mix_123_summary.json": "f0d884c1aa9bc87ad5ff1ffe81e67785a706928b2a83b0541d417b4996f78c47",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_mix_123.jsonl": "9ba1d3bdd70381750e460fcef80e6d0660fe3522657e55910233c621b5698931",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_soft_42_summary.json": "e5fbe667c095bf5389660e40768dd5b7723aed0a4619aeac1dd762aa65a95a32",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_soft_42.jsonl": "9d709d4d0e288ca1e091b491cc83cf39ffd181a67e14023d93149969ef715163",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_soft_7_summary.json": "0b00bd4e95d8a22d3e0fae148c98a094cc5eb2568f67ab195775d2d94e9f6604",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_soft_7.jsonl": "ccf147f6f7ea338b2783542f5ebb404f51d77abe3b160fa163e33321db722e09",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_soft_123_summary.json": "d7abaee34c491ba0662914ba05aab9296dfef7bebe385ca086d413c7319a05d5",
+    "outputs\\gate_comparison_v4\\scores\\test\\adaptive_soft_123.jsonl": "64280a2c309dd651f63787c5997f3c90ab876729a3875c495726aec3f2217dbe"
+  },
+  "code_sha256": "41cdd6eb3b0152bbf3ce0b9af787678c0a22423d4d037e66878ca5814c182560",
+  "versions": {
+    "pymc": "5.28.5",
+    "arviz": "0.23.4",
+    "nutpie": "0.16.11",
+    "numpy": "2.4.6",
+    "scipy": "1.18.1",
+    "pytensor": "2.38.3",
+    "numba": "0.65.1"
+  },
+  "sources": [
+    {
+      "url": "https://mc-stan.org/docs/stan-users-guide/regression.html#item-response-theory-models",
+      "adopt": "Bernoulli-logit correctness, paired student-question hierarchy and identifiability"
+    },
+    {
+      "url": "https://jmlr.org/papers/v18/16-305.html",
+      "adopt": "posterior effect probabilities and practical-equivalence thresholds; not copying multi-dataset CV likelihood"
+    },
+    {
+      "url": "https://sites.stat.columbia.edu/gelman/research/published/taumain.pdf",
+      "adopt": "proper variance priors and sensitivity with few groups"
+    },
+    {
+      "url": "https://arxiv.org/abs/1903.08008",
+      "adopt": "rank Rhat / bulk-tail ESS diagnostics"
+    },
+    {
+      "url": "https://arxiv.org/abs/2011.01808",
+      "adopt": "prior/posterior predictive checks and model criticism"
+    }
+  ],
+  "thread_context_limit": "read_thread exposed user messages but assistant responses were content-reference placeholders; no claim to reproduce inaccessible detailed advice",
+  "compatibility_repair": {
+    "previous_protocol_sha256": "cd46cfee2efbcd2204c0df436cc54b62a16234ab5ebc3a9c67b711aae12962d9",
+    "previous_code_sha256": "f8e411110d16e8bdf95eac560c06c6af9f9cf55881b07ba8119fe0591984088b",
+    "changes": [
+      "nested nutpie metadata serialized as JSON strings for NetCDF",
+      "xarray method coordinate selected with dictionary to avoid reserved method keyword"
+    ],
+    "statistical_model_unchanged_AST_verified": true,
+    "likelihood_priors_input_data_sampling_settings_unchanged": true,
+    "failed_first_fit_preserved": "outputs/bayesian_v1/base_attempt1"
+  },
+  "reporting_performance_repair": {
+    "previous_protocol_sha256": "99cd612cc596258690ec056d5d9802184a0ed6855343b351859f11a29d586573",
+    "previous_source_sha256": "25ffce8d2d30c23b660b70d0d2d7cf6384d3aa015029e171350d00cb54663d91",
+    "change": "Load saved posterior once before batched posterior predictive calculations; prevents rereading large lazy NetCDF arrays for every batch",
+    "model_fit_and_numeric_predictor_AST_unchanged": true
+  },
+  "diagnostics_compatibility_repair": {
+    "previous_protocol_sha256": "51e2b7d0974e1e90e71c82c33a5758799a7e7be42e27f41a8a1253e3a6d0d82d",
+    "previous_source_sha256": "79d79dea8886abd7c0b91e45ea925824be97c60034a2e456fe5faa4170f45b11",
+    "change": "Rename only the diagnostic table input coordinate method to student_method; ArviZ xarray selection treats method as a reserved keyword",
+    "likelihood_priors_posterior_and_numeric_predictor_unchanged": true,
+    "reuse_saved_base_attempt2_draws_without_resampling": true
+  }
+}

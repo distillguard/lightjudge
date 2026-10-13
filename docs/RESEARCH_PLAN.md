@@ -248,6 +248,8 @@ Teacher full-cache 준비의 기존 시간은 hard 응답과 soft 확률 추출�
 
 ## 9. 다른 계열 확장: 후보·토크나이저 준비 (2026-10-13)
 
+**우선순위 변경:** 사용자 요청에 따라 새 모델의 초기 validation·9회 학습은 후속 일반화 단계로 보류한다. 준비한 모델·tokenizer·cache는 유지하며, 먼저 아래 베이지안 분석으로 완료한 Qwen 실험을 해석한다.
+
 완료한 v4.3을 보존하고 ARC 선택지 KD에서 gate 비교가 다른 Student 설정에서도 유지되는지 탐색한다. **현재는 입력·손실·GPU 실행 검사 완료이며 독립 본학습·새 test는 미실행**이다. 같은 ARC의 Student 추가로 다른 데이터·과제의 일반화까지 확인했다고 쓰지 않는다.
 
 | 후보 | 확인한 파라미터 | 준비·선정 근거 |
@@ -285,7 +287,25 @@ T=2·margin=0.05·기존 optimizer/LoRA·3 epochs는 상속한 통제값이며 �
 
 새 [선택지 KD 구현](../src/choice_kd.py)과 [검사](../tests/test_choice_kd.py)는 동결 소스와 분리했다. 전체 41개 CPU 검사와 3모델×3손실의 실제 GPU 갱신 검사를 통과했다. 모델별 가장 긴 train 8개에서 gradient 누적·optimizer 갱신·Teacher/원본 가중치 동결을 확인했고 probe adapter를 저장하거나 본학습에 재사용하지 않았다. Probe peak allocated는 Qwen 3.76·Smol 3.42·Granite 5.08 GiB이며 본학습/속도 benchmark 수치가 아니다. 원본 130개 산출물·12개 소스 hash도 유지했다.
 
-다음은 선정한 세 모델의 동일한 선택지 평가로 초기 validation을 확인하고 **새 학습·평가 프로토콜을 동결**하는 단계다. 이후 독립 초기화의 9회 학습을 순차 실행한다. 본학습 실행기는 아직 작성·실행하지 않았으며 새 test 결과를 보고 모델·손실·checkpoint를 바꾸지 않는다. [준비 기록](../results/checks/choice_kd_preparation.json) · [GPU 기록](../results/protocols/choice_kd_setup.json)
+베이지안 분석 후 일반화 단계에서는 선정한 세 모델의 동일한 선택지 평가로 초기 validation을 확인하고 **새 학습·평가 프로토콜을 동결**하는 단계다. 이후 독립 초기화의 9회 학습을 순차 실행한다. 본학습 실행기는 아직 작성·실행하지 않았으며 새 test 결과를 보고 모델·손실·checkpoint를 바꾸지 않는다. [준비 기록](../results/checks/choice_kd_preparation.json) · [GPU 기록](../results/protocols/choice_kd_setup.json)
+
+## 10. 베이지안 후속 분석: 완료·일반화 준비
+
+참조 채팅에서 확인한 베이지안 계층모형→후속 외부 일반화 순서를 따른다. 상세 assistant 답변은 도구에 참조 표시만 노출돼 원문 조언 전체를 재현했다고 주장하지 않는다. **LLM 증류 알고리즘·checkpoint를 바꾸지 않고 기존 완료 예측을 분석**한다. 이미 test 결과를 관측했으므로 탐색적 사후 분석이며 기존 주 비교·paired CI를 대체하지 않는다.
+
+연구질문은 (B1) Hard−Soft 및 Fixed 대비 정답률 차이의 사후확률·95% credible interval, (B2) 비슷한 평균 정확도에서 문항별 정오 교체·seed/문항 효과의 차이, (B3) Gold/Response와 KL의 선택지 NLL 차이가 높은 확신의 오답에서 비롯되는지를 살펴보는 것이다. Teacher 오답 72개·원본 Student 정답 17개 subset은 작은 표본의 보조 분석으로 둔다.
+
+[Stan의 Rasch/계층 로짓 구조](https://mc-stan.org/docs/stan-users-guide/regression.html#item-response-theory-models)를 참고해 **문항×seed×방법의 Bernoulli-logit 모형**을 구성한다. 문항 난이도, 방법 효과, 문항×방법·seed×방법의 편차와 공통 seed 효과를 포함해 같은 문항/seed의 반복을 독립 표본 10,548개로 단순 취급하지 않는다. [Benavoli 외](https://jmlr.org/papers/v18/16-305.html)는 사후확률·실질적 차이 해석의 근거이며, 원문의 다중 데이터셋 CV 모형 전체를 복제하지 않는다.
+
+적절한 사전분포를 수치 명세로 기록하고 기본·0.5배·2배 scale의 민감도를 비교한다. [Gelman의 분산 prior 논의](https://sites.stat.columbia.edu/gelman/research/published/taumain.pdf)를 따라 **3개 seed에서 분산 prior의 영향이 클 수 있음**을 밝힌다. 이 scale들은 본 분석의 규제 선택이며 논문 표준값이 아니다. 사전/사후 예측 검사와 [rank Rhat·bulk/tail ESS](https://arxiv.org/abs/1903.08008)·divergence를 확인한다. 최소 실질적 차이는 사용자가 지정하지 않았으므로 0~2%p에 대한 확률 곡선만 제시하고 특정 ROPE로 동등성을 선언하지 않는다.
+
+별도 CPU 통계 환경에서 4개 chain을 1개 worker로 순차 계산한다. **MCMC chain/샘플 수는 기존 LLM 학습 seed 수와 다르다.** 가상의 새 학습 seed에서의 **기대 Accuracy 차이**는 모형 기반 보조 결과이며 실제 일반화 실험이 아니다. 이 구간은 새 관측의 Bernoulli 변동을 추가한 실측 Accuracy 예측 구간과 다르다. 저장 호환 오류가 난 첫 계산은 실패 기록을 보존하고, likelihood·prior·입력은 유지한 채 저장 처리를 보완했다. [분석 명세·복구 기록](../results/protocols/bayesian_analysis_protocol.json)
+
+베이지안 진단·사전분포 민감도·핵심 그림과 해석을 완료한 뒤, 준비한 다른 Student의 동일한 과제별 프로토콜로 외부 일반화를 진행한다. 후속 9회 matrix는 Fixed·Hard·Soft의 gate 차이·정오 교체·확신 높은 오답을 비교하는 범위다. Gold/Response 대비 KL의 NLL 차이를 다른 모델에서도 재현했다고 주장하려면 그 대조군이 별도로 필요하며 현재 matrix에는 포함하지 않는다. 기존 전체 어휘 KD와 후속 선택지 KD는 별도로 평가하며 모형 재분석을 Teacher 오류 방지·계열 우위·과적합 해소의 인과 증거로 쓰지 않는다.
+
+모형의 MCMC 수렴과 관측 패턴 재현을 구분한다. 방법 간 paired 정오 불일치가 후방 예측 범위를 벗어나면 해당 계층모형 결과는 탐색적 참고로 제한하고, 원래 결과를 보존한 paired 문항 Bayesian bootstrap을 보조 검사로 보고한다. [Rubin (1981)](https://doi.org/10.1214/aos/1176345338)의 공통 Dirichlet 문항 가중치는 관측한 세 학습 seed에 조건부이며 새 seed를 대신하지 않는다. 이 보조 검사는 test 관측 후 추가했음을 밝힌다. 후방 예측이 부적합한 현재 계층모형을 다른 모델에 그대로 확증 목적으로 확장하지 않는다. 후속 일반화는 실측 paired 효과부터 비교하고, 더 강한 확률 주장에는 잔여 의존 구조의 모형 점검이 필요하다.
+
+완료한 세 prior의 수렴 기준은 통과했고 Hard−Soft의 P(기대 차이>0)는 85.0~85.9%였다. 모든 95% 사후 구간이 0을 포함하며 세 prior 모두 정오 겹침의 후방 예측 한계가 남았다. 주 비교의 우위·동등성을 확정하지 않고, paired bootstrap/기존 CI와 함께 보조 결과로 보고한다. 연구보고서·그림·원본 보존 검증을 마쳤으며 다른 모델 본학습은 후속 단계로 보류했다. [최종 Bayesian 결과](../results/bayesian_v1/summary.json)
 
 ## 참고문헌·근거
 

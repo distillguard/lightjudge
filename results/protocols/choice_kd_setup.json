@@ -355,5 +355,6 @@
     },
     "granite_default_date_fixed": "October 13, 2026"
   },
-  "measurement_limit": "GPU probes validate execution only; not model benchmarks, final training memory, isolated algorithm speed, or accuracy results"
+  "measurement_limit": "GPU probes validate execution only; not model benchmarks, final training memory, isolated algorithm speed, or accuracy results",
+  "execution_priority": "deferred per user: Bayesian hierarchical reanalysis of existing Qwen results first; external Student generalization later"
 }

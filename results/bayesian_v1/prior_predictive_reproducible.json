@@ -1,0 +1,219 @@
+{
+  "status": "computed",
+  "draws": 500,
+  "sampling_seed": 20261017,
+  "code_sha256": "3aa2be3ca62bd0ee62f7e44a646cd1902a5944aacb6f408dc051221c63f7db75",
+  "analysis_model_sha256": "41cdd6eb3b0152bbf3ce0b9af787678c0a22423d4d037e66878ca5814c182560",
+  "scope": "prior plausibility only; same declared priors; no outcome-based prior selection",
+  "original_auxiliary_snapshot_retained": "prior_predictive.json",
+  "reason": "original auxiliary prior check did not record its random seed; add reproducible verification without replacing it",
+  "prior_profiles": {
+    "base": {
+      "expected_accuracy_percent": {
+        "Fixed": {
+          "mean": 50.873450614423874,
+          "median": 51.60978419728373,
+          "credible_interval95": [
+            0.02324921239806008,
+            99.99307387348058
+          ],
+          "probability_positive": 1.0
+        },
+        "Hard": {
+          "mean": 50.63835705400166,
+          "median": 52.3253239337287,
+          "credible_interval95": [
+            0.04017245029491237,
+            99.98553642981878
+          ],
+          "probability_positive": 1.0
+        },
+        "Soft": {
+          "mean": 50.98684921510462,
+          "median": 50.5223014094739,
+          "credible_interval95": [
+            0.06325936403230444,
+            99.97115063673182
+          ],
+          "probability_positive": 1.0
+        }
+      },
+      "simulated_accuracy_percent": {
+        "Fixed": {
+          "mean": 50.87377701934017,
+          "median": 51.49317406143345,
+          "credible_interval95": [
+            0.01350967007963599,
+            100.0
+          ],
+          "probability_positive": 0.974
+        },
+        "Hard": {
+          "mean": 50.652901023890784,
+          "median": 51.79180887372014,
+          "credible_interval95": [
+            0.04195108077360641,
+            100.0
+          ],
+          "probability_positive": 0.982
+        },
+        "Soft": {
+          "mean": 51.02167235494881,
+          "median": 50.810580204778155,
+          "credible_interval95": [
+            0.05688282138794084,
+            99.98649032992036
+          ],
+          "probability_positive": 0.98
+        }
+      },
+      "Hard_minus_Soft_prior_pp": {
+        "mean": -0.3484921611029608,
+        "median": 0.006222416769686887,
+        "credible_interval95": [
+          -27.165716913726182,
+          21.987094104706426
+        ],
+        "probability_positive": 0.514
+      }
+    },
+    "narrow": {
+      "expected_accuracy_percent": {
+        "Fixed": {
+          "mean": 50.8980798629324,
+          "median": 51.47002895477281,
+          "credible_interval95": [
+            0.1983654616771259,
+            99.95632407200397
+          ],
+          "probability_positive": 1.0
+        },
+        "Hard": {
+          "mean": 50.81405206132219,
+          "median": 52.27788002090936,
+          "credible_interval95": [
+            0.2032020535707946,
+            99.94584027260284
+          ],
+          "probability_positive": 1.0
+        },
+        "Soft": {
+          "mean": 50.9837280883535,
+          "median": 50.65178076135115,
+          "credible_interval95": [
+            0.1899924647765182,
+            99.93281563682672
+          ],
+          "probability_positive": 1.0
+        }
+      },
+      "simulated_accuracy_percent": {
+        "Fixed": {
+          "mean": 50.87639362912401,
+          "median": 51.36518771331058,
+          "credible_interval95": [
+            0.17064846416382254,
+            99.97155858930603
+          ],
+          "probability_positive": 0.992
+        },
+        "Hard": {
+          "mean": 50.83276450511946,
+          "median": 52.118885096700794,
+          "credible_interval95": [
+            0.1841581342434585,
+            99.95804891922639
+          ],
+          "probability_positive": 0.988
+        },
+        "Soft": {
+          "mean": 51.03031854379977,
+          "median": 51.05233219567691,
+          "credible_interval95": [
+            0.1557167235494881,
+            99.97155858930603
+          ],
+          "probability_positive": 0.988
+        }
+      },
+      "Hard_minus_Soft_prior_pp": {
+        "mean": -0.16967602703130658,
+        "median": 0.030114481810321943,
+        "credible_interval95": [
+          -18.38002130707483,
+          15.97914736752739
+        ],
+        "probability_positive": 0.522
+      }
+    },
+    "wide": {
+      "expected_accuracy_percent": {
+        "Fixed": {
+          "mean": 50.83762057037735,
+          "median": 52.026723882917,
+          "credible_interval95": [
+            0.001216417191251865,
+            99.99956021853069
+          ],
+          "probability_positive": 1.0
+        },
+        "Hard": {
+          "mean": 50.39993260382823,
+          "median": 52.15709489924865,
+          "credible_interval95": [
+            0.006678485669137965,
+            99.99751901416892
+          ],
+          "probability_positive": 1.0
+        },
+        "Soft": {
+          "mean": 51.003577958016386,
+          "median": 50.574224070431434,
+          "credible_interval95": [
+            0.039240463666540604,
+            99.98699678501133
+          ],
+          "probability_positive": 1.0
+        }
+      },
+      "simulated_accuracy_percent": {
+        "Fixed": {
+          "mean": 50.85051194539249,
+          "median": 51.66382252559727,
+          "credible_interval95": [
+            0.0,
+            100.0
+          ],
+          "probability_positive": 0.964
+        },
+        "Hard": {
+          "mean": 50.40142207053469,
+          "median": 52.09044368600682,
+          "credible_interval95": [
+            0.0,
+            100.0
+          ],
+          "probability_positive": 0.97
+        },
+        "Soft": {
+          "mean": 51.01279863481228,
+          "median": 50.839021615472134,
+          "credible_interval95": [
+            0.04195108077360641,
+            100.0
+          ],
+          "probability_positive": 0.976
+        }
+      },
+      "Hard_minus_Soft_prior_pp": {
+        "mean": -0.6036453541881504,
+        "median": 8.454179754250053e-06,
+        "credible_interval95": [
+          -33.18567438531626,
+          28.55686979000748
+        ],
+        "probability_positive": 0.51
+      }
+    }
+  }
+}

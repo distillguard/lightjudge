@@ -1,0 +1,49 @@
+{
+  "status": "computed",
+  "method": "paired question Bayesian bootstrap; Dirichlet(1,...,1)",
+  "draws": 20000,
+  "seed": 20261016,
+  "training_seeds": [
+    42,
+    7,
+    123
+  ],
+  "scope": "observed three-seed question averages; preserves every matched outcome; does not estimate unobserved seed variability",
+  "reason": "auxiliary robustness check after hierarchical posterior predictive disagreement failed; not a new primary analysis",
+  "source": "https://doi.org/10.1214/aos/1176345338",
+  "comparisons": {
+    "Hard_minus_Soft": {
+      "mean": 0.34348223516068044,
+      "median": 0.3429042097104187,
+      "credible_interval95": [
+        -0.24182285234453715,
+        0.9257404939228236
+      ],
+      "probability_positive": 0.87825,
+      "observed_difference_pp": 0.34129692832764513,
+      "analytic_posterior_variance": 0.08880536142478461
+    },
+    "Hard_minus_Fixed": {
+      "mean": 0.6259707232000794,
+      "median": 0.6242203762728309,
+      "credible_interval95": [
+        0.0639644381948706,
+        1.1985167006291055
+      ],
+      "probability_positive": 0.98495,
+      "observed_difference_pp": 0.6257110352673492,
+      "analytic_posterior_variance": 0.08372154825755224
+    },
+    "Soft_minus_Fixed": {
+      "mean": 0.2824884880393989,
+      "median": 0.2810435479587383,
+      "credible_interval95": [
+        -0.17362710252501115,
+        0.745988704202869
+      ],
+      "probability_positive": 0.88645,
+      "observed_difference_pp": 0.2844141069397043,
+      "analytic_posterior_variance": 0.05489028660594486
+    }
+  }
+}

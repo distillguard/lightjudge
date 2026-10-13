@@ -1,0 +1,519 @@
+{
+  "status": "completed_with_model_adequacy_limit",
+  "scope": "post-hoc Bayesian reanalysis only; no LLM training/new predictions/checkpoint selection",
+  "n_questions": 1172,
+  "training_seeds": [
+    42,
+    7,
+    123
+  ],
+  "frozen_sources": 12,
+  "protected_original_artifacts": 130,
+  "test_score_and_summary_files": 46,
+  "all_original_hashes_match": true,
+  "all_statistical_model_function_ASTs_unchanged": [
+    "model",
+    "posterior_probabilities",
+    "load_completed",
+    "paired_counts",
+    "nll_audit"
+  ],
+  "checkpoint_preservation": {
+    "status": "passed",
+    "models": {
+      "gold_sft_42": 3,
+      "gold_sft_7": 3,
+      "gold_sft_123": 3,
+      "response_kd_42": 3,
+      "response_kd_7": 3,
+      "response_kd_123": 3,
+      "logit_kd_42": 3,
+      "logit_kd_7": 3,
+      "logit_kd_123": 3,
+      "reverse_kl_42": 3,
+      "reverse_kl_7": 3,
+      "reverse_kl_123": 3,
+      "fixed_mix_42": 3,
+      "fixed_mix_7": 3,
+      "fixed_mix_123": 3,
+      "adaptive_mix_42": 3,
+      "adaptive_mix_7": 3,
+      "adaptive_mix_123": 3,
+      "adaptive_soft_42": 3,
+      "adaptive_soft_7": 3,
+      "adaptive_soft_123": 3,
+      "teacher_baseline": 0,
+      "student_baseline": 0
+    },
+    "groups": {
+      "public_checkpoint_files_sha256": 22,
+      "validation_files_sha256": 46,
+      "timing_files_sha256": 117
+    },
+    "test_manifest_sha256": "b69b225374faed56edb595e99633ff6eda4370560e0756adeb17c619b06e50cd"
+  },
+  "fits": {
+    "base": {
+      "attempt": 2,
+      "sampling_status": {
+        "status": "passed",
+        "prior": "base",
+        "attempt": 2,
+        "settings": {
+          "draws": 2000,
+          "tune": 2500,
+          "target_accept": 0.99
+        },
+        "protocol_sha256": "99cd612cc596258690ec056d5d9802184a0ed6855343b351859f11a29d586573",
+        "seconds": 1255.4547766000032,
+        "diagnostics": {
+          "divergences": 0,
+          "max_rank_rhat": 1.003992931078315,
+          "min_bulk_ess": 689.4945429000792,
+          "min_tail_ess": 1177.564155783184,
+          "parameters_above_rhat_limit": 0,
+          "parameters_below_ess_limit": 0
+        },
+        "posterior_sha256": "6a286d1043b0b0198849f259c9135d65dd52a5d6998303c6816daf153301866a",
+        "diagnostics_recovery": {
+          "original_error": "ValueError: setting an array element with a sequence.",
+          "samples_unchanged": true,
+          "no_resampling": true,
+          "reporting_protocol_sha256": "e9c07ec91020b0a97ad757a492ce19bcad6fee510eede64524eca29f52b7d4cf",
+          "numeric_probability_reconstruction_max_error": 1.1102230246251565e-16
+        }
+      },
+      "posterior_numeric_reconstruction_max_error": 2.220446049250313e-16,
+      "energy_bfmi_per_chain": [
+        1.0097771939036162,
+        0.9135151607295661,
+        0.9262180476442069,
+        0.9431893473994272
+      ],
+      "maxdepth_reached_fraction": 0.0,
+      "ppc_warnings": [
+        "Hard_Softdisagreement_fraction",
+        "Hard_Fixeddisagreement_fraction",
+        "Soft_Fixeddisagreement_fraction"
+      ],
+      "contrast_mcmc": {
+        "status": "passed",
+        "posterior_sha256": "6a286d1043b0b0198849f259c9135d65dd52a5d6998303c6816daf153301866a",
+        "difference_diagnostics": {
+          "difference_pp[Hard_minus_Soft]": {
+            "mcse_mean": 0.0027705475580481124,
+            "mcse_sd": 0.003583362963519622,
+            "ess_bulk": 13351.362212311633,
+            "ess_tail": 6721.803208479942,
+            "r_hat": 0.9997090621820988
+          },
+          "difference_pp[Hard_minus_Fixed]": {
+            "mcse_mean": 0.003976032610718157,
+            "mcse_sd": 0.003172011269024801,
+            "ess_bulk": 6414.484508558643,
+            "ess_tail": 6314.3248874303035,
+            "r_hat": 1.0009343799895412
+          },
+          "difference_pp[Soft_minus_Fixed]": {
+            "mcse_mean": 0.0041039610179868105,
+            "mcse_sd": 0.003215610550274096,
+            "ess_bulk": 6253.744001802603,
+            "ess_tail": 6070.943122399571,
+            "r_hat": 1.0007242830677388
+          }
+        },
+        "probability_mcse": {
+          "Hard_minus_Soft": {
+            "probability": 0.85225,
+            "indicator_ess": 7402.040496994239,
+            "mcse": 0.0041245020264656556
+          },
+          "Hard_minus_Fixed": {
+            "probability": 0.967,
+            "indicator_ess": 6760.163224876393,
+            "mcse": 0.002172659235059979
+          },
+          "Soft_minus_Fixed": {
+            "probability": 0.793,
+            "indicator_ess": 6517.440334423026,
+            "mcse": 0.005018607535721721
+          }
+        }
+      }
+    },
+    "narrow": {
+      "attempt": 2,
+      "sampling_status": {
+        "status": "passed",
+        "prior": "narrow",
+        "attempt": 2,
+        "settings": {
+          "draws": 2000,
+          "tune": 2500,
+          "target_accept": 0.99
+        },
+        "protocol_sha256": "e9c07ec91020b0a97ad757a492ce19bcad6fee510eede64524eca29f52b7d4cf",
+        "diagnostics": {
+          "divergences": 0,
+          "max_rank_rhat": 1.0097432147700192,
+          "min_bulk_ess": 522.3990474124543,
+          "min_tail_ess": 1233.7561865453908,
+          "parameters_above_rhat_limit": 0,
+          "parameters_below_ess_limit": 0
+        },
+        "seconds": 1234.993645899929,
+        "posterior_sha256": "1064d07ec60bcccf93ab33f1b6403eec3a58228e341c59aa70609e44d6a5d3ff"
+      },
+      "posterior_numeric_reconstruction_max_error": 2.220446049250313e-16,
+      "energy_bfmi_per_chain": [
+        0.9167792541770277,
+        0.9721984014169848,
+        0.9454262213751318,
+        0.9262347160392136
+      ],
+      "maxdepth_reached_fraction": 0.0,
+      "ppc_warnings": [
+        "Hard_Softdisagreement_fraction",
+        "Hard_Fixeddisagreement_fraction",
+        "Soft_Fixeddisagreement_fraction"
+      ],
+      "contrast_mcmc": {
+        "status": "passed",
+        "posterior_sha256": "1064d07ec60bcccf93ab33f1b6403eec3a58228e341c59aa70609e44d6a5d3ff",
+        "difference_diagnostics": {
+          "difference_pp[Hard_minus_Soft]": {
+            "mcse_mean": 0.0027016597129102355,
+            "mcse_sd": 0.003686117227275574,
+            "ess_bulk": 13566.48745415583,
+            "ess_tail": 6594.099258648805,
+            "r_hat": 1.0000107909908371
+          },
+          "difference_pp[Hard_minus_Fixed]": {
+            "mcse_mean": 0.0038736958699480146,
+            "mcse_sd": 0.003121232770598042,
+            "ess_bulk": 6348.754497414239,
+            "ess_tail": 6518.440596751978,
+            "r_hat": 1.000886053846055
+          },
+          "difference_pp[Soft_minus_Fixed]": {
+            "mcse_mean": 0.003678497400512681,
+            "mcse_sd": 0.0029880411596526902,
+            "ess_bulk": 7133.319624782596,
+            "ess_tail": 6380.378194502642,
+            "r_hat": 1.0006587427650409
+          }
+        },
+        "probability_mcse": {
+          "Hard_minus_Soft": {
+            "probability": 0.849625,
+            "indicator_ess": 7212.97835869791,
+            "mcse": 0.004208662952997621
+          },
+          "Hard_minus_Fixed": {
+            "probability": 0.962625,
+            "indicator_ess": 6784.961485061935,
+            "mcse": 0.002302743025013197
+          },
+          "Soft_minus_Fixed": {
+            "probability": 0.76475,
+            "indicator_ess": 6872.356528338425,
+            "mcse": 0.005116485148823449
+          }
+        }
+      }
+    },
+    "wide": {
+      "attempt": 3,
+      "sampling_status": {
+        "status": "passed",
+        "prior": "wide",
+        "attempt": 3,
+        "settings": {
+          "draws": 4000,
+          "tune": 2500,
+          "target_accept": 0.99
+        },
+        "protocol_sha256": "b13e4cf604518641807f55ae8cd6c45a39f29e19cde4a44c0a445fe8a9d96695",
+        "diagnostics": {
+          "divergences": 0,
+          "max_rank_rhat": 1.0028642316042053,
+          "min_bulk_ess": 702.7452511004715,
+          "min_tail_ess": 2434.0713730272996,
+          "parameters_above_rhat_limit": 0,
+          "parameters_below_ess_limit": 0
+        },
+        "seconds": 1504.529894400388,
+        "posterior_sha256": "2d76abfee3b058b1bfae79aa4765d877fdb8da5f54cdcdd59045c4aad7dc1cea"
+      },
+      "posterior_numeric_reconstruction_max_error": 2.220446049250313e-16,
+      "energy_bfmi_per_chain": [
+        0.9400675722572039,
+        0.9469164094196997,
+        0.9368787034219425,
+        1.0006174485081216
+      ],
+      "maxdepth_reached_fraction": 0.0,
+      "ppc_warnings": [
+        "Hard_Softdisagreement_fraction",
+        "Hard_Fixeddisagreement_fraction",
+        "Soft_Fixeddisagreement_fraction"
+      ],
+      "contrast_mcmc": {
+        "status": "passed",
+        "posterior_sha256": "2d76abfee3b058b1bfae79aa4765d877fdb8da5f54cdcdd59045c4aad7dc1cea",
+        "difference_diagnostics": {
+          "difference_pp[Hard_minus_Soft]": {
+            "mcse_mean": 0.0019888388612686173,
+            "mcse_sd": 0.002590526814711218,
+            "ess_bulk": 26279.555942839972,
+            "ess_tail": 12773.124216817632,
+            "r_hat": 1.000280012209348
+          },
+          "difference_pp[Hard_minus_Fixed]": {
+            "mcse_mean": 0.002892922321909364,
+            "mcse_sd": 0.0021446082331088266,
+            "ess_bulk": 12466.291016218212,
+            "ess_tail": 11888.54564761121,
+            "r_hat": 1.0003683032997082
+          },
+          "difference_pp[Soft_minus_Fixed]": {
+            "mcse_mean": 0.0028887956629458904,
+            "mcse_sd": 0.0021083339324010327,
+            "ess_bulk": 12655.910600071513,
+            "ess_tail": 13910.434714053788,
+            "r_hat": 1.0000773204395075
+          }
+        },
+        "probability_mcse": {
+          "Hard_minus_Soft": {
+            "probability": 0.85875,
+            "indicator_ess": 14214.237011661007,
+            "mcse": 0.0029212305037171283
+          },
+          "Hard_minus_Fixed": {
+            "probability": 0.973875,
+            "indicator_ess": 12457.760218046355,
+            "mcse": 0.0014290906390847357
+          },
+          "Soft_minus_Fixed": {
+            "probability": 0.8104375,
+            "indicator_ess": 13564.604298241831,
+            "mcse": 0.0033653668566259397
+          }
+        }
+      }
+    }
+  },
+  "preserved_attempt_history": {
+    "outputs\\bayesian_v1\\base_attempt1\\status.json": {
+      "status": "failed",
+      "prior": "base",
+      "attempt": 1,
+      "settings": {
+        "draws": 1000,
+        "tune": 1500,
+        "target_accept": 0.95
+      },
+      "protocol_sha256": "cd46cfee2efbcd2204c0df436cc54b62a16234ab5ebc3a9c67b711aae12962d9",
+      "error": "TypeError: Invalid value for attr 'sample_stats': {'inference_library': 'nutpie', 'inference_library_version': '0.16.11', 'inference_library_settings': '{\"sampler\": \"nuts\", \"adaptation\": \"diag\", \"settings\": {\"num_tune\": 1500, \"num_draws\": 1000, \"maxdepth\": 10, \"mindepth\": 0, \"store_gradient\": false, \"store_unconstrained\": false, \"store_transformed\": false, \"max_energy_error\": 1000.0, \"store_divergences\": false, \"adapt_options\": {\"step_size_settings\": {\"target_accept\": 0.95, \"initial_step\": 0.1, \"jitter\": 0.1, \"adapt_options\": {\"method\": \"DualAverage\", \"dual_average\": {\"k\": 0.75, \"t0\": 10.0, \"gamma\": 0.05, \"max_step_size\": 3.141592653589793}, \"adam\": {\"beta1\": 0.9, \"beta2\": 0.999, \"epsilon\": 1e-08, \"learning_rate\": 0.05}}}, \"mass_matrix_options\": {\"store_mass_matrix\": false, \"use_grad_based_estimate\": true}, \"early_window\": 0.3, \"step_size_window\": 0.15, \"mass_matrix_switch_freq\": 80, \"early_mass_matrix_switch_freq\": 10, \"mass_matrix_update_freq\": 1, \"mass_matrix_window_growth\": 1.5}, \"check_turning\": true, \"target_integration_time\": null, \"trajectory_kind\": \"Euclidean\", \"num_chains\": 4, \"seed\": 20261013, \"extra_doublings\": 0}}'}. For serialization to netCDF files, its value must be of one of the following types: str, Number, ndarray, number, list, tuple, bytes",
+      "seconds": 370.1714174998924
+    },
+    "outputs\\bayesian_v1\\base_attempt2\\status.json": {
+      "status": "passed",
+      "prior": "base",
+      "attempt": 2,
+      "settings": {
+        "draws": 2000,
+        "tune": 2500,
+        "target_accept": 0.99
+      },
+      "protocol_sha256": "99cd612cc596258690ec056d5d9802184a0ed6855343b351859f11a29d586573",
+      "seconds": 1255.4547766000032,
+      "diagnostics": {
+        "divergences": 0,
+        "max_rank_rhat": 1.003992931078315,
+        "min_bulk_ess": 689.4945429000792,
+        "min_tail_ess": 1177.564155783184,
+        "parameters_above_rhat_limit": 0,
+        "parameters_below_ess_limit": 0
+      },
+      "posterior_sha256": "6a286d1043b0b0198849f259c9135d65dd52a5d6998303c6816daf153301866a",
+      "diagnostics_recovery": {
+        "original_error": "ValueError: setting an array element with a sequence.",
+        "samples_unchanged": true,
+        "no_resampling": true,
+        "reporting_protocol_sha256": "e9c07ec91020b0a97ad757a492ce19bcad6fee510eede64524eca29f52b7d4cf",
+        "numeric_probability_reconstruction_max_error": 1.1102230246251565e-16
+      }
+    },
+    "outputs\\bayesian_v1\\narrow_attempt1\\status.json": {
+      "status": "diagnostics_failed",
+      "prior": "narrow",
+      "attempt": 1,
+      "settings": {
+        "draws": 1000,
+        "tune": 1500,
+        "target_accept": 0.95
+      },
+      "protocol_sha256": "e9c07ec91020b0a97ad757a492ce19bcad6fee510eede64524eca29f52b7d4cf",
+      "diagnostics": {
+        "divergences": 0,
+        "max_rank_rhat": 1.020807808846658,
+        "min_bulk_ess": 209.43120329007894,
+        "min_tail_ess": 748.4726247042903,
+        "parameters_above_rhat_limit": 19,
+        "parameters_below_ess_limit": 11
+      },
+      "seconds": 343.2358734002337,
+      "posterior_sha256": "921efcd37f0ddcc763bca33a3443fecb33bdd3122fe802f2952c2a9e8bbfd0e5"
+    },
+    "outputs\\bayesian_v1\\narrow_attempt2\\status.json": {
+      "status": "passed",
+      "prior": "narrow",
+      "attempt": 2,
+      "settings": {
+        "draws": 2000,
+        "tune": 2500,
+        "target_accept": 0.99
+      },
+      "protocol_sha256": "e9c07ec91020b0a97ad757a492ce19bcad6fee510eede64524eca29f52b7d4cf",
+      "diagnostics": {
+        "divergences": 0,
+        "max_rank_rhat": 1.0097432147700192,
+        "min_bulk_ess": 522.3990474124543,
+        "min_tail_ess": 1233.7561865453908,
+        "parameters_above_rhat_limit": 0,
+        "parameters_below_ess_limit": 0
+      },
+      "seconds": 1234.993645899929,
+      "posterior_sha256": "1064d07ec60bcccf93ab33f1b6403eec3a58228e341c59aa70609e44d6a5d3ff"
+    },
+    "outputs\\bayesian_v1\\wide_attempt1\\status.json": {
+      "status": "diagnostics_failed",
+      "prior": "wide",
+      "attempt": 1,
+      "settings": {
+        "draws": 1000,
+        "tune": 1500,
+        "target_accept": 0.95
+      },
+      "protocol_sha256": "e9c07ec91020b0a97ad757a492ce19bcad6fee510eede64524eca29f52b7d4cf",
+      "diagnostics": {
+        "divergences": 0,
+        "max_rank_rhat": 1.015411323889888,
+        "min_bulk_ess": 181.78299950515134,
+        "min_tail_ess": 727.6247691782515,
+        "parameters_above_rhat_limit": 1,
+        "parameters_below_ess_limit": 21
+      },
+      "seconds": 364.6540977996774,
+      "posterior_sha256": "b67866fbae4ad9d401e7b34358dd98bef41495ae1813a652597ed1acdc71f342"
+    },
+    "outputs\\bayesian_v1\\wide_attempt2\\status.json": {
+      "status": "diagnostics_failed",
+      "prior": "wide",
+      "attempt": 2,
+      "settings": {
+        "draws": 2000,
+        "tune": 2500,
+        "target_accept": 0.99
+      },
+      "protocol_sha256": "e9c07ec91020b0a97ad757a492ce19bcad6fee510eede64524eca29f52b7d4cf",
+      "diagnostics": {
+        "divergences": 0,
+        "max_rank_rhat": 1.0061146005466568,
+        "min_bulk_ess": 344.7283439956194,
+        "min_tail_ess": 1282.6424698549083,
+        "parameters_above_rhat_limit": 0,
+        "parameters_below_ess_limit": 1
+      },
+      "seconds": 1086.4192560999654,
+      "posterior_sha256": "8c36fe4dc8b5fcdcef2b1ff55cf12941c5efd470a7ad6a2824b225d769df5498"
+    },
+    "outputs\\bayesian_v1\\wide_attempt3\\status.json": {
+      "status": "passed",
+      "prior": "wide",
+      "attempt": 3,
+      "settings": {
+        "draws": 4000,
+        "tune": 2500,
+        "target_accept": 0.99
+      },
+      "protocol_sha256": "b13e4cf604518641807f55ae8cd6c45a39f29e19cde4a44c0a445fe8a9d96695",
+      "diagnostics": {
+        "divergences": 0,
+        "max_rank_rhat": 1.0028642316042053,
+        "min_bulk_ess": 702.7452511004715,
+        "min_tail_ess": 2434.0713730272996,
+        "parameters_above_rhat_limit": 0,
+        "parameters_below_ess_limit": 0
+      },
+      "seconds": 1504.529894400388,
+      "posterior_sha256": "2d76abfee3b058b1bfae79aa4765d877fdb8da5f54cdcdd59045c4aad7dc1cea"
+    }
+  },
+  "tests": {
+    "original_runtime": {
+      "run": 50,
+      "passed": 47,
+      "skipped_isolated_dependency_tests": 3
+    },
+    "isolated_bayesian_runtime": {
+      "run": 9,
+      "passed": 9
+    }
+  },
+  "bayesian_bootstrap_draws": 20000,
+  "paired_bootstrap_checks": "means/variances checked against analytic Dirichlet formulas at computation; all methods share each question weight",
+  "figures_visual_QA": "five rendered scientific figures inspected; no clipping; predictive axis units corrected",
+  "versions": {
+    "pymc": "5.28.5",
+    "arviz": "0.23.4",
+    "nutpie": "0.16.11",
+    "numpy": "2.4.6",
+    "scipy": "1.18.1",
+    "pytensor": "2.38.3",
+    "numba": "0.65.1",
+    "matplotlib": "3.11.2",
+    "xarray": "2026.9.0",
+    "pandas": "3.0.6",
+    "h5netcdf": "1.8.1",
+    "h5py": "3.16.0"
+  },
+  "code_sha256": {
+    "src\\bayesian_analysis.py": "fb09414573bceeb356127ec491086d4d9bac3135ac19855ee348148a98bcc4bc",
+    "src\\report_bayesian.py": "6663823a8d60c169113d3d0c89334240b8b68e22533b1258ee1b3d5c87566e9d",
+    "tests\\test_bayesian_analysis.py": "c9ff18db3739b42e2c20909fbe7183e544c427d8dfb67813718aa5a143b4b5f8",
+    "requirements\\bayesian.txt": "8a0b22154fe55bd2209572eb5aea6bd248339a9dc081339759b09d67665c5fbc"
+  },
+  "protocol_sha256": "b13e4cf604518641807f55ae8cd6c45a39f29e19cde4a44c0a445fe8a9d96695",
+  "public_results_sha256": {
+    "results\\bayesian_v1\\descriptive_audit.json": "97de519e6350f0e1194eaf91f9e396480e58f8363e92184b29aa97933c2d60b9",
+    "results\\bayesian_v1\\effect_thresholds.png": "167d64d8fee783b679a1268fa8c17b898c4087dba8ee25fc23db6860692d507b",
+    "results\\bayesian_v1\\learning_curve_audit.json": "2c579a525672217bc09fff2bb3d08b3539383e31d707cee34779b6e1023933b2",
+    "results\\bayesian_v1\\matched_seed_dependence.json": "aa30548078dca5683b1b86892ad59deaee968744d78bfeef2fa56c926ecae22d",
+    "results\\bayesian_v1\\nll_bayesian_bootstrap.json": "39cffbe6c1988e8c58abbe237fb2e01ec65c3651039218b84609b8db49964f5e",
+    "results\\bayesian_v1\\nll_decomposition.png": "032541fe68ba9d2f10e46c8bcba451df9faa89b02add4eee22b5ae9a71feac91",
+    "results\\bayesian_v1\\paired_accuracy_bayesian_bootstrap.json": "283cd24a323c9a4f06169b97b097a9cae053c6d50caffc5a6890685077940fb2",
+    "results\\bayesian_v1\\paired_errors.png": "c8316b642192f971b7dd3d19c2d526f240265baa74d77400cdf43a7b966d51e1",
+    "results\\bayesian_v1\\posterior_effects.png": "9a28cfaadb948f26fa72857109ac8a0f5d35f67a35118c3f484ef7def545fb56",
+    "results\\bayesian_v1\\posterior_predictive.png": "cb444296c9a0d9ab0cefc69c4d4827a685967a3a1218df55bd4ed7c11f890ac1",
+    "results\\bayesian_v1\\prior_predictive.json": "d13de084e89b53997c7892d705828861db47c9a9c671a660d2ddabb7a9f22982",
+    "results\\bayesian_v1\\prior_predictive_reproducible.json": "7ce842b511903eac2c8d18fbcf8221b3ad55b892b37de013b218e77a993a1b2b",
+    "results\\bayesian_v1\\score_consistency.json": "9542dcfa5b992318a4fbd5fc2bf0906ca92834d2a0d898938054f7f57e932c30",
+    "results\\bayesian_v1\\summary.json": "c3e1f00c7bd794356b09f393e52b686da3d4f014404fc839b5c3cf2f41f2052b",
+    "results\\bayesian_v1\\base_attempt2\\analysis.json": "4e4a9cbd82b2b095b5fe352d3b7252377765b2ee3f37261cba049d57ba293092",
+    "results\\bayesian_v1\\base_attempt2\\contrast_diagnostics.json": "d088e87e9b78f013ca12a92beda8c53825b1dd5720f03d7505da03376a1103a7",
+    "results\\bayesian_v1\\narrow_attempt2\\analysis.json": "ab04151adbd24a12882069bccc5eef3800e84c84ab915b0858ccfc636ac1d8f1",
+    "results\\bayesian_v1\\narrow_attempt2\\contrast_diagnostics.json": "5ec138de74d9b7f3298ede8a003219a2c4153271afc5a7737f980ced1d7662e8",
+    "results\\bayesian_v1\\wide_attempt3\\analysis.json": "d86f5f365a614a9d1d519c4e8a3ccba62b7eea302ae58b3360995e806f39946d",
+    "results\\bayesian_v1\\wide_attempt3\\contrast_diagnostics.json": "026ebdc805bcf3ce1c9e045fbfb8f21f9218e7ad5b4608130beeb7bc1ab16db4"
+  },
+  "limits": [
+    "Every prior profile misses three matched-method disagreement checks; numerical convergence is not model adequacy; hierarchy used as exploratory reference.",
+    "Only three observed training seeds; Bayesian bootstrap is conditional on them; hypothetical seed expected differences are not external generalization.",
+    "Test was observed before this follow-up; no equivalence threshold or causal overfitting/teacher-error prevention claim.",
+    "Detailed referenced assistant responses were content-reference placeholders; not fully accessible."
+  ],
+  "external_model_training": "deferred; existing preparation/assets retained; no automations created"
+}

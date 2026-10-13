@@ -1,0 +1,24 @@
+{
+  "status": "descriptive",
+  "comparisons": {
+    "Hard_vs_Soft": {
+      "matched_seed_disagreement": 0.030147895335608646,
+      "unmatched_seed_disagreement": 0.04124004550625711,
+      "n_matched_question_seed_outcomes": 3516,
+      "n_unmatched_question_seed_pairs": 7032
+    },
+    "Hard_vs_Fixed": {
+      "matched_seed_disagreement": 0.030147895335608646,
+      "unmatched_seed_disagreement": 0.04209328782707622,
+      "n_matched_question_seed_outcomes": 3516,
+      "n_unmatched_question_seed_pairs": 7032
+    },
+    "Soft_vs_Fixed": {
+      "matched_seed_disagreement": 0.02161547212741752,
+      "unmatched_seed_disagreement": 0.04152445961319681,
+      "n_matched_question_seed_outcomes": 3516,
+      "n_unmatched_question_seed_pairs": 7032
+    }
+  },
+  "limits": "Overlapping dependent outcomes, not causal effects or independent sample counts. Lower matched-seed disagreement suggests additional shared question-by-seed dependence; no model refit or favorable prior selection performed."
+}

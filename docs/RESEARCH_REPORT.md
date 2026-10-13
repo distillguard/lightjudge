@@ -174,3 +174,43 @@ MCQA 선행연구의 선택지 문자 logit을 차용해 각 모델의 **공식 
 전체 41개 CPU 검사와 세 모델 각각 Fixed·Hard·Soft의 8회 gradient 누적·1회 optimizer 갱신이 통과했다. 유한 loss/gradient·LoRA 갱신·원본 가중치 동결을 확인했고 probe adapter는 저장·본학습 재사용하지 않았다. 이는 모델 Accuracy·학습 시간 비교나 독립 학습 9회의 결과가 아니다. [각 GPU 검사 파일](../results/protocols/choice_kd_setup.json)
 
 후속 matrix는 3모델×3조건×seed 42의 **9회 탐색 학습**이다. 새로운 선택지 분류 손실·argmax Accuracy는 기존 전체 어휘 KD·자유 생성 평가와 구분한다. T/margin과 1 seed는 통제/예산값이며 최적값이나 학계 표준이 아니다. 모델 크기·native 입력·LoRA 수가 달라 모델 내 방법 차이를 중심으로 보고한다. 현재 **초기 validation 성능·독립 본학습·새 test는 미실행**이며 다음 단계에서 새 실행 프로토콜을 동결한다.
+
+## 베이지안 후속 분석: 2026-10-13
+
+<!-- bayesian-analysis:start -->
+기존 test 관측 후의 **탐색적 사후 분석**이다. Qwen 모델·학습 알고리즘·고정 epoch 3·기존 주 비교/CI는 유지했다. 새 모델 9회 학습은 보류하고 현재 예측의 문항×seed×방법 계층모형을 먼저 분석한다. 참조 채팅 도구에는 user 본문과 assistant 참조 표시만 보여 상세 조언 전체를 확인했다고 주장하지 않는다.
+
+**기본·0.5배·2배 prior의 최종 표집과 민감도 검사를 완료했다.** 각 fit은 4개 MCMC chain을 1개 CPU worker로 계산했으며 LLM 학습 seed 3개와 다르다. 세 fit 모두 divergence 0, rank Rhat≤1.01·bulk/tail ESS≥400을 통과했다(최대 Rhat 약 1.00974, 최소 bulk ESS 522.4·tail ESS 1,177.6). 기준/좁은 prior는 chain당 2,000개, 넓은 prior는 4,000개 사후표본을 사용했다. 호환 오류와 ESS가 부족했던 시도는 보존하고, 모형·prior는 유지한 채 저장/진단 처리 또는 표집 길이만 보완했다.
+
+Hard−Soft의 관측 차이는 +0.341%p지만, 세 paired seed를 합치면 **Hard만 정답 59건·Soft만 정답 47건**이다. 문항별 3-seed 평균에서는 Hard가 높은 43개·Soft가 높은 30개·같은 1,099개다. 비슷한 평균 정확도가 같은 오답 패턴을 뜻하지 않는다. 이 건수는 독립 문항 수가 아니라 반복 관측이며 원인·특정 gate의 오류 방지 능력을 입증하지 않는다.
+
+기본 prior에서 관측 문항·세 seed의 **기대 Accuracy 차이**는 다음과 같다. 기존 Accuracy·paired CI와 추정 대상/가정이 다르며 대체하지 않는다.
+
+| 비교 | 기본 prior 사후평균 | 95% credible interval | P(차이>0) | prior 변경 후 P 범위 |
+|---|---|---|---|---|
+| Hard−Soft | +0.332%p | [-0.304,+0.964]%p | 85.2% | 85.0~85.9% |
+| Hard−Fixed | +0.598%p | [-0.032,+1.221]%p | 96.7% | 96.3~97.4% |
+| Soft−Fixed | +0.266%p | [-0.361,+0.905]%p | 79.3% | 76.5~81.0% |
+
+Hard−Soft의 사후평균은 prior별 +0.325~+0.343%p, 모든 95% 구간은 0을 포함했다. 가상의 새 학습 seed에서 기대 차이의 기본 prior 구간은 [−0.965,+1.638]%p로 더 넓다. 이는 같은 Qwen·문항에 대한 모형 기대값이며 새 관측의 Bernoulli 변동을 포함한 실측 예측 구간이나 다른 모델 일반화 결과가 아니다.
+
+**세 prior 모두 후방 예측 검사 8개 중 방법 간 disagreement 3개를 과대 예측했다**: Soft−Fixed는 실제 2.16%에 비해 95% 예측 구간 3.21~4.44%다. 같은 seed의 Soft−Fixed 불일치 2.16%는 다른 seed 조합 4.15%보다 작아 추가 문항×seed 의존 가능성이 있다. 이는 중복된 관측의 기술 비교이며 인과 효과가 아니다. MCMC 수렴과 모형 적합성은 다르므로 이 모형을 확증 근거로 쓰지 않는다. 결과 방향에 맞춰 likelihood를 수정하지 않고 불일치를 공개한다.
+
+[Rubin의 Bayesian bootstrap](https://doi.org/10.1214/aos/1176345338)을 보조 민감도 검사로 적용했다. 같은 문항의 세 seed·모든 방법에 공통 Dirichlet 가중치를 사용한 20,000회 표집에서 Hard−Soft는 +0.343%p, 95% credible interval [−0.242,+0.926]%p, P(차이>0)=87.8%다. 세 관측 학습 seed에 조건부이며 새로운 seed 변동을 추정하지 않는다. 기존 paired CI [−0.228,+0.910]%p와 함께 **Hard−Soft 우위 확정이나 실질적 동등성 입증에 부족**하다.
+
+Gold/Response의 평균 선택지 NLL 1.0417/1.1187에서 오답이 차지하는 손실 비중은 **98.85%/99.08%**다. 여기서 confidence는 평가 시 T=1 유효 선택지 최대 확률이며 T=2 전체 어휘 entropy gate와 다르다. Confidence≥99% 오답은 seed당 평균 104.0/105.7개로, KL 조건 Fixed/Hard/Soft의 16.7/18.0/20.3개보다 많다. Forward−Gold NLL의 조건부 Bayesian bootstrap 구간은 [−0.644,−0.461]로 낮았지만 Hard−Soft NLL [−0.0187,+0.0043]은 0을 포함한다. Gold/Response도 문항별 균등 확률 기준 NLL 1.3859보다는 낮다. 상대적으로 높은 NLL은 주로 확신 높은 오답에서 나오며 이 사실만으로 과적합을 단정하지 않는다.
+
+전체 validation 학습곡선 9개 중 4개에서 마지막 epoch 정답률이 이전 최고보다 0.33~2.01%p 내려갔다. Validation 299개와 서로 다른 학습 목적의 loss만으로 과적합을 확정하지 않으며, test 결과를 보고 재학습하거나 checkpoint를 변경하지 않았다.
+
+![문항별 정오 교체](../results/bayesian_v1/paired_errors.png)
+
+![정답·오답의 NLL 기여](../results/bayesian_v1/nll_decomposition.png)
+
+![사후 구간과 prior 민감도](../results/bayesian_v1/posterior_effects.png)
+
+![후방 예측의 정오 겹침 한계](../results/bayesian_v1/posterior_predictive.png)
+
+새 모델 본학습·새 test는 보류했다. 다음 일반화 질문은 **다른 Student에서도 gate별 paired 효과·정오 교체·확신 높은 오답 차이가 반복되는가**다. 기존 계층모형의 residual dependence 한계를 그대로 확증 분석에 확장하지 않는다. 재현 가능한 prior 예측·차이 자체의 ESS/Rhat·확률 MCSE·그림 5개와 원본 보존을 검증했다. [전체 결과](../results/bayesian_v1/summary.json) · [개선폭별 확률 곡선](../results/bayesian_v1/effect_thresholds.png) · [최종 검증](../results/checks/bayesian_final_verification.json)
+
+[분석 명세·prior·근거](../results/protocols/bayesian_analysis_protocol.json) · [paired Accuracy 보조 분석](../results/bayesian_v1/paired_accuracy_bayesian_bootstrap.json) · [NLL 보조 분석](../results/bayesian_v1/nll_bayesian_bootstrap.json) · [학습곡선 진단](../results/bayesian_v1/learning_curve_audit.json)
+<!-- bayesian-analysis:end -->

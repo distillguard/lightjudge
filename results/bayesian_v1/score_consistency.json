@@ -1,0 +1,127 @@
+{
+  "status": "passed",
+  "checks": {
+    "gold_sft": [
+      {
+        "seed": 42,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 7,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 123,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      }
+    ],
+    "response_kd": [
+      {
+        "seed": 42,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 7,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 123,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      }
+    ],
+    "logit_kd": [
+      {
+        "seed": 42,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 7,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 123,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      }
+    ],
+    "reverse_kl": [
+      {
+        "seed": 42,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 7,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 123,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      }
+    ],
+    "fixed_mix": [
+      {
+        "seed": 42,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 7,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 123,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      }
+    ],
+    "adaptive_mix": [
+      {
+        "seed": 42,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 7,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 123,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      }
+    ],
+    "adaptive_soft": [
+      {
+        "seed": 42,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 7,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      },
+      {
+        "seed": 123,
+        "argmax_mismatch": 0,
+        "generated_choice_mismatch": 0
+      }
+    ]
+  },
+  "n_questions": 1172,
+  "score_and_original_hashes_reverified": true,
+  "LLM_retraining": false
+}

@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "posterior_sha256": "2d76abfee3b058b1bfae79aa4765d877fdb8da5f54cdcdd59045c4aad7dc1cea",
+  "difference_diagnostics": {
+    "difference_pp[Hard_minus_Soft]": {
+      "mcse_mean": 0.0019888388612686173,
+      "mcse_sd": 0.002590526814711218,
+      "ess_bulk": 26279.555942839972,
+      "ess_tail": 12773.124216817632,
+      "r_hat": 1.000280012209348
+    },
+    "difference_pp[Hard_minus_Fixed]": {
+      "mcse_mean": 0.002892922321909364,
+      "mcse_sd": 0.0021446082331088266,
+      "ess_bulk": 12466.291016218212,
+      "ess_tail": 11888.54564761121,
+      "r_hat": 1.0003683032997082
+    },
+    "difference_pp[Soft_minus_Fixed]": {
+      "mcse_mean": 0.0028887956629458904,
+      "mcse_sd": 0.0021083339324010327,
+      "ess_bulk": 12655.910600071513,
+      "ess_tail": 13910.434714053788,
+      "r_hat": 1.0000773204395075
+    }
+  },
+  "probability_mcse": {
+    "Hard_minus_Soft": {
+      "probability": 0.85875,
+      "indicator_ess": 14214.237011661007,
+      "mcse": 0.0029212305037171283
+    },
+    "Hard_minus_Fixed": {
+      "probability": 0.973875,
+      "indicator_ess": 12457.760218046355,
+      "mcse": 0.0014290906390847357
+    },
+    "Soft_minus_Fixed": {
+      "probability": 0.8104375,
+      "indicator_ess": 13564.604298241831,
+      "mcse": 0.0033653668566259397
+    }
+  }
+}

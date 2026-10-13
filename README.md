@@ -66,6 +66,7 @@ lightjudge/
 | `src/monitor_training.py` | epoch 진단·생성 평가·신뢰도 지표 |
 | `src/teacher_quantization.py` | Teacher NF4 로딩·모델 설정 검사 |
 | `src/analyze_kl.py`, `src/analyze_training.py`, `src/plot_diagnostics.py` | 통계·학습곡선·그래프 |
+| `src/bayesian_analysis.py`, `src/report_bayesian.py` | 완료 결과의 계층모형·민감도·Bayesian bootstrap·모형 검사 |
 
 ## 학습 방식: 7조건
 
@@ -109,8 +110,20 @@ seed 42는 Fixed→Hard→Soft, seed 7은 Hard→Soft→Fixed, seed 123은 Soft�
 
 [파일럿 탐색 결과](results/pilot/index.html) · [범위 변경·원본 보존](results/protocols/scope_change.json)
 
+## 베이지안 후속 분석 완료
+
+기존 Qwen 3-seed 결과의 계층모형·3가지 prior 민감도·paired Bayesian bootstrap과 그림 5개를 완료했다. Hard−Soft는 기본 prior에서 +0.332%p, 95% 사후 구간 [−0.304,+0.964]%p이고 prior별 우위 확률은 85.0~85.9%다. 우위나 동등성을 확정하지 못했으며, 세 prior 모두 방법 간 정오 겹침의 후방 예측 한계가 남아 탐색적 참고로 보고한다. Gold/Response NLL의 약 99%는 오답 손실에서 나왔고 이 사실만으로 과적합을 단정하지 않는다. **새 모델의 9회 학습은 후속 일반화로 보류**하며 준비된 모델·tokenizer는 유지한다. 기존 test 관측 후의 탐색 분석이고 LLM 재학습·checkpoint 변경은 하지 않는다. [분석 명세](results/protocols/bayesian_analysis_protocol.json) · [결과·그림](docs/RESEARCH_REPORT.md#베이지안-후속-분석-2026-10-13) · [검증](results/checks/bayesian_final_verification.json)
+
+통계 환경은 원래 GPU 학습 환경과 분리한다. 로컬 raw score·완료 posterior가 있으면 다음 명령으로 검사·그림을 재생성할 수 있다. 새 fit은 완료 경로 덮어쓰기를 거부하며 동결 분석 명세와 일치해야 한다.
+
+```powershell
+# 별도 .cache/bayes-venv에 requirements/bayesian.txt 설치
+.\.cache\bayes-venv\Scripts\python.exe -B -X utf8 -m unittest discover -s tests -p test_bayesian_analysis.py
+.\.cache\bayes-venv\Scripts\python.exe -B -X utf8 src/report_bayesian.py posterior
+```
+
 ## 다른 계열 확장 준비
 
 기존 Qwen 텍스트 1.882B를 기준으로 SmolLM2-1.711B·Granite-2.534B를 준비했고 가까운 StableLM2/BLOOMZ도 후보에 기록했다. 모델별 공식 tokenizer·native template를 유지하면서 출력만 공통 A~E 선택지 확률로 대응한다. 전체 1,417개 train/validation 입력·Teacher cache 변환·41개 CPU 검사와 세 모델의 Fixed/Hard/Soft GPU 갱신 검사를 통과했다. [후보·토크나이저·GPU 기록](results/protocols/choice_kd_setup.json) · [논문 근거·확장안](docs/RESEARCH_PLAN.md#9-다른-계열-확장-후보토크나이저-준비-2026-10-13)
 
-다음 계획은 **3모델×Fixed/Hard/Soft×seed 42 = 9회 탐색 학습**이며 기존 21회와 별도다. 초기 validation 성능·독립 본학습·새 test는 아직 실행하지 않았다. 입력·손실 준비는 src/choice_kd.py prepare, 저장하지 않는 GPU 선행 검사는 probe --student qwen2b|smollm2|granite2b로 재현한다. 기존 준비 cache가 있으면 덮어쓰기를 거부한다.
+베이지안 분석 이후의 일반화 계획은 **3모델×Fixed/Hard/Soft×seed 42 = 9회 탐색 학습**이며 기존 21회와 별도다. 초기 validation 성능·독립 본학습·새 test는 아직 실행하지 않았다. 입력·손실 준비는 src/choice_kd.py prepare, 저장하지 않는 GPU 선행 검사는 probe --student qwen2b|smollm2|granite2b로 재현한다. 기존 준비 cache가 있으면 덮어쓰기를 거부한다.

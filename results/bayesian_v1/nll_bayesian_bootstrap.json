@@ -1,0 +1,79 @@
+{
+  "status": "computed",
+  "method": "Bayesian bootstrap: Dirichlet(1,...,1) paired question weights",
+  "seed": 20261015,
+  "draws": 20000,
+  "conditions": [
+    "gold_sft",
+    "response_kd",
+    "logit_kd",
+    "reverse_kl",
+    "fixed_mix",
+    "adaptive_mix",
+    "adaptive_soft"
+  ],
+  "scope": "conditional on the three observed trained seeds; all methods share each question weight; does not estimate unseen training-seed variability",
+  "source": "https://doi.org/10.1214/aos/1176345338",
+  "comparisons": {
+    "adaptive_mix_minus_adaptive_soft": {
+      "mean": -0.006984830743060235,
+      "median": -0.006928616634509971,
+      "credible_interval95": [
+        -0.018654498574661456,
+        0.0043315708508494715
+      ],
+      "probability_positive": 0.11375,
+      "probability_left_has_lower_nll": 0.88625,
+      "observed_difference": -0.006997146798071233,
+      "analytic_posterior_variance": 3.400040871377147e-05
+    },
+    "adaptive_mix_minus_fixed_mix": {
+      "mean": -0.0009851997622904226,
+      "median": -0.0010302841462711543,
+      "credible_interval95": [
+        -0.013816875064408892,
+        0.012016945319716723
+      ],
+      "probability_positive": 0.4354,
+      "probability_left_has_lower_nll": 0.5646,
+      "observed_difference": -0.0009960720400314835,
+      "analytic_posterior_variance": 4.1023271679765954e-05
+    },
+    "adaptive_soft_minus_fixed_mix": {
+      "mean": 0.005999630980769812,
+      "median": 0.005930440655157659,
+      "credible_interval95": [
+        -0.002684060382171735,
+        0.014937336326961363
+      ],
+      "probability_positive": 0.91215,
+      "probability_left_has_lower_nll": 0.08785,
+      "observed_difference": 0.006001074758039747,
+      "analytic_posterior_variance": 2.0527887381804134e-05
+    },
+    "logit_kd_minus_gold_sft": {
+      "mean": -0.5494027509156933,
+      "median": -0.5483630069523963,
+      "credible_interval95": [
+        -0.6444072344280043,
+        -0.46125141962824007
+      ],
+      "probability_positive": 0.0,
+      "probability_left_has_lower_nll": 1.0,
+      "observed_difference": -0.5498453949796258,
+      "analytic_posterior_variance": 0.0021923405193761476
+    },
+    "logit_kd_minus_response_kd": {
+      "mean": -0.6268665151836873,
+      "median": -0.6249351738034759,
+      "credible_interval95": [
+        -0.7377966952662807,
+        -0.5254523089256811
+      ],
+      "probability_positive": 0.0,
+      "probability_left_has_lower_nll": 1.0,
+      "observed_difference": -0.6268722001431194,
+      "analytic_posterior_variance": 0.002966735750098961
+    }
+  }
+}
