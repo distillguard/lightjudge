@@ -246,6 +246,29 @@ Teacher full-cache 준비의 기존 시간은 hard 응답과 soft 확률 추출�
 
 평균 가중치 일치 Fixed/Random Gate, Feature/Relation KD, 다른 모델 계열·데이터·양자화·Reasoning KD는 **후속 연구**로 둔다. 이번에는 21개 성능 조건, 명시한 시간 측정, 동결 test, 핵심 표·그림·한계 보고를 완료하면 종료한다.
 
+## 9. 다른 계열 확장안: 문헌 대조·선행 검사 (2026-10-13)
+
+완료한 v4.3을 보존하고 **ARC에서 gate 비교가 다른 Student 설정에서도 유지되는지** 탐색한다. 아래는 실행 전 확장안이며 학습 결과나 동결된 실행 프로토콜이 아니다. 같은 ARC에서 Student를 추가해도 다른 데이터·과제로의 일반화까지 확인한 것은 아니다.
+
+| 선행연구 | 확인한 실험 구성·우리에게 필요한 근거 |
+|---|---|
+| [MiniLLM, ICLR 2024](https://arxiv.org/html/2306.08543v4) §3.1·B.2 | GPT-2·OPT·LLaMA와 여러 평가셋 비교. 명시된 5 seeds는 **답변 생성 평가** 반복이며 독립 학습 5회로 해석하지 않는다. |
+| [DSKD, EMNLP 2024](https://aclanthology.org/2024.emnlp-main.1010/) §3·B.3·B.4 | 다른 tokenizer는 projector·cross-model attention으로 정렬한다. 명시된 5 seeds는 decoding 반복. T=2는 해당 validation 탐색 결과이며 보편적 표준값이 아니다. |
+| [ULD, TMLR 2025 / arXiv v3](https://arxiv.org/html/2402.12030v3) §3.3·4.2 | 여러 계열에 정렬한 확률 질량의 거리를 사용한다. Forward/Reverse KL과 다른 손실이며 확인한 본문에서 학습 seed 수를 확정하지 못했다. |
+| [Few-Shot MCQA Distillation, Findings EMNLP 2025](https://aclanthology.org/2025.findings-emnlp.452/) §3.2·4 | 선택지 문자 logit으로 공통 의미 공간을 만들어 Llama→DeBERTa 증류; ARC 실험도 포함. 전체 실험의 **5개 random seed 평균**을 명시한다. 우리 LoRA gate 실험과 동일한 프레임워크는 아니다. |
+
+**권장 최소 확장:** Qwen3.5-9B NF4 Teacher를 유지하고, Qwen3.5-2B와 SmolLM2-1.7B-Instruct에 각각 Fixed·Hard·Soft × seed 42를 적용하는 **6회 탐색 학습**. [SmolLM2 공식 고정 revision](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct/tree/31b70e2e869a7173562077fd711b654946d38674)은 다른 제작 계열의 공개 Apache-2.0 모델이며 1.7B로 기존 2B에 가까워 첫 후보로 선정했다. SmolLM3-3B는 메타데이터만 확인한 대안이며 추가 학습에 포함하지 않는다. 후보의 실제 성능·GPU 메모리는 아직 측정하지 않았다.
+
+서로 다른 어휘의 전체 logit을 직접 KL로 비교할 수 없으므로 MCQA 선행연구의 **선택지 soft target**을 차용한다. 문항별 유효 선택지 K=3~5를 같은 의미 순서로 놓고 각 모델의 자체 tokenizer로 얻은 답변 문자 logit에 softmax(z/T)를 적용한다. 새 손실은 T²[g KL(Pt‖Ps)+(1−g) KL(Ps‖Pt)]이며, 분류 평가에는 EOS 생성이 필요하지 않아 기존 EOS CE를 이 확장안에 복사하지 않는다. Confidence는 1−H(P)/ln(K), Fixed g=0.5, Hard는 상대 confidence 비교·detach, Soft는 sigmoid(confidence 차이−0.05)·selection gradient 유지로 제안한다. 선택지 공간으로 바꾼 CaRE gate는 우리의 과제별 변형이며 원문 재현이 아니다.
+
+평가는 유효 선택지 **argmax Accuracy**·선택지 NLL·문항 paired CI·gate 분포로 구성한다. 기존 자유 생성 Accuracy와 새 선택지 분류 Accuracy는 별도 결과다. **Qwen도 동일한 새 손실로 다시 학습**해 출력 공간·평가 변경과 Student 변경을 혼동하지 않는다. 모델 내 조건별 초기 LoRA·문항 순서·학습 예산·optimizer를 맞추고, 모델 간 raw Accuracy로 계열 자체의 인과적 우위를 주장하지 않는다.
+
+T=2·margin=0.05·기존 optimizer/LoRA 설정은 비교를 위한 통제값으로 제안하며 새 선택지 공간의 최적값이나 논문 공통 default가 아니다. 숫자·gradient·Teacher cache의 문항/의미 대응과 실제 GPU 1-step 검증 후 새 프로토콜을 동결한다. Train 1,118·validation 299를 유지하고 test로 값을 조정하지 않는다. 새 코드·출력은 기존 동결 소스·결과와 분리한다.
+
+**Seed 정책:** 1 seed는 탐색 예산 선택이다. 학습 SD를 보고하지 않으며 문항 CI가 학습 seed 변동까지 포함한다고 쓰지 않는다. 확증이 필요하면 **새 test를 보기 전에** 대상 모델과 3조건×seed 42·7·123의 전체 반복을 정하고, 결과 방향과 무관하게 보고한다. 기존 Qwen/ARC test를 이미 관측한 후 제안한 후속 실험임을 명시한다.
+
+공식 고정 revision의 tokenizer 검사에서 Qwen·SmolLM2·SmolLM3 모두 A~E 단일 토큰·유효 답변 prefix 대응을 train/validation 1,417개 전체에서 통과했다. 최대 입력+답변+EOS는 각각 236·255·288 tokens로 기존 1,024 예산 이내다. 새 모델 가중치·GPU 실행은 아직 없다. [문헌 위치·후보 revision·전체 선행 검사](../results/protocols/cross_family_evidence.json)
+
 ## 참고문헌·근거
 
 - 사용자 제공 PDF: 「LightJudge 지식 증류 성능 및 시간 효율성 연구보고서」, 2026-10-12. 연구 개정·7조건·시간 효율성·제출 구성의 기준 자료.

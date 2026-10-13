@@ -156,3 +156,11 @@ v3.2의 완료 학습 13회와 validation 12회는 설정·초기화·문항 순
 21개 학습·validation과 23개 test의 문항·정답·확률·checkpoint hash를 검증했다. 5,000회 bootstrap의 전체 집계·CI가 재현됐고 문항별 세 seed 평균을 직접 재표집한 독립 계산도 Accuracy CI와 일치했다. 최종 그림 4개를 확인했으며 보호 원본 130개·동결 소스 12개·공개 checkpoint hash가 유지됐다. Test 이후 재학습·checkpoint 변경은 수행하지 않았다. [최종 검증 기록](../results/checks/gate_final_verification.json)
 
 다른 모델·데이터로의 일반화, 전용 GPU에서의 속도 비교, 원문 전체 프레임워크 재현은 이번 실험에서 확인하지 않았다.
+
+## 다른 계열 확장 준비: 2026-10-13
+
+MiniLLM·DSKD·ULD·Few-Shot MCQA Distillation의 본문·부록을 대조했다. MiniLLM/DSKD의 명시된 5 seeds는 decoding 반복이며 독립 학습 5회로 쓰지 않는다. MCQA 논문은 전체 실험 5개 random seed 평균을 명시하므로 **학습 1 seed가 논문 표준이라는 근거는 없다**. 한 seed 확장은 탐색 예산으로 구분한다. [출처·해석 기록](../results/protocols/cross_family_evidence.json)
+
+후속안은 공통 선택지 확률에서 Qwen2B·SmolLM2-1.7B의 Fixed·Hard·Soft × seed 42, 총 6회다. 새 Qwen 대조가 있어야 기존 전체 어휘 KD와 새 선택지 KD의 차이를 Student 계열 효과로 오해하지 않는다. 이 안은 원문 CaRE/DSKD/ULD의 전체 재현이 아니며 새 선택지 분류 Accuracy도 기존 생성 Accuracy와 별도로 보고한다. [구체적인 확장안·반복 정책](RESEARCH_PLAN.md#9-다른-계열-확장안-문헌-대조선행-검사-2026-10-13)
+
+공식 API/config·tokenizer 고정 revision 검사와 train/validation 1,417개 전체의 답변 token·prefix 대응을 통과했다. SmolLM2의 원본 safetensors는 3,422,777,952 bytes(약 3.19 GiB), SmolLM3는 약 5.73 GiB로 확인했으며 추론/학습 VRAM과 다른 값이다. 가중치 다운로드·새 모델 benchmark·GPU 학습은 수행하지 않았다. 동결 소스 12개와 보호 산출물 130개의 hash는 모두 유지됐다.

@@ -1,0 +1,284 @@
+{
+  "kind": "prospective literature review and tokenizer preflight; not a frozen training protocol",
+  "reviewed_at_kst": "2026-10-13T12:28:35.911923+09:00",
+  "status": "literature_and_tokenizers_checked_not_implemented_or_trained",
+  "user_scope": "different model families; reduce extension training repetitions where appropriate; use primary-paper evidence",
+  "sources": [
+    {
+      "title": "MiniLLM: Knowledge Distillation of Large Language Models",
+      "venue": "ICLR 2024",
+      "url": "https://arxiv.org/html/2306.08543v4",
+      "locations": [
+        "3.1 Base Models / Evaluation",
+        "B.2 Automatic Evaluation Details"
+      ],
+      "verified": "GPT-2, OPT, LLaMA families and five evaluation sets; five seeds [10,20,30,40,50] explicitly used for sampled response generation at decoding temperature 1",
+      "training_repetition": "independent training repetition count not established from the inspected paper sections",
+      "adopt": "multiple model settings; validation-based settings before final test",
+      "do_not_claim": "ARC first-answer-position offline reverse KL is a full MiniLLM implementation; five decoding seeds are five independently trained models"
+    },
+    {
+      "title": "Dual-Space Knowledge Distillation for Large Language Models",
+      "venue": "EMNLP 2024",
+      "url": "https://aclanthology.org/2024.emnlp-main.1010/",
+      "pdf": "https://aclanthology.org/2024.emnlp-main.1010.pdf",
+      "code": "https://github.com/songmzhang/DSKD",
+      "locations": [
+        "2.2.2 / 3",
+        "Table 1 / Table 2",
+        "B.3 / B.4"
+      ],
+      "verified": "projectors and cross-model attention handle unequal vocabularies; Qwen1.5-1.8B to GPT2-120M and Mistral-7B to TinyLLaMA-1.1B evaluated; five seeds are explicitly used for decoding in B.3; KD temperatures searched on validation among [1,1.5,2,3,4], selecting 2",
+      "training_repetition": "independent training repetition count not established; decoding variation must not be labeled training variation",
+      "adopt": "tokenizer mismatch requires an explicit shared output space; tune on validation if tuning is claimed",
+      "do_not_claim": "T=2 is universally optimal; projector framework implemented by merely swapping Student ID"
+    },
+    {
+      "title": "Towards Cross-Tokenizer Distillation: the Universal Logit Distillation Loss for LLMs",
+      "venue": "TMLR 2025; inspected arXiv v3",
+      "url": "https://arxiv.org/html/2402.12030v3",
+      "published_url": "https://openreview.net/forum?id=bwRxXiGO9A",
+      "locations": [
+        "3.3 Eq. 5",
+        "4.1 / 4.2"
+      ],
+      "verified": "Llama2-7B-Chat/Mistral-7B-Instruct teachers with OPT/Pythia/Bloomz/MT0 students across QA and summarization; sorted probability-mass absolute differences under stated approximations",
+      "training_repetition": "not established; no explicit independent training-seed count found in inspected v3 text",
+      "adopt": "cross-family feasibility requires a distinct alignment loss",
+      "do_not_claim": "sorted probability matching preserves token semantics or is interchangeable with forward/reverse KL; absent reporting proves a single-seed study",
+      "access_note": "OpenReview final PDF browser verification blocked; technical claims use accessible arXiv v3, not a verified identical final version"
+    },
+    {
+      "title": "LLM Distillation for Efficient Few-Shot Multiple Choice Question Answering",
+      "venue": "Findings of EMNLP 2025",
+      "url": "https://aclanthology.org/2025.findings-emnlp.452/",
+      "pdf": "https://aclanthology.org/2025.findings-emnlp.452.pdf",
+      "locations": [
+        "3.2 Label scoring / Training using distillation loss",
+        "4 Experiments",
+        "4.4 / B.3"
+      ],
+      "verified": "choice-letter logits form common answer-choice soft targets; Llama3.1-8B-Instruct teacher to DeBERTa-v3-base student; MMLU with ARC ablations; section 4 reports averaging all experiments over five different random seeds",
+      "training_repetition": "five experiment seeds explicitly reported; training-only versus data-generation seed effects are not separately established here",
+      "adopt": "shared semantic answer-choice space can support task-specific distillation across tokenizer families",
+      "do_not_claim": "our LoRA causal-LM fixed/hard/soft gate extension reproduces its encoder/few-shot synthetic-data framework or its reported accuracy"
+    }
+  ],
+  "recommended_extension": {
+    "stage": "exploratory ARC task-label distillation, not confirmation of universal full-vocabulary gate generalization",
+    "teacher": {
+      "id": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+      "precision": "NF4 double quant, BF16 compute",
+      "reuse_train_cache_only_after_id_prefix_revision_hash_checks": true
+    },
+    "students": [
+      "Qwen/Qwen3.5-2B",
+      "HuggingFaceTB/SmolLM2-1.7B-Instruct"
+    ],
+    "alternate_candidate": "HuggingFaceTB/SmolLM3-3B; metadata screened only, not scheduled; same Smol family and larger size",
+    "seed": [
+      42
+    ],
+    "methods": [
+      "fixed_mix",
+      "adaptive_hard",
+      "adaptive_soft"
+    ],
+    "proposed_training_runs": 6,
+    "seed_policy": "seed 42 is inherited budget/control choice, not a paper standard; no training SD reported for one run; question bootstrap conditional on each learned checkpoint does not estimate training-seed variability",
+    "new_output_space": "native-tokenizer logits of valid A..E labels, in the same semantic order per question; softmax over only K valid choices (K=3..5)",
+    "proposed_loss": "T^2 * (g * KL(p_teacher || p_student) + (1-g) * KL(p_student || p_teacher)); pure choice classification objective; original EOS CE not reused",
+    "proposed_gate": "confidence=1-H(p)/log(K); fixed g=.5; hard g=1[c_teacher>=c_student] detached; soft g=sigmoid(c_teacher-c_student-.05) with selection gradient",
+    "hyperparameter_policy": "T=2 and margin=.05 are inherited comparison settings with DSKD/CaRE context, not established optimum in the new label space; optimizer/LoRA/data/order/budget inherited within each model as declared controls; no tuning or paper replication claimed; finalize only after numerical/GPU validation",
+    "evaluation_proposal": "valid-choice argmax accuracy and choice NLL; gate weights and paired question CI; unconstrained generation only if later explicitly added, not interchangeable with this classifier evaluation",
+    "comparison": "fixed/hard/soft differences within each Student; rerun Qwen under the same new loss and evaluation instead of comparing old full-vocabulary results directly; different architectures/native prompts/LoRA counts preclude model-family causal superiority claims",
+    "data": "existing frozen ARC-Challenge train 1118 and validation 299; new test manifest required before new evaluations; existing Qwen/ARC test results have already been seen, so this extension is exploratory",
+    "confirmation_policy": "before any new test, commit the full model/method/seed matrix; any seed7/123 confirmation must repeat all three methods on the prespecified model(s), irrespective of a favorable or unfavorable outcome; do not select only positive test models",
+    "cross_dataset_generalization": "not established by adding a Student on the same ARC task; separate unseen task/data needed for that claim",
+    "next_required_checks": [
+      "task-label loss and gradient checks",
+      "Teacher train-cache projection and semantic order checks",
+      "Student BF16 LoRA loading/one optimizer-step GPU preflight",
+      "frozen new protocol with actual trainable parameter count and timing scope",
+      "complete same-loss Qwen and SmolLM2 matrix; freeze test evaluation"
+    ],
+    "implementation_status": "not implemented; no new model weight loading, benchmarking or training"
+  },
+  "candidate_metadata_and_tokenizer_preflight": [
+    {
+      "id": "Qwen/Qwen3.5-2B",
+      "revision": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+      "gated": false,
+      "role": "same-loss reference",
+      "label_token_ids": {
+        "A": [
+          32
+        ],
+        "B": [
+          33
+        ],
+        "C": [
+          34
+        ],
+        "D": [
+          35
+        ],
+        "E": [
+          36
+        ]
+      },
+      "token_preflight": {
+        "status": "passed",
+        "train_rows": 1118,
+        "validation_rows": 299,
+        "test_read": false,
+        "prompt_tokens_max": 234,
+        "prompt_tokens_median": 110,
+        "all_valid_label_prefix_boundaries_match": true,
+        "answer_labels_single_token_and_distinct": true,
+        "max_prompt_plus_answer_eos_tokens": 236,
+        "max_sequence_length_control": 1024,
+        "native_chat_template": true,
+        "enable_thinking": false,
+        "cache_location": "project",
+        "weight_loading": false
+      },
+      "official_sources": [
+        "https://huggingface.co/Qwen/Qwen3.5-2B/tree/15852e8c16360a2fea060d615a32b45270f8a8fc",
+        "https://huggingface.co/api/models/Qwen/Qwen3.5-2B"
+      ]
+    },
+    {
+      "id": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "revision": "31b70e2e869a7173562077fd711b654946d38674",
+      "gated": false,
+      "license": "apache-2.0",
+      "model_type": "llama",
+      "architectures": [
+        "LlamaForCausalLM"
+      ],
+      "vocab_size": 49152,
+      "tokenizer_size": 49152,
+      "hidden_size": 2048,
+      "layers": 24,
+      "context": 8192,
+      "declared_dtype": "bfloat16",
+      "safetensors_bytes": 3422777952,
+      "safetensors_files": [
+        "model.safetensors"
+      ],
+      "config_sha256": "994f50b16abb4ae00880baefe03c10260b5bd608d2bf586f7056ca05a534feea",
+      "config_class": "LlamaConfig",
+      "label_token_ids": {
+        "A": [
+          49
+        ],
+        "B": [
+          50
+        ],
+        "C": [
+          51
+        ],
+        "D": [
+          52
+        ],
+        "E": [
+          53
+        ]
+      },
+      "chat_template_has_thinking_flag": false,
+      "weights_downloaded": false,
+      "token_preflight": {
+        "status": "passed",
+        "train_rows": 1118,
+        "validation_rows": 299,
+        "test_read": false,
+        "prompt_tokens_max": 253,
+        "prompt_tokens_median": 130,
+        "all_valid_label_prefix_boundaries_match": true,
+        "answer_labels_single_token_and_distinct": true,
+        "max_prompt_plus_answer_eos_tokens": 255,
+        "max_sequence_length_control": 1024,
+        "native_chat_template": true,
+        "enable_thinking": false,
+        "cache_location": "default Hugging Face user cache",
+        "weight_loading": false
+      },
+      "official_sources": [
+        "https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct/tree/31b70e2e869a7173562077fd711b654946d38674",
+        "https://huggingface.co/api/models/HuggingFaceTB/SmolLM2-1.7B-Instruct"
+      ]
+    },
+    {
+      "id": "HuggingFaceTB/SmolLM3-3B",
+      "revision": "a07cc9a04f16550a088caea529712d1d335b0ac1",
+      "gated": false,
+      "license": "apache-2.0",
+      "model_type": "smollm3",
+      "architectures": [
+        "SmolLM3ForCausalLM"
+      ],
+      "vocab_size": 128256,
+      "tokenizer_size": 128256,
+      "hidden_size": 2048,
+      "layers": 36,
+      "context": 65536,
+      "declared_dtype": "bfloat16",
+      "safetensors_bytes": 6150235008,
+      "safetensors_files": [
+        "model-00001-of-00002.safetensors",
+        "model-00002-of-00002.safetensors"
+      ],
+      "config_sha256": "c72b1031274ff4626e434d0019e88e95a767460135db9ee492eb80652b786af1",
+      "config_class": "SmolLM3Config",
+      "label_token_ids": {
+        "A": [
+          32
+        ],
+        "B": [
+          33
+        ],
+        "C": [
+          34
+        ],
+        "D": [
+          35
+        ],
+        "E": [
+          36
+        ]
+      },
+      "chat_template_has_thinking_flag": true,
+      "weights_downloaded": false,
+      "token_preflight": {
+        "status": "passed",
+        "train_rows": 1118,
+        "validation_rows": 299,
+        "test_read": false,
+        "prompt_tokens_max": 286,
+        "prompt_tokens_median": 162,
+        "all_valid_label_prefix_boundaries_match": true,
+        "answer_labels_single_token_and_distinct": true,
+        "max_prompt_plus_answer_eos_tokens": 288,
+        "max_sequence_length_control": 1024,
+        "native_chat_template": true,
+        "enable_thinking": false,
+        "cache_location": "default Hugging Face user cache",
+        "weight_loading": false
+      },
+      "official_sources": [
+        "https://huggingface.co/HuggingFaceTB/SmolLM3-3B/tree/a07cc9a04f16550a088caea529712d1d335b0ac1",
+        "https://huggingface.co/api/models/HuggingFaceTB/SmolLM3-3B"
+      ]
+    }
+  ],
+  "preservation_check": {
+    "frozen_source_files": 12,
+    "protected_original_artifacts": 130,
+    "all_match": true,
+    "existing_train_validation_test_checkpoints_modified": false,
+    "existing_protocols_modified": false,
+    "new_test_data_read": false
+  }
+}

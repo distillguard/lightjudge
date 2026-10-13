@@ -108,3 +108,7 @@ seed 42는 Fixed→Hard→Soft, seed 7은 Hard→Soft→Fixed, seed 123은 Soft�
 후속 실행은 예약 작업 없이 실행 프로세스 안에서 대기하며, 학습 실패·소스 변경·미완료 산출물이 있으면 test를 시작하지 않는다. [사전 평가 동결](results/protocols/gate_evaluation_protocol.json) · [전체 실측 학습곡선](results/gate_comparison_v4/test/learning_curves.png)
 
 [파일럿 탐색 결과](results/pilot/index.html) · [범위 변경·원본 보존](results/protocols/scope_change.json)
+
+## 다른 계열 확장 준비
+
+문헌과 공식 tokenizer 검사를 마쳤다. 선택지 KD로 Qwen3.5-2B·SmolLM2-1.7B의 Fixed·Hard·Soft × seed 42, **6회 탐색 학습**을 제안하며 기존 21회 실험과 구분한다. 1 seed는 예산 선택으로, 학습 변동까지 일반화하지 않는다. 새 모델 가중치·GPU 학습은 아직 수행하지 않았다. [확장안·논문 근거](docs/RESEARCH_PLAN.md#9-다른-계열-확장안-문헌-대조선행-검사-2026-10-13) · [후보 revision·선행 검사](results/protocols/cross_family_evidence.json)
