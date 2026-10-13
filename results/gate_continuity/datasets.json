@@ -1,0 +1,168 @@
+{
+  "openbookqa": {
+    "id": "allenai/openbookqa",
+    "revision": "388097ea7776314e93a529163e0fea805b8a6454",
+    "folder": "main",
+    "counts": {
+      "train": 4957,
+      "validation": 500
+    },
+    "train": {
+      "n": 4957,
+      "parquet_bytes": 495845,
+      "parquet_sha256": "98148f8a54e62eb862346a75192d5fb824d6cbb68f2f59aecd793d39ecb5cd8b",
+      "normalized_bytes": 3007068,
+      "normalized_sha256": "b11df03d8bc61deef854e57f23bbea66f798260cc91b0a46665cb498dbd81ea6",
+      "labels": {
+        "D": 1221,
+        "C": 1146,
+        "A": 1378,
+        "B": 1212
+      },
+      "duplicate_full_inputs": 42,
+      "duplicate_questions": 126,
+      "prompt_characters": {
+        "n": 4957,
+        "mean": 305.9368569699415,
+        "sd_population": 52.278164688267424,
+        "min_p05_p25_median_p75_p95_max": [
+          215.0,
+          245.0,
+          267.0,
+          293.0,
+          334.0,
+          403.0,
+          675.0
+        ]
+      },
+      "exact_input_overlap_with_arc": {
+        "train": 0,
+        "validation": 0,
+        "test": 0
+      }
+    },
+    "validation": {
+      "n": 500,
+      "parquet_bytes": 58233,
+      "parquet_sha256": "35370b9cfee8c1ff325ccc74adc434d12c47ca0ac3244aa87f3fa77069285206",
+      "normalized_bytes": 310928,
+      "normalized_sha256": "d2a2963a8eaccf3d78644aef4e4529b582b3252c92d6f836bb01ddc3468d98b6",
+      "labels": {
+        "A": 126,
+        "D": 126,
+        "B": 138,
+        "C": 110
+      },
+      "duplicate_full_inputs": 0,
+      "duplicate_questions": 1,
+      "prompt_characters": {
+        "n": 500,
+        "mean": 317.39,
+        "sd_population": 57.86582670281312,
+        "min_p05_p25_median_p75_p95_max": [
+          227.0,
+          241.0,
+          270.0,
+          310.0,
+          357.25,
+          418.04999999999995,
+          612.0
+        ]
+      },
+      "exact_input_overlap_with_arc": {
+        "train": 0,
+        "validation": 0,
+        "test": 0
+      }
+    },
+    "train_validation_exact_input_overlap": 7,
+    "conflicting_gold_full_inputs": 1,
+    "conflicting_gold_source_ids": [
+      "openbookqa:9-616",
+      "openbookqa:12-272"
+    ],
+    "unique_train_inputs_excluding_validation_overlap": 4907
+  },
+  "hellaswag": {
+    "id": "Rowan/hellaswag",
+    "revision": "218ec52e09a7e7462a5400043bb9a69a41d06b76",
+    "folder": "data",
+    "counts": {
+      "train": 39905,
+      "validation": 10042
+    },
+    "train": {
+      "n": 39905,
+      "parquet_bytes": 24365524,
+      "parquet_sha256": "cacb12587faa63d7f723a72d61d12bfa94b140446f5a6a0a2e1c6906ab88bf02",
+      "normalized_bytes": 56612778,
+      "normalized_sha256": "94ebdf37458bcf0d0b37f131f4a0a9ddb56067384f0f6cf7c71c552e00d15830",
+      "labels": {
+        "D": 10021,
+        "C": 9867,
+        "A": 9986,
+        "B": 10031
+      },
+      "duplicate_full_inputs": 0,
+      "duplicate_questions": 106,
+      "prompt_characters": {
+        "n": 39905,
+        "mean": 1008.6901641398321,
+        "sd_population": 334.21863481469273,
+        "min_p05_p25_median_p75_p95_max": [
+          372.0,
+          486.0,
+          648.0,
+          1125.0,
+          1278.0,
+          1447.0,
+          1910.0
+        ]
+      },
+      "exact_input_overlap_with_arc": {
+        "train": 0,
+        "validation": 0,
+        "test": 0
+      }
+    },
+    "validation": {
+      "n": 10042,
+      "parquet_bytes": 6315951,
+      "parquet_sha256": "899813071e1e95efafec90f856e1987d2150fa4d020fc005df6962c259f660cd",
+      "normalized_bytes": 14545411,
+      "normalized_sha256": "8b38b57044cc58649846fcedb37c3240d369b1f038055ea852d913dc48b82a4f",
+      "labels": {
+        "D": 2458,
+        "C": 2584,
+        "B": 2485,
+        "A": 2515
+      },
+      "duplicate_full_inputs": 0,
+      "duplicate_questions": 24,
+      "prompt_characters": {
+        "n": 10042,
+        "mean": 1033.3356901015734,
+        "sd_population": 322.1605951274066,
+        "min_p05_p25_median_p75_p95_max": [
+          369.0,
+          488.0,
+          690.0,
+          1148.0,
+          1280.0,
+          1435.0,
+          1782.0
+        ]
+      },
+      "exact_input_overlap_with_arc": {
+        "train": 0,
+        "validation": 0,
+        "test": 0
+      }
+    },
+    "train_validation_exact_input_overlap": 0,
+    "train_validation_shared_scene_ids": 0,
+    "conflicting_gold_full_inputs": 0,
+    "conflicting_gold_source_ids": [],
+    "unique_train_inputs_excluding_validation_overlap": 39905
+  }
+}

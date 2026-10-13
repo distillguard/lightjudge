@@ -287,7 +287,7 @@ T=2·margin=0.05·기존 optimizer/LoRA·3 epochs는 상속한 통제값이며 �
 
 새 [선택지 KD 구현](../src/choice_kd.py)과 [검사](../tests/test_choice_kd.py)는 동결 소스와 분리했다. 전체 41개 CPU 검사와 3모델×3손실의 실제 GPU 갱신 검사를 통과했다. 모델별 가장 긴 train 8개에서 gradient 누적·optimizer 갱신·Teacher/원본 가중치 동결을 확인했고 probe adapter를 저장하거나 본학습에 재사용하지 않았다. Probe peak allocated는 Qwen 3.76·Smol 3.42·Granite 5.08 GiB이며 본학습/속도 benchmark 수치가 아니다. 원본 130개 산출물·12개 소스 hash도 유지했다.
 
-베이지안 분석 후 일반화 단계에서는 선정한 세 모델의 동일한 선택지 평가로 초기 validation을 확인하고 **새 학습·평가 프로토콜을 동결**하는 단계다. 이후 독립 초기화의 9회 학습을 순차 실행한다. 본학습 실행기는 아직 작성·실행하지 않았으며 새 test 결과를 보고 모델·손실·checkpoint를 바꾸지 않는다. [준비 기록](../results/checks/choice_kd_preparation.json) · [GPU 기록](../results/protocols/choice_kd_setup.json)
+동일 Qwen의 새 데이터 진단·gate 비교 뒤 모델 일반화 단계에서는 선정한 세 모델의 동일한 선택지 평가로 초기 validation을 확인하고 **새 학습·평가 프로토콜을 동결**하는 단계다. 이후 독립 초기화의 9회 학습을 순차 실행한다. 본학습 실행기는 아직 작성·실행하지 않았으며 새 test 결과를 보고 모델·손실·checkpoint를 바꾸지 않는다. [준비 기록](../results/checks/choice_kd_preparation.json) · [GPU 기록](../results/protocols/choice_kd_setup.json)
 
 ## 10. 베이지안 후속 분석: 완료·일반화 준비
 
@@ -301,11 +301,30 @@ T=2·margin=0.05·기존 optimizer/LoRA·3 epochs는 상속한 통제값이며 �
 
 별도 CPU 통계 환경에서 4개 chain을 1개 worker로 순차 계산한다. **MCMC chain/샘플 수는 기존 LLM 학습 seed 수와 다르다.** 가상의 새 학습 seed에서의 **기대 Accuracy 차이**는 모형 기반 보조 결과이며 실제 일반화 실험이 아니다. 이 구간은 새 관측의 Bernoulli 변동을 추가한 실측 Accuracy 예측 구간과 다르다. 저장 호환 오류가 난 첫 계산은 실패 기록을 보존하고, likelihood·prior·입력은 유지한 채 저장 처리를 보완했다. [분석 명세·복구 기록](../results/protocols/bayesian_analysis_protocol.json)
 
-베이지안 진단·사전분포 민감도·핵심 그림과 해석을 완료한 뒤, 준비한 다른 Student의 동일한 과제별 프로토콜로 외부 일반화를 진행한다. 후속 9회 matrix는 Fixed·Hard·Soft의 gate 차이·정오 교체·확신 높은 오답을 비교하는 범위다. Gold/Response 대비 KL의 NLL 차이를 다른 모델에서도 재현했다고 주장하려면 그 대조군이 별도로 필요하며 현재 matrix에는 포함하지 않는다. 기존 전체 어휘 KD와 후속 선택지 KD는 별도로 평가하며 모형 재분석을 Teacher 오류 방지·계열 우위·과적합 해소의 인과 증거로 쓰지 않는다.
+베이지안 진단·사전분포 민감도·핵심 그림과 해석은 완료했다. §11의 동일 모델·새 데이터 gate 비교를 먼저 진행한 뒤, 준비한 다른 Student의 동일한 과제별 프로토콜로 외부 일반화를 진행한다. 후속 9회 matrix는 Fixed·Hard·Soft의 gate 차이·정오 교체·확신 높은 오답을 비교하는 범위다. Gold/Response 대비 KL의 NLL 차이를 다른 모델에서도 재현했다고 주장하려면 그 대조군이 별도로 필요하며 현재 matrix에는 포함하지 않는다. 기존 전체 어휘 KD와 후속 선택지 KD는 별도로 평가하며 모형 재분석을 Teacher 오류 방지·계열 우위·과적합 해소의 인과 증거로 쓰지 않는다.
 
 모형의 MCMC 수렴과 관측 패턴 재현을 구분한다. 방법 간 paired 정오 불일치가 후방 예측 범위를 벗어나면 해당 계층모형 결과는 탐색적 참고로 제한하고, 원래 결과를 보존한 paired 문항 Bayesian bootstrap을 보조 검사로 보고한다. [Rubin (1981)](https://doi.org/10.1214/aos/1176345338)의 공통 Dirichlet 문항 가중치는 관측한 세 학습 seed에 조건부이며 새 seed를 대신하지 않는다. 이 보조 검사는 test 관측 후 추가했음을 밝힌다. 후방 예측이 부적합한 현재 계층모형을 다른 모델에 그대로 확증 목적으로 확장하지 않는다. 후속 일반화는 실측 paired 효과부터 비교하고, 더 강한 확률 주장에는 잔여 의존 구조의 모형 점검이 필요하다.
 
 완료한 세 prior의 수렴 기준은 통과했고 Hard−Soft의 P(기대 차이>0)는 85.0~85.9%였다. 모든 95% 사후 구간이 0을 포함하며 세 prior 모두 정오 겹침의 후방 예측 한계가 남았다. 주 비교의 우위·동등성을 확정하지 않고, paired bootstrap/기존 CI와 함께 보조 결과로 보고한다. 연구보고서·그림·원본 보존 검증을 마쳤으며 다른 모델 본학습은 후속 단계로 보류했다. [최종 Bayesian 결과](../results/bayesian_v1/summary.json)
+
+## 11. 다른 데이터에서 이진 선택과 연속 가중의 비교: 후속 탐색
+
+기존 ARC test를 관측한 뒤 추가한 질문이다. **Hard의 0·1 이진 선택과 Soft의 연속 가중이 얼마나 다르게 작동하며, Soft가 Fixed 50:50에 가까울 때도 실제 이득이 있는지**를 먼저 살핀 뒤 다른 Student 계열로 확장한다. 원본 v4.3의 질문·checkpoint·주 비교는 유지한다.
+
+평균만으로 gate가 상수였다고 판단하지 않는다. 기존 train의 문항별·epoch별 confidence 차이, gate 평균·SD·5/95 분위수와 selection gradient를 구분한다. 원문 `g=sigmoid(cp-cq-0.05)`는 confidence가 같으면 약 0.4875이고 `dg/d(cp-cq)=g(1-g)`이다. 수식에 없는 온도를 추가하거나 Soft의 우위를 만들기 위해 margin을 바꾸지 않는다. [CaRE-KD 식 (3)·(7)](https://arxiv.org/html/2609.36734v1)
+
+| 후보 | 선정 근거 | 확보할 분할 | 역할 |
+|---|---|---|---|
+| OpenBookQA main | 과학 지식·상식의 4지선다, ARC와 가까운 과제 | train 4,957 / validation 500 | 같은 영역의 재현성 검사 |
+| HellaSwag | 적대적 필터링으로 만든 상황의 다음 전개 4지선다 | train 39,905 / validation 10,042 | 다른 영역의 일반화 검사 |
+
+[OpenBookQA 원 논문](https://aclanthology.org/D18-1260/) · [HellaSwag 원 논문](https://aclanthology.org/P19-1472/). 공식 Hub revision을 고정하고 train·validation만 받는다. OpenBookQA의 추가 fact1 필드는 입력하지 않으며, HellaSwag의 출처·문항 번호를 함께 ID로 사용한다. 원본을 유지한 채 동일 입력 중복·validation 겹침·정답 충돌을 train 후보에서 제외한다. 정제 후보는 OpenBookQA 4,907개·HellaSwag 39,905개다. 의미상 중복이나 공개 모델의 사전 노출은 이 검사로 배제할 수 없다.
+
+**현재 단계는 학습 전 진단이다.** ARC·OpenBookQA·HellaSwag에서 성능과 무관하게 미리 고른 train 128문항씩을 Qwen 9B NF4 Teacher·원본 2B BF16 Student로 순차 추론한다. 공통 문구를 중립적인 multiple-choice question으로 맞춰 ARC도 새로 진단한다. T=2 전체 어휘 confidence를 주 진단으로 유지하고, 유효 선택지 confidence는 별도의 측정 공간 진단으로 표시한다. 선택지 T=1 argmax 정답률은 train 표본의 참고값이며 기존 자유 생성 test 정답률과 직접 비교하지 않는다. HellaSwag의 raw context/endings를 문자 선택형으로 변환하므로 공식 completion scoring을 재현한 점수가 아니다. 학습 전 진단은 완료됐고 새 test나 adapter는 이 단계에서 사용하지 않았다. OpenBookQA·HellaSwag에서도 Soft의 weight SD는 0.0402·0.0315로, 새로운 ARC 진단 0.0343에 비해 일관되게 넓어지지 않았다. [입력·수식·선정 동결](../results/gate_continuity/protocol.json)
+
+이후에는 같은 Qwen·같은 confidence 공간에서 새 두 데이터의 Fixed·Hard·Soft를 seed 42로 비교하는 **6회 탐색 학습**이 최소 범위다. 실제 학습 전 전체 후보의 token 길이·중복 제거 후 고정 train 예산·validation·prompt를 동결한다. 데이터별로 유리한 설정이나 문항만 고르지 않고 두 데이터의 결과를 모두 보고하며, 1 seed 결과로 안정적인 일반화를 확정하지 않는다. 새 test는 학습·평가 조건을 고정한 뒤에만 접근한다.
+
+Soft−Fixed에는 평균 가중치의 이동·문항별 변화·selection gradient가 함께 포함된다. **연속성 자체의 이득**을 주장하려면 train만으로 정한 상수 가중치 대조와 Soft detach 대조가 추가로 필요하다. 현재 3조건만으로 이 세 원인을 분리했다고 주장하지 않는다. 데이터 변경과 전체 어휘→선택지 공간 변경, 모델 계열 변경은 각각 별도 요인으로 검증한다. 기존 Bayesian 계층모형의 후방 예측 한계를 다른 데이터에 그대로 확증 목적으로 확장하지 않는다.
 
 ## 참고문헌·근거
 

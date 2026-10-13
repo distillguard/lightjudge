@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "original_preservation": {
+    "frozen_sources": 12,
+    "protected_artifacts": 130,
+    "all_match": true
+  },
+  "completed_adapter_files": 63,
+  "completed_adapters": 21,
+  "frozen_groups": {
+    "public_checkpoint_files_sha256": 22,
+    "validation_files_sha256": 46,
+    "timing_files_sha256": 117
+  },
+  "screened_datasets": 3,
+  "train_items_per_dataset": 128,
+  "total_model_forwards": 768,
+  "new_test_evaluations": 0,
+  "new_training_runs": 0,
+  "data_and_code_and_score_hashes_match": true,
+  "selected_ids_and_unique_inputs_match": true,
+  "selected_validation_overlap": 0,
+  "selected_conflicting_gold_ids": 0,
+  "unit_tests": {
+    "data_normalization": 4,
+    "existing_soft_gradient_and_loss": 9
+  },
+  "figures_visually_reviewed": [
+    "original_gate_distribution.png",
+    "hard_soft_data_screening.png"
+  ]
+}

@@ -173,7 +173,7 @@ MCQA 선행연구의 선택지 문자 logit을 차용해 각 모델의 **공식 
 
 전체 41개 CPU 검사와 세 모델 각각 Fixed·Hard·Soft의 8회 gradient 누적·1회 optimizer 갱신이 통과했다. 유한 loss/gradient·LoRA 갱신·원본 가중치 동결을 확인했고 probe adapter는 저장·본학습 재사용하지 않았다. 이는 모델 Accuracy·학습 시간 비교나 독립 학습 9회의 결과가 아니다. [각 GPU 검사 파일](../results/protocols/choice_kd_setup.json)
 
-후속 matrix는 3모델×3조건×seed 42의 **9회 탐색 학습**이다. 새로운 선택지 분류 손실·argmax Accuracy는 기존 전체 어휘 KD·자유 생성 평가와 구분한다. T/margin과 1 seed는 통제/예산값이며 최적값이나 학계 표준이 아니다. 모델 크기·native 입력·LoRA 수가 달라 모델 내 방법 차이를 중심으로 보고한다. 현재 **초기 validation 성능·독립 본학습·새 test는 미실행**이며 다음 단계에서 새 실행 프로토콜을 동결한다.
+후속 matrix는 3모델×3조건×seed 42의 **9회 탐색 학습**이다. 새로운 선택지 분류 손실·argmax Accuracy는 기존 전체 어휘 KD·자유 생성 평가와 구분한다. T/margin과 1 seed는 통제/예산값이며 최적값이나 학계 표준이 아니다. 모델 크기·native 입력·LoRA 수가 달라 모델 내 방법 차이를 중심으로 보고한다. 현재 **초기 validation 성능·독립 본학습·새 test는 미실행**이며, 동일 Qwen의 새 데이터 gate 비교를 먼저 진행한 뒤 새 모델 실행 프로토콜을 동결한다.
 
 ## 베이지안 후속 분석: 2026-10-13
 
@@ -210,7 +210,40 @@ Gold/Response의 평균 선택지 NLL 1.0417/1.1187에서 오답이 차지하는
 
 ![후방 예측의 정오 겹침 한계](../results/bayesian_v1/posterior_predictive.png)
 
-새 모델 본학습·새 test는 보류했다. 다음 일반화 질문은 **다른 Student에서도 gate별 paired 효과·정오 교체·확신 높은 오답 차이가 반복되는가**다. 기존 계층모형의 residual dependence 한계를 그대로 확증 분석에 확장하지 않는다. 재현 가능한 prior 예측·차이 자체의 ESS/Rhat·확률 MCSE·그림 5개와 원본 보존을 검증했다. [전체 결과](../results/bayesian_v1/summary.json) · [개선폭별 확률 곡선](../results/bayesian_v1/effect_thresholds.png) · [최종 검증](../results/checks/bayesian_final_verification.json)
+새 모델 본학습·새 test는 보류했다. 모델 일반화 단계의 질문은 **다른 Student에서도 gate별 paired 효과·정오 교체·확신 높은 오답 차이가 반복되는가**다. 기존 계층모형의 residual dependence 한계를 그대로 확증 분석에 확장하지 않는다. 재현 가능한 prior 예측·차이 자체의 ESS/Rhat·확률 MCSE·그림 5개와 원본 보존을 검증했다. [전체 결과](../results/bayesian_v1/summary.json) · [개선폭별 확률 곡선](../results/bayesian_v1/effect_thresholds.png) · [최종 검증](../results/checks/bayesian_final_verification.json)
 
 [분석 명세·prior·근거](../results/protocols/bayesian_analysis_protocol.json) · [paired Accuracy 보조 분석](../results/bayesian_v1/paired_accuracy_bayesian_bootstrap.json) · [NLL 보조 분석](../results/bayesian_v1/nll_bayesian_bootstrap.json) · [학습곡선 진단](../results/bayesian_v1/learning_curve_audit.json)
 <!-- bayesian-analysis:end -->
+
+## 이진 Hard·연속 Soft와 다른 데이터 진단: 2026-10-13
+
+사용자의 ‘연속성’은 **Hard의 0·1 선택과 Soft의 연속 가중 사이의 차이**를 뜻한다. 기존 Soft 학습 3 seed의 10,062회 기록에서 평균은 **0.4866**, SD는 **0.0260**, 가운데 90%는 **0.442~0.527**였다. 같은 문항·epoch의 반복 관측이므로 독립 표본 10,062개나 신뢰구간으로 해석하지 않는다. 모든 seed에서 epoch 1의 SD 약 0.033이 epoch 3의 약 0.019로 줄었다. 50:50 근처에 집중됐다는 지적은 타당하지만 상수 가중치나 동등한 결과라고 단정할 수는 없다.
+
+Hard는 confidence 차이가 0을 넘으면 Forward 비율이 0에서 1로 바뀐다. Soft는 `sigmoid(cp-cq-0.05)`로 연속적으로 섞고, 차이가 0이면 약 0.4875다. 이 수식에서 가능한 가중치 범위는 약 0.259~0.721이며 작은 confidence 차이는 작은 비율 변화로 나타난다. 관측한 평균 기울기 `g(1-g)`는 0.2491로, **작은 비율 변화가 sigmoid의 gradient 소실을 뜻하지 않는다.** Soft는 `(ForwardKL-ReverseKL)·gradient(g)`도 전달한다. 로그로 계산한 scalar coefficient를 실제 parameter gradient norm이라고 부르지 않았다. [원문 식 (3)·(7)](https://arxiv.org/html/2609.36734v1) · [분포·기울기 진단](../results/gate_continuity/original_gate_audit.json)
+
+![기존 Soft의 분포와 epoch 변화](../results/gate_continuity/original_gate_distribution.png)
+
+OpenBookQA는 [과학 지식·상식 4지선다](https://aclanthology.org/D18-1260/), HellaSwag는 [상황의 다음 전개 4지선다](https://aclanthology.org/P19-1472/)라는 근거로 선정했다. 두 데이터의 **train·validation만** 고정 Hub revision으로 받았으며 원본 Parquet 합계는 31,235,553 bytes(29.79 MiB), 정규화 JSONL은 74,476,185 bytes(71.03 MiB)다. GPU 모델 추가 다운로드나 새 test 평가는 하지 않았다.
+
+| 데이터 | 원본 train / validation | 데이터 품질 검사 | 학습 후보 |
+|---|---|---|---|
+| OpenBookQA main | 4,957 / 500 | train 동일 입력 중복 42건, validation 겹침 7문항, 정답 선택지 불일치 1문항 그룹(2개 ID) | 4,907개 |
+| HellaSwag | 39,905 / 10,042 | 동일 입력 중복·분할 겹침 0; 출처별 ind 재사용은 출처+번호로 구분 | 39,905개 |
+
+원본을 보존하며 중복·겹침·충돌만 train 후보에서 제외했다. OpenBookQA 추가 fact1은 입력하지 않는다. 두 데이터 모두 기존 ARC train·validation·test와 **정규화된 동일 전체 입력**의 겹침은 0개였으며, 의미상 중복이나 공개 모델의 사전 노출까지 배제한 검사가 아니다. [분할·revision·hash·EDA](../results/gate_continuity/datasets.json) · [정성 검토용 train 샘플](../results/gate_continuity/review_samples.json)
+
+**학습 전 GPU 진단 완료:** 성능과 무관하게 고정한 train 128문항씩을 기존 Qwen 9B NF4 Teacher·원본 2B BF16 Student로 순차 평가했다. 세 데이터 모두 중립적인 공통 문구·native template·T=2 전체 어휘 entropy를 사용했고 768회 forward, prefix 최대 356 tokens로 잘림은 없었다. 다음 정답률은 train 표본의 T=1 유효 문자 argmax이며 기존 자유 생성 test 정답률·HellaSwag의 공식 completion 점수와 직접 비교하지 않는다.
+
+| train 표본 | Teacher / Student 문자 정답률 | Soft 평균 | Soft SD | 가중치 5~95 분위수 | Hard의 Forward 선택 비율 |
+|---|---|---|---|---|---|
+| ARC-Challenge | 93.75% / 78.12% | 0.5520 | 0.0343 | 0.492~0.597 | 95.3% |
+| OpenBookQA | 86.72% / 70.31% | 0.5245 | 0.0402 | 0.457~0.588 | 76.6% |
+| HellaSwag | 90.62% / 60.16% | 0.5093 | 0.0315 | 0.460~0.562 | 69.5% |
+
+**다른 데이터로 바꿔도 Soft의 변화 폭이 자동으로 넓어지지는 않았다.** HellaSwag에서는 평균이 0.5093으로 더 50:50에 가까웠고 SD도 ARC 진단보다 작았다. 초기 ARC의 평균 0.5520과 완료 Soft 학습 로그의 0.4866은 Student 상태·공통 문구·문항 범위가 달라 직접적인 학습 전후 효과로 해석하지 않는다. 유효 선택지로 entropy 공간을 바꾼 별도 진단에서는 SD 0.0543~0.0601로 더 넓었지만, 이는 **같은 알고리즘의 데이터 일반화가 아니라 confidence 측정 공간 변경**이다. 더 넓은 비율이 더 좋은 증류를 뜻하지도 않는다. [train 진단·raw score hash](../results/gate_continuity/train_screening.json)
+
+![Hard의 이진 선택과 Soft의 연속 가중·새 데이터의 실제 초기 분포](../results/gate_continuity/hard_soft_data_screening.png)
+
+다음 학습은 같은 모델·같은 confidence 공간에서 새 데이터 2개×Fixed·Hard·Soft×seed 42의 6회 탐색이 최소 범위다. **현재 새 데이터의 증류 학습·validation 성능 비교·test는 미실행**이다. 전체 token 길이와 학습 예산을 동결한 뒤 진행하며, 최종적인 일반화에는 반복 seed가 필요하다. 연속 가중 자체의 이득과 평균 가중치·selection gradient의 영향을 분리하려면 상수 가중치 및 detach 대조가 필요하고 현재 3조건만으로 그 원인을 확정하지 않는다. 다른 Student 계열의 본학습은 그 뒤로 유지한다.
+
+[최종 입력·13개 검사·원본/adapter 보존 검증](../results/gate_continuity/verification.json)

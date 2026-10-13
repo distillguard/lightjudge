@@ -127,3 +127,11 @@ seed 42는 Fixed→Hard→Soft, seed 7은 Hard→Soft→Fixed, seed 123은 Soft�
 기존 Qwen 텍스트 1.882B를 기준으로 SmolLM2-1.711B·Granite-2.534B를 준비했고 가까운 StableLM2/BLOOMZ도 후보에 기록했다. 모델별 공식 tokenizer·native template를 유지하면서 출력만 공통 A~E 선택지 확률로 대응한다. 전체 1,417개 train/validation 입력·Teacher cache 변환·41개 CPU 검사와 세 모델의 Fixed/Hard/Soft GPU 갱신 검사를 통과했다. [후보·토크나이저·GPU 기록](results/protocols/choice_kd_setup.json) · [논문 근거·확장안](docs/RESEARCH_PLAN.md#9-다른-계열-확장-후보토크나이저-준비-2026-10-13)
 
 베이지안 분석 이후의 일반화 계획은 **3모델×Fixed/Hard/Soft×seed 42 = 9회 탐색 학습**이며 기존 21회와 별도다. 초기 validation 성능·독립 본학습·새 test는 아직 실행하지 않았다. 입력·손실 준비는 src/choice_kd.py prepare, 저장하지 않는 GPU 선행 검사는 probe --student qwen2b|smollm2|granite2b로 재현한다. 기존 준비 cache가 있으면 덮어쓰기를 거부한다.
+
+## 현재 후속 단계: 이진 Hard·연속 Soft와 다른 데이터
+
+기존 Soft의 전체 train 평균은 **0.4866**, 가운데 90%는 **0.442~0.527**로 50:50 부근에 집중됐다. 연속적으로 변하는 수식·selection gradient가 있으므로 Fixed와 동일하다고 단정하지 않는다. OpenBookQA·HellaSwag의 train/validation을 확보하고, 중복·겹침·정답 충돌을 제외한 학습 후보 **4,907·39,905개**를 준비했다. 원본 Parquet은 두 데이터 합계 약 29.79 MiB다.
+
+기존 Teacher·원본 Student의 각 train 128문항 진단에서 Soft 평균/SD는 ARC **0.5520/0.0343**, OpenBookQA **0.5245/0.0402**, HellaSwag **0.5093/0.0315**였다. 다른 데이터에서도 변화 폭이 일관되게 커지지는 않았다. 이것은 학습 전 진단이며 새 데이터 증류 학습·test는 아직 수행하지 않았다. 같은 모델·같은 수식의 데이터 비교를 먼저 하고 다른 Student 일반화는 뒤에 진행한다. [이진 선택·연속 가중 그림](results/gate_continuity/hard_soft_data_screening.png) · [보고서·데이터·샘플](docs/RESEARCH_REPORT.md#이진-hard연속-soft와-다른-데이터-진단-2026-10-13) · [후속 계획](docs/RESEARCH_PLAN.md#11-다른-데이터에서-이진-선택과-연속-가중의-비교-후속-탐색)
+
+로컬 cache와 고정 입력이 있으면 `src/gate_continuity.py screen`으로 완료 추론을 검증·재사용하고 `src/report_gate_continuity.py`로 그림을 재생성한다. `prepare`는 완료 준비를 덮어쓰지 않는다. 원본 데이터·model weights·raw score는 Git에 올리지 않는다.

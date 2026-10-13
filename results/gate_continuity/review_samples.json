@@ -1,0 +1,266 @@
+{
+  "openbookqa": [
+    {
+      "source_id": "openbookqa:7-118",
+      "source_split": "train",
+      "question": "The condor screamed in pain as its wing was singed by the",
+      "choices": [
+        {
+          "label": "A",
+          "source_label": "A",
+          "text": "ice"
+        },
+        {
+          "label": "B",
+          "source_label": "B",
+          "text": "water"
+        },
+        {
+          "label": "C",
+          "source_label": "C",
+          "text": "electricity"
+        },
+        {
+          "label": "D",
+          "source_label": "D",
+          "text": "campfire"
+        }
+      ],
+      "gold": "D",
+      "source_gold": "D",
+      "question_sha256": "2a2f63b8778896986aeb0684b7814bed3c23c6adaf5f561f581e7bf7cc23a18a",
+      "input_sha256": "13d716f90d4e96c63e4a0ad52d7eef879836fb568c075a6d90dfe581676aa3ee"
+    },
+    {
+      "source_id": "openbookqa:7-890",
+      "source_split": "train",
+      "question": "A bird makes its home in various places, such as",
+      "choices": [
+        {
+          "label": "A",
+          "source_label": "A",
+          "text": "groves of plants"
+        },
+        {
+          "label": "B",
+          "source_label": "B",
+          "text": "waterways"
+        },
+        {
+          "label": "C",
+          "source_label": "C",
+          "text": "city streets"
+        },
+        {
+          "label": "D",
+          "source_label": "D",
+          "text": "public parks"
+        }
+      ],
+      "gold": "A",
+      "source_gold": "A",
+      "question_sha256": "8404bafc3be6dc55e8e552de8d74239984fc9b76bd759dbce76e41b90d8c2d82",
+      "input_sha256": "3bb973d90ec1d48e53805b75738af819129b3db95f9765e8a47d1ce7ca25a44e"
+    },
+    {
+      "source_id": "openbookqa:11-332",
+      "source_split": "train",
+      "question": "Which of the following is an instinctive behavior?",
+      "choices": [
+        {
+          "label": "A",
+          "source_label": "A",
+          "text": "geese leave colder regions"
+        },
+        {
+          "label": "B",
+          "source_label": "B",
+          "text": "a human boy learns to speak French"
+        },
+        {
+          "label": "C",
+          "source_label": "C",
+          "text": "a chicken learns to play fetch"
+        },
+        {
+          "label": "D",
+          "source_label": "D",
+          "text": "an eagle eats trash"
+        }
+      ],
+      "gold": "A",
+      "source_gold": "A",
+      "question_sha256": "aea24dfa39fde387b065bd08e32ce2e5d17421a0377193ccca72f2ac176c5455",
+      "input_sha256": "31bc03583bb7a0287a2d5b8e9c5dcf85eff4fe275da436a0cee1eff8db2b719c"
+    },
+    {
+      "source_id": "openbookqa:10-1162",
+      "source_split": "train",
+      "question": "In the photosynthesis process what has the role of raw material?",
+      "choices": [
+        {
+          "label": "A",
+          "source_label": "A",
+          "text": "water"
+        },
+        {
+          "label": "B",
+          "source_label": "B",
+          "text": "CO2"
+        },
+        {
+          "label": "C",
+          "source_label": "C",
+          "text": "wind"
+        },
+        {
+          "label": "D",
+          "source_label": "D",
+          "text": "dirt"
+        }
+      ],
+      "gold": "B",
+      "source_gold": "B",
+      "question_sha256": "891895be0002cd827dbae3d30396e9c5c8598aa5a043ea7c3ef0ccfeb588286f",
+      "input_sha256": "7e8124f9362410df39e1ac22c76b17a73dbbb7b67aeef2524e437221920bc02e"
+    }
+  ],
+  "hellaswag": [
+    {
+      "source_id": "hellaswag:activitynet~v_1H2bRd91sZw:25406",
+      "source_split": "train",
+      "question": "Choose the most plausible continuation of this situation:\nSeveral food items and dishes are laid out on a table. Meat product and other items are used to create a sandwich. then a bento shaper",
+      "choices": [
+        {
+          "label": "A",
+          "source_label": "A",
+          "text": "is put into a skillet on the stove."
+        },
+        {
+          "label": "B",
+          "source_label": "B",
+          "text": "is used to create an image in the sandwich."
+        },
+        {
+          "label": "C",
+          "source_label": "C",
+          "text": "is put together and put into the oven."
+        },
+        {
+          "label": "D",
+          "source_label": "D",
+          "text": "depositions and improvement of the sandwich."
+        }
+      ],
+      "gold": "B",
+      "source_gold": "B",
+      "question_sha256": "054734aaadf678aa045046a0dcc72c189109cba8333d872d86ce0cd8053c8d99",
+      "input_sha256": "c6187df3926b20e3ef817a576004f798390e39abbdbda9c8680746c3e91cf88f",
+      "scene_id": "activitynet~v_1H2bRd91sZw",
+      "activity": "Making a sandwich",
+      "split_type": "indomain"
+    },
+    {
+      "source_id": "hellaswag:activitynet~v_yJezvcXU4YE:5219",
+      "source_split": "train",
+      "question": "Choose the most plausible continuation of this situation:\nA man in a black vest is standing in a room. He throws darts at a dart board on the wall. a woman",
+      "choices": [
+        {
+          "label": "A",
+          "source_label": "A",
+          "text": "stands next to him watching."
+        },
+        {
+          "label": "B",
+          "source_label": "B",
+          "text": "puts her arm down."
+        },
+        {
+          "label": "C",
+          "source_label": "C",
+          "text": "comes onto the screen and starts talking into a microphone."
+        },
+        {
+          "label": "D",
+          "source_label": "D",
+          "text": "puts darts on a board on the ground."
+        }
+      ],
+      "gold": "A",
+      "source_gold": "A",
+      "question_sha256": "0411fdbb119dcb1495ecaae5d491c9f5af3091d96cef581c4db934dd490dcc2a",
+      "input_sha256": "e1b511b2d53e20707dffb5b41ae94d411100dc44f87a44ed2425005d788adfab",
+      "scene_id": "activitynet~v_yJezvcXU4YE",
+      "activity": "Throwing darts",
+      "split_type": "indomain"
+    },
+    {
+      "source_id": "hellaswag:wikihow~11039:6678",
+      "source_split": "train",
+      "question": "Choose the most plausible continuation of this situation:\n[header] How to make money by having a house party [title] Find a couple friends to help plan the party. [step] Planning a killer house party is a lot easier when you've got accomplices to spread the time and responsibilities out to. Talk to your friends, and see who is interested in helping.",
+      "choices": [
+        {
+          "label": "A",
+          "source_label": "A",
+          "text": "If there are not any friends that you think could help, enlist other people that might be willing to help. [title] Arrive at the house to check if all is okay."
+        },
+        {
+          "label": "B",
+          "source_label": "B",
+          "text": "This will make things a lot easier on you. Consider the following : [substeps] Who has what responsibilities."
+        },
+        {
+          "label": "C",
+          "source_label": "C",
+          "text": "See who thinks of the most people to host. You can even take turns hosting your party, but no one is guaranteed to get invited to the party and make the best impression."
+        },
+        {
+          "label": "D",
+          "source_label": "D",
+          "text": "They will help you plan where the party will occur and get you started. [substeps] Have everyone outside that circle of friends agree on a date and time of the party."
+        }
+      ],
+      "gold": "B",
+      "source_gold": "B",
+      "question_sha256": "48fa759c3714bf11a69fa2f5650bf45759669727c5ea2fd38a1be62b254f08a1",
+      "input_sha256": "ed39da0ba7e1c3ada53a163695eaa8a4cbf15aabce8bff00a92758d350200256",
+      "scene_id": "wikihow~11039",
+      "activity": "Food and Entertaining",
+      "split_type": "indomain"
+    },
+    {
+      "source_id": "hellaswag:wikihow~4424:2691",
+      "source_split": "train",
+      "question": "Choose the most plausible continuation of this situation:\n[header] How to trim trees [title] Wear safety goggles, helmet, and purchase a step ladder. [step] Safety goggles and a helmet or hard hat will protect your head and eyes as you prune adult trees. You may also need a small step ladder to reach higher branches.",
+      "choices": [
+        {
+          "label": "A",
+          "source_label": "A",
+          "text": "[title] Insert a mitten stake about two feet (- 4) away from the pruning necessities (tree). [step] You can purchase mitten stakes at most tree planting supply stores or online."
+        },
+        {
+          "label": "B",
+          "source_label": "B",
+          "text": "However, if the branch is located high in the air and requires an extension ladder, consult a professional instead of trying to do it yourself. [substeps] Purchase this equipment online or at a hardware store."
+        },
+        {
+          "label": "C",
+          "source_label": "C",
+          "text": "[title] Cut an \" x \" into the trunk of the tree. [step] Purchase a can of hand pruners from a hardware store and use a sharp knife to cut right through the trunk of the tree."
+        },
+        {
+          "label": "D",
+          "source_label": "D",
+          "text": "You may wear gloves to protect your face from the branch you are trimming. [substeps] You may wear long sleeved green or cotton gloves."
+        }
+      ],
+      "gold": "B",
+      "source_gold": "B",
+      "question_sha256": "894a137ff04f7fb8f999368d7e4bf88e9477378a045b77b9f9492f77682c16f5",
+      "input_sha256": "d5054a9a56cb140f9dbdde7d179ad61ebb05b5671c391ad67127aedb333fdf9b",
+      "scene_id": "wikihow~4424",
+      "activity": "Home and Garden",
+      "split_type": "indomain"
+    }
+  ]
+}
