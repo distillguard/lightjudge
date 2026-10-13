@@ -1,0 +1,274 @@
+{
+  "status": "passed",
+  "student": "granite2b",
+  "model_id": "ibm-granite/granite-3.3-2b-instruct",
+  "revision": "707f574c62054322f6b5b04b6d075f0a8f05e0f0",
+  "precision": "BF16 base / FP32 LoRA",
+  "source_split": "train",
+  "test_read": false,
+  "adapter_saved": false,
+  "probe_reused_for_training": false,
+  "code_sha256": "6e221f2471f289cbc302d9caa9e7867bff59ac1e6b38b92bb3d52ec1d7cf792b",
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "recipe_sha256": "241c7a771931014661cddb845b2697826ee3b96fbf2f4e84630550c6c719d840",
+  "base_parameters": 2533539840,
+  "trainable_parameters": 14090240,
+  "probe_input_ids": [
+    "MSA_2013_8_4",
+    "MSA_2013_8_5",
+    "Mercury_401402",
+    "MSA_2012_5_14",
+    "Mercury_7213255",
+    "Mercury_409819",
+    "Mercury_7284060",
+    "Mercury_415092"
+  ],
+  "longest_train_tokens": 321,
+  "methods": {
+    "fixed_mix": {
+      "status": "passed",
+      "optimizer_steps": 1,
+      "micro_batches": 8,
+      "grad_norm": 99.4573974609375,
+      "seconds": 4.1732590002939105,
+      "observations": [
+        {
+          "loss": 3.6077499389648438,
+          "forward_kl": 0.8730630874633789,
+          "reverse_kl": 0.930811882019043,
+          "teacher_confidence": 0.36884671449661255,
+          "student_confidence": 0.4441298246383667,
+          "hard_gate": 0.0,
+          "forward_weight": 0.5
+        },
+        {
+          "loss": 5.0019612312316895,
+          "forward_kl": 0.9860616326332092,
+          "reverse_kl": 1.5149190425872803,
+          "teacher_confidence": 0.7028990387916565,
+          "student_confidence": 0.29611146450042725,
+          "hard_gate": 1.0,
+          "forward_weight": 0.5
+        },
+        {
+          "loss": 21.66250991821289,
+          "forward_kl": 6.761639595031738,
+          "reverse_kl": 4.069615364074707,
+          "teacher_confidence": 0.8897750973701477,
+          "student_confidence": 0.8062620162963867,
+          "hard_gate": 1.0,
+          "forward_weight": 0.5
+        },
+        {
+          "loss": 5.592559814453125,
+          "forward_kl": 1.4290215969085693,
+          "reverse_kl": 1.3672581911087036,
+          "teacher_confidence": 0.47121375799179077,
+          "student_confidence": 0.40883588790893555,
+          "hard_gate": 1.0,
+          "forward_weight": 0.5
+        },
+        {
+          "loss": 10.622396469116211,
+          "forward_kl": 2.3692915439605713,
+          "reverse_kl": 2.941906690597534,
+          "teacher_confidence": 0.6705489158630371,
+          "student_confidence": 0.49214911460876465,
+          "hard_gate": 1.0,
+          "forward_weight": 0.5
+        },
+        {
+          "loss": 1.0280934572219849,
+          "forward_kl": 0.3302960693836212,
+          "reverse_kl": 0.18375064432621002,
+          "teacher_confidence": 0.1405605673789978,
+          "student_confidence": 0.2677382826805115,
+          "hard_gate": 0.0,
+          "forward_weight": 0.5
+        },
+        {
+          "loss": 10.110983848571777,
+          "forward_kl": 2.4315059185028076,
+          "reverse_kl": 2.623986005783081,
+          "teacher_confidence": 0.5335800647735596,
+          "student_confidence": 0.7994317412376404,
+          "hard_gate": 0.0,
+          "forward_weight": 0.5
+        },
+        {
+          "loss": 0.09466256201267242,
+          "forward_kl": 0.022832199931144714,
+          "reverse_kl": 0.024499081075191498,
+          "teacher_confidence": 0.7702028751373291,
+          "student_confidence": 0.7373920679092407,
+          "hard_gate": 1.0,
+          "forward_weight": 0.5
+        }
+      ]
+    },
+    "adaptive_hard": {
+      "status": "passed",
+      "optimizer_steps": 1,
+      "micro_batches": 8,
+      "grad_norm": 23.092134475708008,
+      "seconds": 3.6826605000533164,
+      "observations": [
+        {
+          "loss": 0.27324026823043823,
+          "forward_kl": 0.06831006705760956,
+          "reverse_kl": 0.08307397365570068,
+          "teacher_confidence": 0.36884671449661255,
+          "student_confidence": 0.192851722240448,
+          "hard_gate": 1.0,
+          "forward_weight": 1.0
+        },
+        {
+          "loss": 0.42499658465385437,
+          "forward_kl": 0.10624914616346359,
+          "reverse_kl": 0.14040420949459076,
+          "teacher_confidence": 0.7028990387916565,
+          "student_confidence": 0.5853712558746338,
+          "hard_gate": 1.0,
+          "forward_weight": 1.0
+        },
+        {
+          "loss": 1.8808751106262207,
+          "forward_kl": 0.4702187776565552,
+          "reverse_kl": 0.9689701795578003,
+          "teacher_confidence": 0.8897750973701477,
+          "student_confidence": 0.18409502506256104,
+          "hard_gate": 1.0,
+          "forward_weight": 1.0
+        },
+        {
+          "loss": 2.187711715698242,
+          "forward_kl": 0.5469279289245605,
+          "reverse_kl": 0.5944184064865112,
+          "teacher_confidence": 0.47121375799179077,
+          "student_confidence": 0.012812554836273193,
+          "hard_gate": 1.0,
+          "forward_weight": 1.0
+        },
+        {
+          "loss": 5.2315897941589355,
+          "forward_kl": 1.3078974485397339,
+          "reverse_kl": 1.7058639526367188,
+          "teacher_confidence": 0.6705489158630371,
+          "student_confidence": 0.10163915157318115,
+          "hard_gate": 1.0,
+          "forward_weight": 1.0
+        },
+        {
+          "loss": 0.4162537455558777,
+          "forward_kl": 0.10406343638896942,
+          "reverse_kl": 0.14370660483837128,
+          "teacher_confidence": 0.1405605673789978,
+          "student_confidence": 0.04953885078430176,
+          "hard_gate": 1.0,
+          "forward_weight": 1.0
+        },
+        {
+          "loss": 0.5241079926490784,
+          "forward_kl": 0.1310269981622696,
+          "reverse_kl": 0.16292627155780792,
+          "teacher_confidence": 0.5335800647735596,
+          "student_confidence": 0.21800923347473145,
+          "hard_gate": 1.0,
+          "forward_weight": 1.0
+        },
+        {
+          "loss": 1.7569118738174438,
+          "forward_kl": 0.43922796845436096,
+          "reverse_kl": 0.7185418605804443,
+          "teacher_confidence": 0.7702028751373291,
+          "student_confidence": 0.1328970193862915,
+          "hard_gate": 1.0,
+          "forward_weight": 1.0
+        }
+      ]
+    },
+    "adaptive_soft": {
+      "status": "passed",
+      "optimizer_steps": 1,
+      "micro_batches": 8,
+      "grad_norm": 12.508871078491211,
+      "seconds": 3.7092190999537706,
+      "observations": [
+        {
+          "loss": 0.26824378967285156,
+          "forward_kl": 0.06131706386804581,
+          "reverse_kl": 0.07341770827770233,
+          "teacher_confidence": 0.36884671449661255,
+          "student_confidence": 0.21746259927749634,
+          "hard_gate": 1.0,
+          "forward_weight": 0.5253243446350098
+        },
+        {
+          "loss": 0.4308321177959442,
+          "forward_kl": 0.1597924828529358,
+          "reverse_kl": 0.06928323954343796,
+          "teacher_confidence": 0.7028990387916565,
+          "student_confidence": 0.9570626020431519,
+          "hard_gate": 0.0,
+          "forward_weight": 0.4245399832725525
+        },
+        {
+          "loss": 0.06462345272302628,
+          "forward_kl": 0.021127618849277496,
+          "reverse_kl": 0.011758729815483093,
+          "teacher_confidence": 0.8897750973701477,
+          "student_confidence": 0.9625958204269409,
+          "hard_gate": 0.0,
+          "forward_weight": 0.4693334102630615
+        },
+        {
+          "loss": 0.3814055323600769,
+          "forward_kl": 0.08687340468168259,
+          "reverse_kl": 0.10509701818227768,
+          "teacher_confidence": 0.47121375799179077,
+          "student_confidence": 0.28186553716659546,
+          "hard_gate": 1.0,
+          "forward_weight": 0.5347808003425598
+        },
+        {
+          "loss": 3.841679096221924,
+          "forward_kl": 0.8403985500335693,
+          "reverse_kl": 1.161403775215149,
+          "teacher_confidence": 0.6705489158630371,
+          "student_confidence": 0.104991614818573,
+          "hard_gate": 1.0,
+          "forward_weight": 0.6261082887649536
+        },
+        {
+          "loss": 1.1244854927062988,
+          "forward_kl": 0.3008788824081421,
+          "reverse_kl": 0.2625049948692322,
+          "teacher_confidence": 0.1405605673789978,
+          "student_confidence": 0.1500537395477295,
+          "hard_gate": 0.0,
+          "forward_weight": 0.4851311147212982
+        },
+        {
+          "loss": 0.15169870853424072,
+          "forward_kl": 0.049957841634750366,
+          "reverse_kl": 0.02746770717203617,
+          "teacher_confidence": 0.5335800647735596,
+          "student_confidence": 0.6239776611328125,
+          "hard_gate": 0.0,
+          "forward_weight": 0.464958131313324
+        },
+        {
+          "loss": 1.2973911762237549,
+          "forward_kl": 0.24705301225185394,
+          "reverse_kl": 0.43250715732574463,
+          "teacher_confidence": 0.7702028751373291,
+          "student_confidence": 0.38422393798828125,
+          "hard_gate": 1.0,
+          "forward_weight": 0.5832133889198303
+        }
+      ]
+    }
+  },
+  "peak_allocated_bytes": 5456709120,
+  "note": "Disposable sequential checks share one probe adapter; not independent training experiments"
+}

@@ -111,4 +111,6 @@ seed 42는 Fixed→Hard→Soft, seed 7은 Hard→Soft→Fixed, seed 123은 Soft�
 
 ## 다른 계열 확장 준비
 
-문헌과 공식 tokenizer 검사를 마쳤다. 선택지 KD로 Qwen3.5-2B·SmolLM2-1.7B의 Fixed·Hard·Soft × seed 42, **6회 탐색 학습**을 제안하며 기존 21회 실험과 구분한다. 1 seed는 예산 선택으로, 학습 변동까지 일반화하지 않는다. 새 모델 가중치·GPU 학습은 아직 수행하지 않았다. [확장안·논문 근거](docs/RESEARCH_PLAN.md#9-다른-계열-확장안-문헌-대조선행-검사-2026-10-13) · [후보 revision·선행 검사](results/protocols/cross_family_evidence.json)
+기존 Qwen 텍스트 1.882B를 기준으로 SmolLM2-1.711B·Granite-2.534B를 준비했고 가까운 StableLM2/BLOOMZ도 후보에 기록했다. 모델별 공식 tokenizer·native template를 유지하면서 출력만 공통 A~E 선택지 확률로 대응한다. 전체 1,417개 train/validation 입력·Teacher cache 변환·41개 CPU 검사와 세 모델의 Fixed/Hard/Soft GPU 갱신 검사를 통과했다. [후보·토크나이저·GPU 기록](results/protocols/choice_kd_setup.json) · [논문 근거·확장안](docs/RESEARCH_PLAN.md#9-다른-계열-확장-후보토크나이저-준비-2026-10-13)
+
+다음 계획은 **3모델×Fixed/Hard/Soft×seed 42 = 9회 탐색 학습**이며 기존 21회와 별도다. 초기 validation 성능·독립 본학습·새 test는 아직 실행하지 않았다. 입력·손실 준비는 src/choice_kd.py prepare, 저장하지 않는 GPU 선행 검사는 probe --student qwen2b|smollm2|granite2b로 재현한다. 기존 준비 cache가 있으면 덮어쓰기를 거부한다.

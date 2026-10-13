@@ -1,0 +1,112 @@
+{
+  "status": "passed",
+  "rows": 1118,
+  "train_sha256": "9fc1cac8d43e7d3cf81c8d64ecfd24df0407f2ed93b747efb7a45059606b5552",
+  "validation_sha256": "ff81477379b26b7d8b107306bb540c997a9e02e35793322de08df8fe7e34b357",
+  "teacher_source_sha256": "a00226418d3300b77d84a6f2e0fe287806e7238fd91171a0dd7616f6fa84352a",
+  "teacher_source_temperature": 2.0,
+  "teacher_labels": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "teacher_token_ids": [
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "projected_shape": [
+    1118,
+    5
+  ],
+  "projected_bytes": 22456,
+  "projected_sha256": "699cc54dc7f5d2d3e4b360bf7bd665ebbf707fa0d70b82eb87d3dcf81acc3939",
+  "recipe_sha256": "241c7a771931014661cddb845b2697826ee3b96fbf2f4e84630550c6c719d840",
+  "code_sha256": "6e221f2471f289cbc302d9caa9e7867bff59ac1e6b38b92bb3d52ec1d7cf792b",
+  "tokenizers": {
+    "qwen2b": {
+      "status": "passed",
+      "train_n": 1118,
+      "validation_n": 299,
+      "test_read": false,
+      "max_prompt_tokens": 234,
+      "label_token_ids": {
+        "A": 32,
+        "B": 33,
+        "C": 34,
+        "D": 35,
+        "E": 36
+      },
+      "prefix_set_sha256": "e8b1c452b5f5f922413189591dc3cbdad7ad2afe1bbfb3aa32203e2e4808edbb",
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "fixed_system_message": null,
+      "tokenizer_file_sha256": {
+        "chat_template.jinja": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80",
+        "config.json": "ed1c1723241f23f7f4e23430759cbd7dcfb4103cbdfe052bfe7626b57c2615b4",
+        "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+        "tokenizer_config.json": "49e2b6e395f959f077f1e992b338919c0d4a9732fc6e613995e06557f843500c"
+      }
+    },
+    "smollm2": {
+      "status": "passed",
+      "train_n": 1118,
+      "validation_n": 299,
+      "test_read": false,
+      "max_prompt_tokens": 253,
+      "label_token_ids": {
+        "A": 49,
+        "B": 50,
+        "C": 51,
+        "D": 52,
+        "E": 53
+      },
+      "prefix_set_sha256": "51f74ff0968cfde294f07d8067b6349d1dc39ba161a4808ff7ed74aac755f7b5",
+      "chat_template_kwargs": {},
+      "fixed_system_message": null,
+      "tokenizer_file_sha256": {
+        "config.json": "994f50b16abb4ae00880baefe03c10260b5bd608d2bf586f7056ca05a534feea",
+        "special_tokens_map.json": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52",
+        "tokenizer.json": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "tokenizer_config.json": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df"
+      }
+    },
+    "granite2b": {
+      "status": "passed",
+      "train_n": 1118,
+      "validation_n": 299,
+      "test_read": false,
+      "max_prompt_tokens": 321,
+      "label_token_ids": {
+        "A": 51,
+        "B": 52,
+        "C": 53,
+        "D": 54,
+        "E": 55
+      },
+      "prefix_set_sha256": "75ea00691b620f1a3a861eb3056d57befd78ea7dde14c77dc3533340271ed5c6",
+      "chat_template_kwargs": {
+        "thinking": false
+      },
+      "fixed_system_message": "Knowledge Cutoff Date: April 2024.\nToday's Date: October 13, 2026.\nYou are Granite, developed by IBM. You are a helpful AI assistant.",
+      "tokenizer_file_sha256": {
+        "config.json": "9202d328d8368958aab7dad89a8e6aa35c250b3a2eedd2d8850ee0bcceca65f6",
+        "special_tokens_map.json": "21ce694081bb9ae1bd4bc64549e72e0799ebb74705e6b650e3585d85b71ebdc1",
+        "tokenizer.json": "91168e938f05796aa6dcca7e485e4b30ab52785320c7a6391ecef86e6c84681e",
+        "tokenizer_config.json": "f65a6a5a911424c85f157c40cfbdf06e025814c755480ba2e998d7fba1178664"
+      }
+    }
+  },
+  "preservation": {
+    "frozen_sources": 12,
+    "protected_artifacts": 130,
+    "all_match": true
+  },
+  "test_read": false,
+  "training_started": false
+}

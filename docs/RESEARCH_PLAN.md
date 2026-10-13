@@ -246,28 +246,46 @@ Teacher full-cache 준비의 기존 시간은 hard 응답과 soft 확률 추출�
 
 평균 가중치 일치 Fixed/Random Gate, Feature/Relation KD, 다른 모델 계열·데이터·양자화·Reasoning KD는 **후속 연구**로 둔다. 이번에는 21개 성능 조건, 명시한 시간 측정, 동결 test, 핵심 표·그림·한계 보고를 완료하면 종료한다.
 
-## 9. 다른 계열 확장안: 문헌 대조·선행 검사 (2026-10-13)
+## 9. 다른 계열 확장: 후보·토크나이저 준비 (2026-10-13)
 
-완료한 v4.3을 보존하고 **ARC에서 gate 비교가 다른 Student 설정에서도 유지되는지** 탐색한다. 아래는 실행 전 확장안이며 학습 결과나 동결된 실행 프로토콜이 아니다. 같은 ARC에서 Student를 추가해도 다른 데이터·과제로의 일반화까지 확인한 것은 아니다.
+완료한 v4.3을 보존하고 ARC 선택지 KD에서 gate 비교가 다른 Student 설정에서도 유지되는지 탐색한다. **현재는 입력·손실·GPU 실행 검사 완료이며 독립 본학습·새 test는 미실행**이다. 같은 ARC의 Student 추가로 다른 데이터·과제의 일반화까지 확인했다고 쓰지 않는다.
 
-| 선행연구 | 확인한 실험 구성·우리에게 필요한 근거 |
-|---|---|
-| [MiniLLM, ICLR 2024](https://arxiv.org/html/2306.08543v4) §3.1·B.2 | GPT-2·OPT·LLaMA와 여러 평가셋 비교. 명시된 5 seeds는 **답변 생성 평가** 반복이며 독립 학습 5회로 해석하지 않는다. |
-| [DSKD, EMNLP 2024](https://aclanthology.org/2024.emnlp-main.1010/) §3·B.3·B.4 | 다른 tokenizer는 projector·cross-model attention으로 정렬한다. 명시된 5 seeds는 decoding 반복. T=2는 해당 validation 탐색 결과이며 보편적 표준값이 아니다. |
-| [ULD, TMLR 2025 / arXiv v3](https://arxiv.org/html/2402.12030v3) §3.3·4.2 | 여러 계열에 정렬한 확률 질량의 거리를 사용한다. Forward/Reverse KL과 다른 손실이며 확인한 본문에서 학습 seed 수를 확정하지 못했다. |
-| [Few-Shot MCQA Distillation, Findings EMNLP 2025](https://aclanthology.org/2025.findings-emnlp.452/) §3.2·4 | 선택지 문자 logit으로 공통 의미 공간을 만들어 Llama→DeBERTa 증류; ARC 실험도 포함. 전체 실험의 **5개 random seed 평균**을 명시한다. 우리 LoRA gate 실험과 동일한 프레임워크는 아니다. |
+| 후보 | 확인한 파라미터 | 준비·선정 근거 |
+|---|---|---|
+| 기존 Qwen3.5-2B | **텍스트 1.882B** | 동일한 새 선택지 KD의 기준 모델. 공개 전체 checkpoint의 2.274B에는 사용하지 않는 vision 가중치도 포함된다. |
+| [SmolLM2-1.7B-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct) | **1.711B** | 우선 비교: 기존 텍스트 모델과 약 9% 차이, 공개 Apache-2.0·native chat. |
+| [Granite-3.3-2B-Instruct](https://huggingface.co/ibm-granite/granite-3.3-2b-instruct) | **2.534B** | 추가 계열: 공개 Apache-2.0·native chat·non-thinking 지원. 약 35% 더 커서 엄밀한 크기 일치 대조는 아니다. |
+| [StableLM-2-Zephyr-1.6B](https://huggingface.co/stabilityai/stablelm-2-zephyr-1_6b) | 1.645B | 가까운 대안. Non-commercial research license·native chat 확인, 가중치·GPU 미검증. |
+| [BLOOMZ-1b7](https://huggingface.co/bigscience/bloomz-1b7) | 1.722B | 가까운 대안. RAIL license·native chat template 없음; 별도 plain prompt 설계가 필요하다. |
+| [Gemma-2-2B-it](https://huggingface.co/google/gemma-2-2b-it) | 2.614B | 접근 승인 필요. 이번 작업에서 약관 동의·접근 요청을 하지 않았다. |
+| [LFM2.5-2.6B](https://huggingface.co/LiquidAI/LFM2.5-2.6B) / [Llama-3.2-3B](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct) | 2.697B / 3.213B | 더 큰 후보로 기록. LFM은 별도 hybrid 실행 경로, Llama는 접근 제한으로 우선 실험에서 제외했다. |
 
-**권장 최소 확장:** Qwen3.5-9B NF4 Teacher를 유지하고, Qwen3.5-2B와 SmolLM2-1.7B-Instruct에 각각 Fixed·Hard·Soft × seed 42를 적용하는 **6회 탐색 학습**. [SmolLM2 공식 고정 revision](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct/tree/31b70e2e869a7173562077fd711b654946d38674)은 다른 제작 계열의 공개 Apache-2.0 모델이며 1.7B로 기존 2B에 가까워 첫 후보로 선정했다. SmolLM3-3B는 메타데이터만 확인한 대안이며 추가 학습에 포함하지 않는다. 후보의 실제 성능·GPU 메모리는 아직 측정하지 않았다.
+수치는 공식 Hub safetensors 메타데이터를 대조했다. 선정 3개의 텍스트 모델 수는 tied embedding 중복을 제거한 실제 로딩 가중치 수로도 일치했다. **가중치 수는 LoRA 학습 parameter 수와 다르다.** 선정은 크기·공개 접근·native chat·실행 가능성 기준이며 아직 모델의 Accuracy로 순위를 매기지 않았다. [고정 revision·파일 hash·후보 기록](../results/protocols/choice_kd_setup.json)
 
-서로 다른 어휘의 전체 logit을 직접 KL로 비교할 수 없으므로 MCQA 선행연구의 **선택지 soft target**을 차용한다. 문항별 유효 선택지 K=3~5를 같은 의미 순서로 놓고 각 모델의 자체 tokenizer로 얻은 답변 문자 logit에 softmax(z/T)를 적용한다. 새 손실은 T²[g KL(Pt‖Ps)+(1−g) KL(Ps‖Pt)]이며, 분류 평가에는 EOS 생성이 필요하지 않아 기존 EOS CE를 이 확장안에 복사하지 않는다. Confidence는 1−H(P)/ln(K), Fixed g=0.5, Hard는 상대 confidence 비교·detach, Soft는 sigmoid(confidence 차이−0.05)·selection gradient 유지로 제안한다. 선택지 공간으로 바꾼 CaRE gate는 우리의 과제별 변형이며 원문 재현이 아니다.
+### 문헌에서 가져오는 부분
 
-평가는 유효 선택지 **argmax Accuracy**·선택지 NLL·문항 paired CI·gate 분포로 구성한다. 기존 자유 생성 Accuracy와 새 선택지 분류 Accuracy는 별도 결과다. **Qwen도 동일한 새 손실로 다시 학습**해 출력 공간·평가 변경과 Student 변경을 혼동하지 않는다. 모델 내 조건별 초기 LoRA·문항 순서·학습 예산·optimizer를 맞추고, 모델 간 raw Accuracy로 계열 자체의 인과적 우위를 주장하지 않는다.
+[MiniLLM](https://arxiv.org/html/2306.08543v4)처럼 여러 모델 설정에서 방법별 차이를 비교한다. [DSKD](https://aclanthology.org/2024.emnlp-main.1010/)의 projector/CMA와 [ULD](https://arxiv.org/html/2402.12030v3)의 정렬 확률 질량 손실은 서로 다른 어휘를 처리하는 별도 알고리즘이므로 기존 KL에 토큰 번호만 바꿔 넣지 않는다.
 
-T=2·margin=0.05·기존 optimizer/LoRA 설정은 비교를 위한 통제값으로 제안하며 새 선택지 공간의 최적값이나 논문 공통 default가 아니다. 숫자·gradient·Teacher cache의 문항/의미 대응과 실제 GPU 1-step 검증 후 새 프로토콜을 동결한다. Train 1,118·validation 299를 유지하고 test로 값을 조정하지 않는다. 새 코드·출력은 기존 동결 소스·결과와 분리한다.
+ARC에 맞는 최소 방식은 [Few-Shot MCQA Distillation](https://aclanthology.org/2025.findings-emnlp.452/) §3.2·B.2의 **선택지 문자 logit→soft target**이다. 원문은 Llama→DeBERTa·few-shot 합성 데이터이며, 우리 LoRA causal-LM·Hard/Soft gate 전체의 재현은 아니다. [CaRE 식 (3)·(7)](https://arxiv.org/html/2609.36734v1)은 선택지 confidence로 적용하는 과제별 변형으로 구분한다. 원문 위치·차이와 seed 해석은 [문헌 기록](../results/protocols/cross_family_evidence.json)에 둔다.
 
-**Seed 정책:** 1 seed는 탐색 예산 선택이다. 학습 SD를 보고하지 않으며 문항 CI가 학습 seed 변동까지 포함한다고 쓰지 않는다. 확증이 필요하면 **새 test를 보기 전에** 대상 모델과 3조건×seed 42·7·123의 전체 반복을 정하고, 결과 방향과 무관하게 보고한다. 기존 Qwen/ARC test를 이미 관측한 후 제안한 후속 실험임을 명시한다.
+### 토크나이저·손실 구성
 
-공식 고정 revision의 tokenizer 검사에서 Qwen·SmolLM2·SmolLM3 모두 A~E 단일 토큰·유효 답변 prefix 대응을 train/validation 1,417개 전체에서 통과했다. 최대 입력+답변+EOS는 각각 236·255·288 tokens로 기존 1,024 예산 이내다. 새 모델 가중치·GPU 실행은 아직 없다. [문헌 위치·후보 revision·전체 선행 검사](../results/protocols/cross_family_evidence.json)
+- **각 모델의 pretrained tokenizer·공식 chat template를 유지**한다. 새 tokenizer 학습·공통 vocabulary 교체·embedding resize는 하지 않는다. 같은 질문·선택지 순서를 사용하고 template 이후 add_special_tokens=False로 BOS 중복을 막는다.
+- Qwen은 enable_thinking=False, SmolLM2는 native non-reasoning template, Granite는 thinking=False를 사용한다. Granite의 기본 system에 자동 날짜가 있어 공식 non-thinking system 문구의 날짜를 October 13, 2026으로 고정했다.
+- 원본 선택지 순서를 A~E에 대응시켜 문항별 K=3~5만 비교한다. Qwen의 A~E ID는 32~36, Smol은 49~53, Granite는 51~55다. **문자 의미로 대응하며 같은 숫자 ID로 맞추지 않는다.**
+- 세 모델의 train 1,118·validation 299개 모두 문자 단일 토큰·distinct ID·prompt+답변의 경계를 검사했다. 최대 prefix는 234·253·321 tokens로 1,024 예산 이내이며 자르거나 특정 문항을 제거하지 않았다.
+- Teacher의 기존 train FP32 log-prob cache에서 해당 문자만 추출하고 **유효 선택지에 재정규화**한다. 이미 T=2가 적용된 cache에는 온도를 다시 적용하지 않는다. 1,118×5 cache는 22,456 bytes이며 Teacher의 선택지 argmax와 기존 응답 불일치는 0개, gold 정답은 1,066개다. 오답도 유지한다.
+- 새 손실은 T²[g KL(Pt‖Ps)+(1−g) KL(Ps‖Pt)]. Confidence는 1−H(P)/ln(K), Fixed g=0.5, Hard는 상대 confidence 비교·detach, Soft는 sigmoid(confidence 차이−0.05)·selection gradient 유지다. 분류 과제이므로 EOS 생성 손실을 붙이지 않는다.
+
+**계획 matrix:** Qwen·SmolLM2·Granite × Fixed·Hard·Soft × seed 42 = **9회 탐색 학습**. 세 모델 모두 같은 새 손실·선택지 argmax 평가로 비교하고 기존 전체 어휘 KD/자유 생성 Accuracy와 구분한다. 공통 rank=8도 모델별 LoRA 수는 8.410M·9.044M·14.090M로 달라 raw Accuracy·시간을 계열 자체의 인과 효과로 주장하지 않는다.
+
+T=2·margin=0.05·기존 optimizer/LoRA·3 epochs는 상속한 통제값이며 새 선택지 공간의 최적값이나 논문 공통 default가 아니다. 1 seed는 탐색 예산 선택이다. MiniLLM/DSKD의 명시된 5 seeds는 decoding 평가 반복이고 MCQA 논문은 전체 실험 5개 random seed 평균을 명시하므로 학습 1 seed를 논문 표준으로 주장하지 않는다. 학습 SD를 보고하지 않으며 문항 CI가 seed 변동을 포함한다고 쓰지 않는다. 확증 반복은 새 test 전에 대상 모델과 전체 3조건×3 seeds를 정해 결과 방향과 무관하게 보고한다. 기존 Qwen/ARC test 관측 이후의 후속 실험임도 밝힌다.
+
+### 준비 완료·다음 실행
+
+새 [선택지 KD 구현](../src/choice_kd.py)과 [검사](../tests/test_choice_kd.py)는 동결 소스와 분리했다. 전체 41개 CPU 검사와 3모델×3손실의 실제 GPU 갱신 검사를 통과했다. 모델별 가장 긴 train 8개에서 gradient 누적·optimizer 갱신·Teacher/원본 가중치 동결을 확인했고 probe adapter를 저장하거나 본학습에 재사용하지 않았다. Probe peak allocated는 Qwen 3.76·Smol 3.42·Granite 5.08 GiB이며 본학습/속도 benchmark 수치가 아니다. 원본 130개 산출물·12개 소스 hash도 유지했다.
+
+다음은 선정한 세 모델의 동일한 선택지 평가로 초기 validation을 확인하고 **새 학습·평가 프로토콜을 동결**하는 단계다. 이후 독립 초기화의 9회 학습을 순차 실행한다. 본학습 실행기는 아직 작성·실행하지 않았으며 새 test 결과를 보고 모델·손실·checkpoint를 바꾸지 않는다. [준비 기록](../results/checks/choice_kd_preparation.json) · [GPU 기록](../results/protocols/choice_kd_setup.json)
 
 ## 참고문헌·근거
 

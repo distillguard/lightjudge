@@ -1,0 +1,359 @@
+{
+  "status": "ready_for_baseline_and_training_protocol",
+  "selected_models": [
+    {
+      "key": "qwen2b",
+      "id": "Qwen/Qwen3.5-2B",
+      "revision": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "text_model_parameters": 1881825088,
+      "config_vocab_size": 248320,
+      "model_class": "Qwen3_5ForCausalLM",
+      "tokenizer_snapshot_path": "C:\\lightjudge\\.cache\\huggingface\\hub\\models--Qwen--Qwen3.5-2B\\snapshots\\15852e8c16360a2fea060d615a32b45270f8a8fc",
+      "tokenizer_file_sha256": {
+        "chat_template.jinja": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80",
+        "config.json": "ed1c1723241f23f7f4e23430759cbd7dcfb4103cbdfe052bfe7626b57c2615b4",
+        "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+        "tokenizer_config.json": "49e2b6e395f959f077f1e992b338919c0d4a9732fc6e613995e06557f843500c"
+      },
+      "tied_input_output_embeddings": true
+    },
+    {
+      "key": "smollm2",
+      "id": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "revision": "31b70e2e869a7173562077fd711b654946d38674",
+      "chat_template_kwargs": {},
+      "text_model_parameters": 1711376384,
+      "config_vocab_size": 49152,
+      "model_class": "LlamaForCausalLM",
+      "tokenizer_snapshot_path": "C:\\lightjudge\\.cache\\huggingface\\hub\\models--HuggingFaceTB--SmolLM2-1.7B-Instruct\\snapshots\\31b70e2e869a7173562077fd711b654946d38674",
+      "tokenizer_file_sha256": {
+        "config.json": "994f50b16abb4ae00880baefe03c10260b5bd608d2bf586f7056ca05a534feea",
+        "special_tokens_map.json": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52",
+        "tokenizer.json": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "tokenizer_config.json": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df"
+      },
+      "tied_input_output_embeddings": true
+    },
+    {
+      "key": "granite2b",
+      "id": "ibm-granite/granite-3.3-2b-instruct",
+      "revision": "707f574c62054322f6b5b04b6d075f0a8f05e0f0",
+      "chat_template_kwargs": {
+        "thinking": false
+      },
+      "text_model_parameters": 2533539840,
+      "config_vocab_size": 49159,
+      "model_class": "GraniteForCausalLM",
+      "tokenizer_snapshot_path": "C:\\lightjudge\\.cache\\huggingface\\hub\\models--ibm-granite--granite-3.3-2b-instruct\\snapshots\\707f574c62054322f6b5b04b6d075f0a8f05e0f0",
+      "tokenizer_file_sha256": {
+        "config.json": "9202d328d8368958aab7dad89a8e6aa35c250b3a2eedd2d8850ee0bcceca65f6",
+        "special_tokens_map.json": "21ce694081bb9ae1bd4bc64549e72e0799ebb74705e6b650e3585d85b71ebdc1",
+        "tokenizer.json": "91168e938f05796aa6dcca7e485e4b30ab52785320c7a6391ecef86e6c84681e",
+        "tokenizer_config.json": "f65a6a5a911424c85f157c40cfbdf06e025814c755480ba2e998d7fba1178664"
+      },
+      "tied_input_output_embeddings": true,
+      "system_message": "Knowledge Cutoff Date: April 2024.\nToday's Date: October 13, 2026.\nYou are Granite, developed by IBM. You are a helpful AI assistant.",
+      "system_message_reason": "freeze the official non-thinking default system text/date; prevent strftime_now from changing input across training days"
+    }
+  ],
+  "temperature": 2.0,
+  "soft_margin": 0.05,
+  "methods": [
+    "fixed_mix",
+    "adaptive_hard",
+    "adaptive_soft"
+  ],
+  "seed": [
+    42
+  ],
+  "planned_runs": 9,
+  "parameter_count_definition": "unique tied text-model parameters; excludes Qwen vision tower",
+  "tokenizer_policy": "native pretrained tokenizer and chat template; no shared vocabulary replacement or embedding resize; semantic A..E mapping",
+  "sources": [
+    "https://aclanthology.org/2025.findings-emnlp.452/",
+    "https://aclanthology.org/2024.emnlp-main.1010/",
+    "https://arxiv.org/html/2402.12030v3"
+  ],
+  "old_experiment_changed": false,
+  "full_training_started": false,
+  "candidate_screening": [
+    {
+      "id": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "revision": "31b70e2e869a7173562077fd711b654946d38674",
+      "gated": false,
+      "license": "apache-2.0",
+      "parameters_hub": 1711376384,
+      "weight_bytes": 3422777952,
+      "official_url": "https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct/tree/31b70e2e869a7173562077fd711b654946d38674",
+      "model_type": "llama",
+      "vocab_size": 49152,
+      "layers": 24,
+      "hidden_size": 2048,
+      "context": 8192,
+      "label_token_ids": {
+        "A": [
+          49
+        ],
+        "B": [
+          50
+        ],
+        "C": [
+          51
+        ],
+        "D": [
+          52
+        ],
+        "E": [
+          53
+        ]
+      },
+      "config_class": "LlamaConfig",
+      "tokenizer_status": "loaded",
+      "selected": true,
+      "selection_note": "selected: closest accessible native-chat instruction model; Apache-2.0"
+    },
+    {
+      "id": "ibm-granite/granite-3.3-2b-instruct",
+      "revision": "707f574c62054322f6b5b04b6d075f0a8f05e0f0",
+      "gated": false,
+      "license": "apache-2.0",
+      "parameters_hub": 2533539840,
+      "weight_bytes": 5067121552,
+      "official_url": "https://huggingface.co/ibm-granite/granite-3.3-2b-instruct/tree/707f574c62054322f6b5b04b6d075f0a8f05e0f0",
+      "model_type": "granite",
+      "vocab_size": 49159,
+      "layers": 40,
+      "hidden_size": 2048,
+      "context": 131072,
+      "label_token_ids": {
+        "A": [
+          51
+        ],
+        "B": [
+          52
+        ],
+        "C": [
+          53
+        ],
+        "D": [
+          54
+        ],
+        "E": [
+          55
+        ]
+      },
+      "config_class": "GraniteConfig",
+      "tokenizer_status": "loaded",
+      "selected": true,
+      "selection_note": "selected: independent IBM family, Apache-2.0 and native no-thinking mode; larger than Qwen text model, so use within-model method differences"
+    },
+    {
+      "id": "google/gemma-2-2b-it",
+      "revision": "299a8560bedf22ed1c72a8a11e7dce4a7f9f51f8",
+      "gated": "manual",
+      "license": "gemma",
+      "parameters_hub": 2614341888,
+      "weight_bytes": 5228717488,
+      "official_url": "https://huggingface.co/google/gemma-2-2b-it/tree/299a8560bedf22ed1c72a8a11e7dce4a7f9f51f8",
+      "tokenizer_status": "access agreement required; not requested or accepted by this task",
+      "selected": false,
+      "selection_note": "candidate: gated model; access agreement not accepted by this task"
+    },
+    {
+      "id": "LiquidAI/LFM2.5-2.6B",
+      "revision": "654f9463ce32b05d0429d76fe1f580b27d4c1ac0",
+      "gated": false,
+      "license": "other",
+      "parameters_hub": 2697198592,
+      "weight_bytes": 5394427456,
+      "official_url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B/tree/654f9463ce32b05d0429d76fe1f580b27d4c1ac0",
+      "model_type": "lfm2",
+      "vocab_size": 128000,
+      "layers": 30,
+      "hidden_size": 2048,
+      "context": 131072,
+      "label_token_ids": {
+        "A": [
+          41
+        ],
+        "B": [
+          42
+        ],
+        "C": [
+          43
+        ],
+        "D": [
+          44
+        ],
+        "E": [
+          45
+        ]
+      },
+      "config_class": "Lfm2Config",
+      "tokenizer_status": "loaded",
+      "selected": false,
+      "selection_note": "candidate: newer hybrid family but larger and different fine-tuning/runtime path; not scheduled"
+    },
+    {
+      "id": "meta-llama/Llama-3.2-3B-Instruct",
+      "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+      "gated": "manual",
+      "license": "llama3.2",
+      "parameters_hub": 3212749824,
+      "weight_bytes": 6425529048,
+      "official_url": "https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct/tree/0cb88a4f764b7a12671c53f0838cd831a0843b95",
+      "tokenizer_status": "access agreement required; not requested or accepted by this task",
+      "selected": false,
+      "selection_note": "candidate: larger and gated; not scheduled"
+    },
+    {
+      "id": "stabilityai/stablelm-2-zephyr-1_6b",
+      "revision": "2f275b1127d59fc31e4f7c7426d528768ada9ea4",
+      "gated": false,
+      "license": "other",
+      "parameters_hub": 1644515328,
+      "weight_bytes": 3289069184,
+      "official_url": "https://huggingface.co/stabilityai/stablelm-2-zephyr-1_6b/tree/2f275b1127d59fc31e4f7c7426d528768ada9ea4",
+      "model_type": "stablelm",
+      "vocab_size": 100352,
+      "layers": 24,
+      "context": 4096,
+      "label_token_ids": {
+        "A": [
+          32
+        ],
+        "B": [
+          33
+        ],
+        "C": [
+          34
+        ],
+        "D": [
+          35
+        ],
+        "E": [
+          36
+        ]
+      },
+      "has_native_chat_template": true,
+      "tokenizer_status": "loaded",
+      "config_class": "StableLmConfig",
+      "selected": false,
+      "selection_note": "candidate: close parameter size, native chat, non-commercial research license; no weights downloaded or GPU tested"
+    },
+    {
+      "id": "bigscience/bloomz-1b7",
+      "revision": "4ea0141c75b2b96e17bc41f0d52c5368c879a281",
+      "gated": false,
+      "license": "bigscience-bloom-rail-1.0",
+      "parameters_hub": 1722408960,
+      "weight_bytes": 3444848602,
+      "official_url": "https://huggingface.co/bigscience/bloomz-1b7/tree/4ea0141c75b2b96e17bc41f0d52c5368c879a281",
+      "model_type": "bloom",
+      "vocab_size": 250880,
+      "layers": 24,
+      "context": null,
+      "label_token_ids": {
+        "A": [
+          36
+        ],
+        "B": [
+          37
+        ],
+        "C": [
+          38
+        ],
+        "D": [
+          39
+        ],
+        "E": [
+          40
+        ]
+      },
+      "has_native_chat_template": false,
+      "tokenizer_status": "loaded",
+      "config_class": "BloomConfig",
+      "selected": false,
+      "selection_note": "candidate: close parameter size but no native chat template, different prompt/post-training regime; not scheduled"
+    }
+  ],
+  "selection_note": "SmolLM2 primary parameter-near alternative; Granite secondary architecture setting. Selection uses public access/native chat/runtime fit, not test accuracy. Other close-size alternatives retained in screening.",
+  "unit_checks": {
+    "total_passed": 41,
+    "new_choice_tests_passed": 8,
+    "source": "tests/test_choice_kd.py",
+    "scope": "CPU math/gradients, semantic label alignment, invariance, cache temperature and original regression checks"
+  },
+  "preparation_check": "results/checks/choice_kd_preparation.json",
+  "updated_at_kst": "2026-10-13T12:49:49.037460+09:00",
+  "gpu_checks": {
+    "qwen2b": {
+      "path": "results/checks/choice_gpu_qwen2b_20261013_124257_747004.json",
+      "trainable_lora_parameters": 8409600,
+      "base_parameters": 1881825088,
+      "peak_allocated_bytes": 4033705984,
+      "longest_train_tokens": 234,
+      "status": "passed"
+    },
+    "smollm2": {
+      "path": "results/checks/choice_gpu_smollm2_20261013_124322_822431.json",
+      "trainable_lora_parameters": 9043968,
+      "base_parameters": 1711376384,
+      "peak_allocated_bytes": 3675434496,
+      "longest_train_tokens": 253,
+      "status": "passed"
+    },
+    "granite2b": {
+      "path": "results/checks/choice_gpu_granite2b_20261013_124340_092796.json",
+      "trainable_lora_parameters": 14090240,
+      "base_parameters": 2533539840,
+      "peak_allocated_bytes": 5456709120,
+      "longest_train_tokens": 321,
+      "status": "passed"
+    }
+  },
+  "new_test_evaluation_started": false,
+  "teacher_projected_train_audit": {
+    "rows": 1118,
+    "correct": 1066,
+    "argmax_vs_original_response_disagreements": 0,
+    "teacher_errors_filtered": false
+  },
+  "matrix_note": "3 Students x Fixed/Hard/Soft x seed42 = 9 prospective runs; not started and not yet a frozen full training protocol",
+  "control_values": {
+    "source": "existing train_student.CONFIG / logit_kd.TEMPERATURE / soft_gate.MARGIN",
+    "epochs": 3,
+    "effective_batch_size": 8,
+    "learning_rate": 0.0002,
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "temperature": 2,
+    "margin": 0.05,
+    "reason": "declared inherited controls, not claimed optimal in task-label space"
+  },
+  "input_policy": {
+    "answer_labels": "original choice order mapped to A..E, K=3..5",
+    "native_tokenizers": true,
+    "new_tokenizer_trained": false,
+    "shared_tokenizer_replacement": false,
+    "embedding_resize": false,
+    "add_special_tokens_after_native_template": false,
+    "truncation": false,
+    "max_prompt_tokens_budget": 1024,
+    "thinking_modes": {
+      "qwen2b": {
+        "enable_thinking": false
+      },
+      "smollm2": {},
+      "granite2b": {
+        "thinking": false
+      }
+    },
+    "granite_default_date_fixed": "October 13, 2026"
+  },
+  "measurement_limit": "GPU probes validate execution only; not model benchmarks, final training memory, isolated algorithm speed, or accuracy results"
+}

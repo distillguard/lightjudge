@@ -159,8 +159,18 @@ v3.2의 완료 학습 13회와 validation 12회는 설정·초기화·문항 순
 
 ## 다른 계열 확장 준비: 2026-10-13
 
-MiniLLM·DSKD·ULD·Few-Shot MCQA Distillation의 본문·부록을 대조했다. MiniLLM/DSKD의 명시된 5 seeds는 decoding 반복이며 독립 학습 5회로 쓰지 않는다. MCQA 논문은 전체 실험 5개 random seed 평균을 명시하므로 **학습 1 seed가 논문 표준이라는 근거는 없다**. 한 seed 확장은 탐색 예산으로 구분한다. [출처·해석 기록](../results/protocols/cross_family_evidence.json)
+공식 자료에서 7개 다른 계열 후보의 실제 크기·접근·license·tokenizer를 확인했다. 기존 Qwen3.5-2B의 **실제 텍스트 가중치는 1.882B**이며 공개 전체 checkpoint에는 사용하지 않는 vision도 포함된다. 가장 가까운 우선 모델은 SmolLM2-1.7B(1.711B), 추가 계열은 Granite-3.3-2B(2.534B)다. StableLM2(1.645B)·BLOOMZ(1.722B)도 가까운 대안으로 기록했다. 크기·native chat·공개 접근·실행 가능성으로 준비했으며 Accuracy 순위는 아직 측정하지 않았다. [후보·고정 revision·선정 근거](../results/protocols/choice_kd_setup.json)
 
-후속안은 공통 선택지 확률에서 Qwen2B·SmolLM2-1.7B의 Fixed·Hard·Soft × seed 42, 총 6회다. 새 Qwen 대조가 있어야 기존 전체 어휘 KD와 새 선택지 KD의 차이를 Student 계열 효과로 오해하지 않는다. 이 안은 원문 CaRE/DSKD/ULD의 전체 재현이 아니며 새 선택지 분류 Accuracy도 기존 생성 Accuracy와 별도로 보고한다. [구체적인 확장안·반복 정책](RESEARCH_PLAN.md#9-다른-계열-확장안-문헌-대조선행-검사-2026-10-13)
+MCQA 선행연구의 선택지 문자 logit을 차용해 각 모델의 **공식 tokenizer를 유지하고 출력 의미만 A~E로 대응**했다. Qwen/Smol/Granite의 token ID는 각각 32~36/49~53/51~55이며 같은 ID로 맞추지 않는다. Native template·non-thinking 모드·Granite의 자동 날짜를 고정하고, 전체 train/validation 1,417개에서 단일 답변 토큰·prefix 경계·1,024 입력 예산을 확인했다. [논문 차이·손실·평가 구성](RESEARCH_PLAN.md#9-다른-계열-확장-후보토크나이저-준비-2026-10-13)
 
-공식 API/config·tokenizer 고정 revision 검사와 train/validation 1,417개 전체의 답변 token·prefix 대응을 통과했다. SmolLM2의 원본 safetensors는 3,422,777,952 bytes(약 3.19 GiB), SmolLM3는 약 5.73 GiB로 확인했으며 추론/학습 VRAM과 다른 값이다. 가중치 다운로드·새 모델 benchmark·GPU 학습은 수행하지 않았다. 동결 소스 12개와 보호 산출물 130개의 hash는 모두 유지됐다.
+기존 Teacher train cache를 1,118×5 선택지 점수 22,456 bytes로 변환했다. T=2를 이중 적용하지 않았고 유효 선택지만 재정규화한다. 선택지 argmax와 기존 Teacher 응답의 불일치는 0개이며 train 정답은 1,066/1,118개다. 오답 필터링·새 test 평가 없이 준비했고 기존 130개 보호 산출물·12개 동결 소스 hash를 유지했다. [전체 준비 검사](../results/checks/choice_kd_preparation.json)
+
+| GPU 선행 검사 | 텍스트 base 가중치 | 학습 LoRA | 최장 train prefix | Probe peak allocated |
+|---|---|---|---|---|
+| Qwen3.5-2B | 1.882B | 8.410M | 234 tokens | 3.76 GiB |
+| SmolLM2-1.7B | 1.711B | 9.044M | 253 tokens | 3.42 GiB |
+| Granite-3.3-2B | 2.534B | 14.090M | 321 tokens | 5.08 GiB |
+
+전체 41개 CPU 검사와 세 모델 각각 Fixed·Hard·Soft의 8회 gradient 누적·1회 optimizer 갱신이 통과했다. 유한 loss/gradient·LoRA 갱신·원본 가중치 동결을 확인했고 probe adapter는 저장·본학습 재사용하지 않았다. 이는 모델 Accuracy·학습 시간 비교나 독립 학습 9회의 결과가 아니다. [각 GPU 검사 파일](../results/protocols/choice_kd_setup.json)
+
+후속 matrix는 3모델×3조건×seed 42의 **9회 탐색 학습**이다. 새로운 선택지 분류 손실·argmax Accuracy는 기존 전체 어휘 KD·자유 생성 평가와 구분한다. T/margin과 1 seed는 통제/예산값이며 최적값이나 학계 표준이 아니다. 모델 크기·native 입력·LoRA 수가 달라 모델 내 방법 차이를 중심으로 보고한다. 현재 **초기 validation 성능·독립 본학습·새 test는 미실행**이며 다음 단계에서 새 실행 프로토콜을 동결한다.

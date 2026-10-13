@@ -1,7 +1,7 @@
 {
   "kind": "prospective literature review and tokenizer preflight; not a frozen training protocol",
   "reviewed_at_kst": "2026-10-13T12:28:35.911923+09:00",
-  "status": "literature_and_tokenizers_checked_not_implemented_or_trained",
+  "status": "native_tokenizers_and_choice_loss_prepared_gpu_checks_passed_not_full_training",
   "user_scope": "different model families; reduce extension training repetitions where appropriate; use primary-paper evidence",
   "sources": [
     {
@@ -74,7 +74,8 @@
     },
     "students": [
       "Qwen/Qwen3.5-2B",
-      "HuggingFaceTB/SmolLM2-1.7B-Instruct"
+      "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "ibm-granite/granite-3.3-2b-instruct"
     ],
     "alternate_candidate": "HuggingFaceTB/SmolLM3-3B; metadata screened only, not scheduled; same Smol family and larger size",
     "seed": [
@@ -85,7 +86,7 @@
       "adaptive_hard",
       "adaptive_soft"
     ],
-    "proposed_training_runs": 6,
+    "proposed_training_runs": 9,
     "seed_policy": "seed 42 is inherited budget/control choice, not a paper standard; no training SD reported for one run; question bootstrap conditional on each learned checkpoint does not estimate training-seed variability",
     "new_output_space": "native-tokenizer logits of valid A..E labels, in the same semantic order per question; softmax over only K valid choices (K=3..5)",
     "proposed_loss": "T^2 * (g * KL(p_teacher || p_student) + (1-g) * KL(p_student || p_teacher)); pure choice classification objective; original EOS CE not reused",
@@ -97,13 +98,12 @@
     "confirmation_policy": "before any new test, commit the full model/method/seed matrix; any seed7/123 confirmation must repeat all three methods on the prespecified model(s), irrespective of a favorable or unfavorable outcome; do not select only positive test models",
     "cross_dataset_generalization": "not established by adding a Student on the same ARC task; separate unseen task/data needed for that claim",
     "next_required_checks": [
-      "task-label loss and gradient checks",
-      "Teacher train-cache projection and semantic order checks",
-      "Student BF16 LoRA loading/one optimizer-step GPU preflight",
-      "frozen new protocol with actual trainable parameter count and timing scope",
-      "complete same-loss Qwen and SmolLM2 matrix; freeze test evaluation"
+      "baseline validation of all prespecified Students using the same choice argmax evaluator",
+      "freeze the new full training/evaluation protocol before 9 independent runs",
+      "complete all prespecified results regardless of outcome; freeze new test manifest before evaluating"
     ],
-    "implementation_status": "not implemented; no new model weight loading, benchmarking or training"
+    "implementation_status": "choice-loss and input pipeline implemented; Teacher train targets projected; 41 CPU tests and all 3 x 3 method GPU probes passed; no independent full training or new test evaluation",
+    "selection_policy": "SmolLM2 is the closest primary alternative; Granite is a larger secondary family setting. StableLM2/BLOOMZ near-size candidates and gated Gemma/Llama alternatives remain in screening. No test-score-based selection."
   },
   "candidate_metadata_and_tokenizer_preflight": [
     {
@@ -280,5 +280,217 @@
     "existing_train_validation_test_checkpoints_modified": false,
     "existing_protocols_modified": false,
     "new_test_data_read": false
-  }
+  },
+  "implementation_update": {
+    "date_kst": "2026-10-13",
+    "setup": "results/protocols/choice_kd_setup.json",
+    "module": "src/choice_kd.py",
+    "tests": "tests/test_choice_kd.py",
+    "unit_tests_passed": 41,
+    "student_gpu_checks_passed": 3,
+    "methods_per_probe": 3,
+    "full_training_started": false,
+    "new_test_read": false
+  },
+  "additional_candidate_screening": [
+    {
+      "id": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "revision": "31b70e2e869a7173562077fd711b654946d38674",
+      "gated": false,
+      "license": "apache-2.0",
+      "parameters_hub": 1711376384,
+      "weight_bytes": 3422777952,
+      "official_url": "https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct/tree/31b70e2e869a7173562077fd711b654946d38674",
+      "model_type": "llama",
+      "vocab_size": 49152,
+      "layers": 24,
+      "hidden_size": 2048,
+      "context": 8192,
+      "label_token_ids": {
+        "A": [
+          49
+        ],
+        "B": [
+          50
+        ],
+        "C": [
+          51
+        ],
+        "D": [
+          52
+        ],
+        "E": [
+          53
+        ]
+      },
+      "config_class": "LlamaConfig",
+      "tokenizer_status": "loaded",
+      "selected": true,
+      "selection_note": "selected: closest accessible native-chat instruction model; Apache-2.0"
+    },
+    {
+      "id": "ibm-granite/granite-3.3-2b-instruct",
+      "revision": "707f574c62054322f6b5b04b6d075f0a8f05e0f0",
+      "gated": false,
+      "license": "apache-2.0",
+      "parameters_hub": 2533539840,
+      "weight_bytes": 5067121552,
+      "official_url": "https://huggingface.co/ibm-granite/granite-3.3-2b-instruct/tree/707f574c62054322f6b5b04b6d075f0a8f05e0f0",
+      "model_type": "granite",
+      "vocab_size": 49159,
+      "layers": 40,
+      "hidden_size": 2048,
+      "context": 131072,
+      "label_token_ids": {
+        "A": [
+          51
+        ],
+        "B": [
+          52
+        ],
+        "C": [
+          53
+        ],
+        "D": [
+          54
+        ],
+        "E": [
+          55
+        ]
+      },
+      "config_class": "GraniteConfig",
+      "tokenizer_status": "loaded",
+      "selected": true,
+      "selection_note": "selected: independent IBM family, Apache-2.0 and native no-thinking mode; larger than Qwen text model, so use within-model method differences"
+    },
+    {
+      "id": "google/gemma-2-2b-it",
+      "revision": "299a8560bedf22ed1c72a8a11e7dce4a7f9f51f8",
+      "gated": "manual",
+      "license": "gemma",
+      "parameters_hub": 2614341888,
+      "weight_bytes": 5228717488,
+      "official_url": "https://huggingface.co/google/gemma-2-2b-it/tree/299a8560bedf22ed1c72a8a11e7dce4a7f9f51f8",
+      "tokenizer_status": "access agreement required; not requested or accepted by this task",
+      "selected": false,
+      "selection_note": "candidate: gated model; access agreement not accepted by this task"
+    },
+    {
+      "id": "LiquidAI/LFM2.5-2.6B",
+      "revision": "654f9463ce32b05d0429d76fe1f580b27d4c1ac0",
+      "gated": false,
+      "license": "other",
+      "parameters_hub": 2697198592,
+      "weight_bytes": 5394427456,
+      "official_url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B/tree/654f9463ce32b05d0429d76fe1f580b27d4c1ac0",
+      "model_type": "lfm2",
+      "vocab_size": 128000,
+      "layers": 30,
+      "hidden_size": 2048,
+      "context": 131072,
+      "label_token_ids": {
+        "A": [
+          41
+        ],
+        "B": [
+          42
+        ],
+        "C": [
+          43
+        ],
+        "D": [
+          44
+        ],
+        "E": [
+          45
+        ]
+      },
+      "config_class": "Lfm2Config",
+      "tokenizer_status": "loaded",
+      "selected": false,
+      "selection_note": "candidate: newer hybrid family but larger and different fine-tuning/runtime path; not scheduled"
+    },
+    {
+      "id": "meta-llama/Llama-3.2-3B-Instruct",
+      "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+      "gated": "manual",
+      "license": "llama3.2",
+      "parameters_hub": 3212749824,
+      "weight_bytes": 6425529048,
+      "official_url": "https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct/tree/0cb88a4f764b7a12671c53f0838cd831a0843b95",
+      "tokenizer_status": "access agreement required; not requested or accepted by this task",
+      "selected": false,
+      "selection_note": "candidate: larger and gated; not scheduled"
+    },
+    {
+      "id": "stabilityai/stablelm-2-zephyr-1_6b",
+      "revision": "2f275b1127d59fc31e4f7c7426d528768ada9ea4",
+      "gated": false,
+      "license": "other",
+      "parameters_hub": 1644515328,
+      "weight_bytes": 3289069184,
+      "official_url": "https://huggingface.co/stabilityai/stablelm-2-zephyr-1_6b/tree/2f275b1127d59fc31e4f7c7426d528768ada9ea4",
+      "model_type": "stablelm",
+      "vocab_size": 100352,
+      "layers": 24,
+      "context": 4096,
+      "label_token_ids": {
+        "A": [
+          32
+        ],
+        "B": [
+          33
+        ],
+        "C": [
+          34
+        ],
+        "D": [
+          35
+        ],
+        "E": [
+          36
+        ]
+      },
+      "has_native_chat_template": true,
+      "tokenizer_status": "loaded",
+      "config_class": "StableLmConfig",
+      "selected": false,
+      "selection_note": "candidate: close parameter size, native chat, non-commercial research license; no weights downloaded or GPU tested"
+    },
+    {
+      "id": "bigscience/bloomz-1b7",
+      "revision": "4ea0141c75b2b96e17bc41f0d52c5368c879a281",
+      "gated": false,
+      "license": "bigscience-bloom-rail-1.0",
+      "parameters_hub": 1722408960,
+      "weight_bytes": 3444848602,
+      "official_url": "https://huggingface.co/bigscience/bloomz-1b7/tree/4ea0141c75b2b96e17bc41f0d52c5368c879a281",
+      "model_type": "bloom",
+      "vocab_size": 250880,
+      "layers": 24,
+      "context": null,
+      "label_token_ids": {
+        "A": [
+          36
+        ],
+        "B": [
+          37
+        ],
+        "C": [
+          38
+        ],
+        "D": [
+          39
+        ],
+        "E": [
+          40
+        ]
+      },
+      "has_native_chat_template": false,
+      "tokenizer_status": "loaded",
+      "config_class": "BloomConfig",
+      "selected": false,
+      "selection_note": "candidate: close parameter size but no native chat template, different prompt/post-training regime; not scheduled"
+    }
+  ]
 }
