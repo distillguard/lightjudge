@@ -1,0 +1,108 @@
+{
+  "stage": "cpu_budget_audit_complete_performance_benchmark_pending",
+  "teacher": "Qwen/Qwen3.5-9B NF4 frozen",
+  "train_n": 1118,
+  "validation_n": 299,
+  "epochs": 3,
+  "seed": 42,
+  "train_sha256": "9fc1cac8d43e7d3cf81c8d64ecfd24df0407f2ed93b747efb7a45059606b5552",
+  "validation_sha256": "ff81477379b26b7d8b107306bb540c997a9e02e35793322de08df8fe7e34b357",
+  "preparation_sha256": "0241af0d1f685aae1278b11240dfce6fd1b812170c40c19111d7e15f851c097c",
+  "models": {
+    "qwen2b": {
+      "model_id": "Qwen/Qwen3.5-2B",
+      "revision": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+      "text_parameters": 1881825088,
+      "vocab_size": 248320,
+      "tied_embedding_parameters": 508559360,
+      "non_embedding_parameters": 1373265728,
+      "lora_parameters": 8409600,
+      "tokens": {
+        "train": {
+          "n": 1118,
+          "prompt_token_sum": 126203,
+          "prompt_mean": 112.88282647584973,
+          "prompt_max": 234,
+          "three_epoch_input_tokens": 378609,
+          "three_epoch_answer_supervision_events": 3354
+        },
+        "validation": {
+          "n": 299,
+          "prompt_token_sum": 33994,
+          "prompt_mean": 113.6923076923077,
+          "prompt_max": 209
+        }
+      },
+      "total_parameter_difference_vs_qwen_pct": 0.0,
+      "non_embedding_parameter_difference_vs_qwen_pct": 0.0,
+      "lora_parameter_difference_vs_qwen_pct": 0.0,
+      "input_token_difference_vs_qwen_pct": 0.0
+    },
+    "smollm2": {
+      "model_id": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "revision": "31b70e2e869a7173562077fd711b654946d38674",
+      "text_parameters": 1711376384,
+      "vocab_size": 49152,
+      "tied_embedding_parameters": 100663296,
+      "non_embedding_parameters": 1610713088,
+      "lora_parameters": 9043968,
+      "tokens": {
+        "train": {
+          "n": 1118,
+          "prompt_token_sum": 148921,
+          "prompt_mean": 133.20304114490162,
+          "prompt_max": 253,
+          "three_epoch_input_tokens": 446763,
+          "three_epoch_answer_supervision_events": 3354
+        },
+        "validation": {
+          "n": 299,
+          "prompt_token_sum": 40010,
+          "prompt_mean": 133.81270903010034,
+          "prompt_max": 229
+        }
+      },
+      "total_parameter_difference_vs_qwen_pct": -9.057627357978982,
+      "non_embedding_parameter_difference_vs_qwen_pct": 17.290707483526457,
+      "lora_parameter_difference_vs_qwen_pct": 7.54337899543378,
+      "input_token_difference_vs_qwen_pct": 18.001156866318556
+    },
+    "granite2b": {
+      "model_id": "ibm-granite/granite-3.3-2b-instruct",
+      "revision": "707f574c62054322f6b5b04b6d075f0a8f05e0f0",
+      "text_parameters": 2533539840,
+      "vocab_size": 49159,
+      "tied_embedding_parameters": 100677632,
+      "non_embedding_parameters": 2432862208,
+      "lora_parameters": 14090240,
+      "tokens": {
+        "train": {
+          "n": 1118,
+          "prompt_token_sum": 190266,
+          "prompt_mean": 170.18425760286226,
+          "prompt_max": 321,
+          "three_epoch_input_tokens": 570798,
+          "three_epoch_answer_supervision_events": 3354
+        },
+        "validation": {
+          "n": 299,
+          "prompt_token_sum": 51256,
+          "prompt_mean": 171.4247491638796,
+          "prompt_max": 279
+        }
+      },
+      "total_parameter_difference_vs_qwen_pct": 34.63205779090983,
+      "non_embedding_parameter_difference_vs_qwen_pct": 77.15888180965366,
+      "lora_parameter_difference_vs_qwen_pct": 67.54946727549466,
+      "input_token_difference_vs_qwen_pct": 50.761867784442515
+    }
+  },
+  "preservation": {
+    "frozen_sources": 12,
+    "protected_artifacts": 130,
+    "all_match": true
+  },
+  "token_count_definition": "nonpadding native-template prompt input tokens actually fed to the model; one predicted answer label is not appended to the input in choice KD",
+  "control_policy": "same questions, order, 3 epochs and 420 optimizer steps; native token counts differ and must be reported; this is not equal-total-input-token-budget training",
+  "comparison_policy": "SmolLM2 is the parameter-near primary comparison; Granite is a larger supplementary candidate. All Students including Qwen require the same choice-space KD. Original performance baselines and independent runs are pending."
+}

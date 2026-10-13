@@ -130,13 +130,15 @@ MCMC 수렴과 후방 예측 적합성을 구분한다. 현재 계층모형은 �
 
 ## 7. 이후 단계: 다른 Student 계열
 
-| 준비한 Student | 실제 텍스트 가중치 | 모델 내 비교 |
-|---|---|---|
-| Qwen3.5-2B | 1.882B | Fixed·Hard·Soft |
-| SmolLM2-1.7B-Instruct | 1.711B | Fixed·Hard·Soft |
-| Granite-3.3-2B-Instruct | 2.534B | Fixed·Hard·Soft |
+| 준비한 Student | 실제 텍스트 파라미터 | 어휘 수 | LoRA 파라미터 | ARC train 3회 입력 tokens | 역할 |
+|---|---:|---:|---:|---:|---|
+| Qwen3.5-2B | 1.882B | 248,320 | 8,409,600 | 378,609 | 비교 기준 |
+| SmolLM2-1.7B-Instruct | 1.711B | 49,152 | 9,043,968 | 446,763 | 크기가 가까운 주 비교 |
+| Granite-3.3-2B-Instruct | 2.534B | 49,159 | 14,090,240 | 570,798 | 더 큰 보조 후보 |
 
-모델별 공식 tokenizer·native template를 유지하고 출력 의미만 A~E로 대응한다. 서로 다른 숫자 token ID를 같은 어휘라고 취급하지 않는다. 단일 답변 토큰·prefix 경계·입력 예산·실제 GPU 갱신 검사는 완료했다. 전체 후보·revision·LoRA 수·근거는 [준비 기록](../results/protocols/choice_kd_setup.json)에 둔다.
+모델별 공식 tokenizer·native template를 유지하고 출력 의미만 A~E로 대응한다. 서로 다른 숫자 token ID를 같은 어휘라고 취급하지 않는다. 단일 답변 토큰·prefix 경계·입력 예산·실제 GPU 갱신 검사는 완료했다. **GPU 검사는 성능 벤치마크가 아니다.** 전체 후보·revision·LoRA 수·근거는 [준비 기록](../results/protocols/choice_kd_setup.json)에 둔다.
+
+같은 1,118문항·3 epochs·420 steps는 **동일 문항 노출 예산**이며 동일 입력 토큰 예산은 아니다. SmolLM2는 Qwen 대비 총 파라미터 −9.1%, 입력 토큰 +18.0%이고 Granite는 +34.6%, +50.8%다. native template의 비패딩 입력만 세었으며 예측할 답변은 입력에 더하지 않았다. 강제로 tokenizer를 교체하거나 질문을 잘라 수치를 맞추지 않는다. embedding 비중·LoRA 수도 다르므로 계열 차이의 인과 효과와 동일 연산량을 주장하지 않는다. 정확한 입력 토큰 예산 일치 실험은 미설계·미실행이다. [예산 실측](../results/checks/student_comparison_budget.json)
 
 이 확장은 **유효 선택지에 재정규화한 별도 KD 손실**이며 기존 전체 어휘 KD와 구분한다. 이미 T=2인 Teacher cache에 온도를 다시 적용하지 않고 EOS CE를 붙이지 않는다. Qwen도 같은 새 손실로 다시 비교한다. [MCQA distillation](https://aclanthology.org/2025.findings-emnlp.452/)의 문자 logit 대응을 참고했으며, [DSKD](https://aclanthology.org/2024.emnlp-main.1010/)·[ULD](https://arxiv.org/html/2402.12030v3)의 어휘 정렬을 구현한 것은 아니다.
 

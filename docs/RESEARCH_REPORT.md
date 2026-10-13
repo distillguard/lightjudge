@@ -132,7 +132,7 @@ Gold/Response의 평균 NLL 1.0417/1.1187 중 오답 손실 비중은 **98.85%/9
 ## 7. 미실행 항목·다음 단계
 
 1. **새 데이터 학습:** 같은 Qwen·전체 어휘 confidence에서 데이터 2개×Fixed·Hard·Soft×seed 42의 6회 탐색. 전체 token 길이·train 예산·validation·prompt를 먼저 동결한다. 현재 증류 학습·validation 성능 비교·새 test는 미실행이다.
-2. **다른 Student:** Qwen 1.882B·SmolLM2 1.711B·Granite 2.534B의 공식 tokenizer와 선택지 KD를 준비했다. 입력·GPU 갱신 검사만 완료됐으며 9회 본학습은 새 데이터 비교 뒤로 보류했다. 전체 어휘 KD와 다른 손실·평가 공간이므로 별도 실험으로 보고한다. [후보·tokenizer·GPU 기록](../results/protocols/choice_kd_setup.json)
+2. **다른 Student:** Qwen 1.882B·SmolLM2 1.711B·Granite 2.534B의 공식 tokenizer와 선택지 KD를 준비했다. **GPU 실행 검사는 성능 벤치마크가 아니며 원본 validation 벤치마크·9회 독립 본학습은 미수행이다.** Qwen–SmolLM2가 크기가 가까운 주 비교이고 Granite는 더 큰 보조 후보다. 같은 1,118문항×3회라도 실제 입력은 Qwen 378,609 / SmolLM2 446,763 / Granite 570,798 tokens이므로 동일 토큰 예산이라고 부르지 않는다. Qwen도 공통 선택지 KD로 다시 학습한다. [예산 실측](../results/checks/student_comparison_budget.json) · [tokenizer·GPU 검사](../results/protocols/choice_kd_setup.json)
 3. **해석 범위:** 현재 3조건은 실제 방법 비교다. 연속성·평균 가중치·selection gradient의 원인을 분리하려면 상수 가중치와 detach 대조가 필요하며, 1 seed 탐색으로 안정적인 일반화를 확정하지 않는다.
 
 ## 8. 재현·보존 기록

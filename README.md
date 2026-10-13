@@ -14,9 +14,11 @@ Qwen3.5-9B Teacher와 Qwen3.5-2B Student에서 **Hard의 이진 선택·Soft의 
 | 베이지안 후속 분석 | 완료 | 3가지 prior·paired Bayesian bootstrap; 모형 적합성 한계 있음 |
 | 새 데이터 | 준비·초기 진단 완료 | OpenBookQA·HellaSwag 확보, 각 train 128문항에서 gate 진단 |
 | 새 데이터 증류 학습 | 준비·동결 완료 | 같은 Qwen에서 Fixed·Hard·Soft의 6회 탐색 학습 계획 |
-| 다른 Student 계열 | 준비·GPU 검사 완료 | SmolLM2·Granite 본학습은 새 데이터 비교 뒤에 진행 |
+| 다른 Student 계열 | 입력·손실·GPU 검사 완료 | 원본 성능 벤치마크·독립 본학습 미수행; SmolLM2 주 비교, Granite 보조 후보 |
 
 ARC test는 Hard **85.38%**, Soft **85.04%**다. 차이 +0.34%p의 paired 95% CI는 [−0.23,+0.91]%p로, 우위와 동등성을 확정하지 못했다. 학습된 Soft의 평균 가중치 **0.4866**은 50:50에 가깝지만 문항별 변화와 selection gradient가 있어 Fixed와 동일하다고 단정하지 않는다.
+
+다른 계열 Student 비교도 합의된 범위다. 같은 문항·학습 횟수를 맞추는 준비안이며, 실제 입력 토큰 수까지 동일하지 않다(Qwen 37.9만 / SmolLM2 44.7만 / Granite 57.1만). Qwen도 공통 선택지 KD로 다시 학습해 비교한다. [파라미터·토큰 예산 실측](results/checks/student_comparison_budget.json).
 
 ## 문서·결과
 
