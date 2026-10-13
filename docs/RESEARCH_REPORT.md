@@ -141,6 +141,8 @@ Gold/Response의 평균 NLL 1.0417/1.1187 중 오답 손실 비중은 **98.85%/9
 
 공개 checkpoint의 ARC 사전 노출·의미상 데이터 중복·공식 CaRE 실행 config는 미검증이다. 과거 학습 중간 상태는 본문에서 제거했으며 [기존 중간 수치](../results/main/comparison.json)·[파일럿 결과](../results/pilot/index.html)·[근거 점검](../results/protocols/evidence_audit.json)·Git 이력에 보존한다.
 
+**현재 Teacher:** `Qwen/Qwen3.5-9B`, NF4 4-bit double quantization·BF16 compute, 가중치 동결. **현재 Student:** `Qwen/Qwen3.5-2B`, BF16 원본 동결·FP32 LoRA(rank 8, alpha 16) 학습. Fixed·Hard·Soft는 같은 원본 Student에서 각각 독립 시작한다. SmolLM2·Granite 본학습은 이후 단계다.
+
 <!-- data-gates:start -->
 ## 현실적인 후속 범위 동결: 2026-10-14
 

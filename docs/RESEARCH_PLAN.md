@@ -157,6 +157,8 @@ MCMC 수렴과 후방 예측 적합성을 구분한다. 현재 계층모형은 �
 - [Stan 계층 로짓](https://mc-stan.org/docs/stan-users-guide/regression.html#item-response-theory-models) · [Benavoli 외](https://jmlr.org/papers/v18/16-305.html) · [Rubin](https://doi.org/10.1214/aos/1176345338): Bayesian 구조·해석·bootstrap.
 - [Guo 외](https://arxiv.org/abs/1706.04599) · [PyTorch 계측](https://docs.pytorch.org/docs/2.11/benchmark_utils.html): calibration·시간 계측 원칙.
 
+**현재 Teacher:** `Qwen/Qwen3.5-9B`, NF4 4-bit double quantization·BF16 compute, 가중치 동결. **현재 Student:** `Qwen/Qwen3.5-2B`, BF16 원본 동결·FP32 LoRA(rank 8, alpha 16) 학습. Fixed·Hard·Soft는 같은 원본 Student에서 각각 독립 시작한다. SmolLM2·Granite 본학습은 이후 단계다.
+
 <!-- data-gates:start -->
 ## 현실적인 후속 범위 동결: 2026-10-14
 

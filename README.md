@@ -47,6 +47,8 @@ tests/        수식·데이터·학습·보존 검사
 
 Bayesian 분석은 별도 `.cache/bayes-venv`와 [requirements/bayesian.txt](requirements/bayesian.txt)를 사용한다. 완료 posterior의 그림은 `src/report_bayesian.py posterior`로 재생성한다. 기존 ARC 학습·평가 경로는 [학습 프로토콜](results/protocols/gate_training_protocol.json)과 [test manifest](results/protocols/gate_test_manifest.json)에 보존한다. GPU 작업은 순차 실행하며 완료 checkpoint를 변경하지 않는다.
 
+**현재 Teacher:** `Qwen/Qwen3.5-9B`, NF4 4-bit double quantization·BF16 compute, 가중치 동결. **현재 Student:** `Qwen/Qwen3.5-2B`, BF16 원본 동결·FP32 LoRA(rank 8, alpha 16) 학습. Fixed·Hard·Soft는 같은 원본 Student에서 각각 독립 시작한다. SmolLM2·Granite 본학습은 이후 단계다.
+
 <!-- data-gates:start -->
 ## 현실적인 후속 범위 동결: 2026-10-14
 

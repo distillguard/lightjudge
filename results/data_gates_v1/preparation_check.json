@@ -1,0 +1,51 @@
+{
+  "stage": "preparation_complete",
+  "training_planned": 6,
+  "original_preservation": {
+    "frozen_sources": 12,
+    "protected_artifacts": 130,
+    "all_match": true
+  },
+  "datasets": {
+    "openbookqa": {
+      "development_n": 500,
+      "teacher": {
+        "n": 500,
+        "accuracy": 0.876,
+        "choice_nll": 0.3896179475771787
+      },
+      "original_student": {
+        "n": 500,
+        "accuracy": 0.694,
+        "choice_nll": 0.7790125718740747
+      },
+      "probe_peak_allocated_GiB": 4.373821258544922,
+      "initial_selection_to_learning_gradient_median": 0.01605299416241589,
+      "probe_passed": true,
+      "full_top1_valid_choice_fraction": {
+        "teacher": 1.0,
+        "student": 1.0
+      }
+    },
+    "hellaswag": {
+      "development_n": 500,
+      "teacher": {
+        "n": 500,
+        "accuracy": 0.876,
+        "choice_nll": 0.3441613575335505
+      },
+      "original_student": {
+        "n": 500,
+        "accuracy": 0.616,
+        "choice_nll": 1.0134745467370376
+      },
+      "probe_peak_allocated_GiB": 5.501753807067871,
+      "initial_selection_to_learning_gradient_median": 0.009532643059841524,
+      "probe_passed": true,
+      "full_top1_valid_choice_fraction": {
+        "teacher": 1.0,
+        "student": 1.0
+      }
+    }
+  }
+}
