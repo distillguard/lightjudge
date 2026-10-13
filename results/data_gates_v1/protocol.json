@@ -1,0 +1,241 @@
+{
+  "version": "data_gates_v1",
+  "frozen_at_kst": "2026-10-14T01:14:25.054051+09:00",
+  "seed": 42,
+  "datasets": {
+    "openbookqa": {
+      "train_n": 1118,
+      "validation_n": 500,
+      "eligible_unique_train_questions": 4818,
+      "token_lengths_including_two_targets": {
+        "train": {
+          "n": 1118,
+          "mean": 90.92844364937388,
+          "sd_population": 10.625191800518639,
+          "min_p05_p25_median_p75_p95_max": [
+            74.0,
+            78.0,
+            83.0,
+            88.0,
+            96.0,
+            111.0,
+            162.0
+          ]
+        },
+        "validation": {
+          "n": 500,
+          "mean": 93.398,
+          "sd_population": 12.005481914525546,
+          "min_p05_p25_median_p75_p95_max": [
+            74.0,
+            78.0,
+            84.0,
+            92.0,
+            100.0,
+            114.09999999999991,
+            156.0
+          ]
+        }
+      },
+      "gradient_probe_ids": [
+        "openbookqa:9-762",
+        "openbookqa:7-890",
+        "openbookqa:11-346",
+        "openbookqa:10-1176",
+        "openbookqa:10-895",
+        "openbookqa:8-87",
+        "openbookqa:9-1146",
+        "openbookqa:14-885"
+      ],
+      "final_evaluation": "official test, input-only frozen exclusions applied after training",
+      "dataset_revision": "388097ea7776314e93a529163e0fea805b8a6454"
+    },
+    "hellaswag": {
+      "train_n": 1118,
+      "validation_n": 500,
+      "eligible_unique_train_questions": 39776,
+      "token_lengths_including_two_targets": {
+        "train": {
+          "n": 1118,
+          "mean": 250.4758497316637,
+          "sd_population": 73.29440992250346,
+          "min_p05_p25_median_p75_p95_max": [
+            116.0,
+            133.0,
+            166.0,
+            282.5,
+            309.0,
+            336.0,
+            395.0
+          ]
+        },
+        "validation": {
+          "n": 500,
+          "mean": 255.326,
+          "sd_population": 70.91301519467353,
+          "min_p05_p25_median_p75_p95_max": [
+            116.0,
+            135.0,
+            175.0,
+            284.5,
+            309.25,
+            337.0,
+            367.0
+          ]
+        },
+        "holdout": {
+          "n": 500,
+          "mean": 261.088,
+          "sd_population": 70.24605509208328,
+          "min_p05_p25_median_p75_p95_max": [
+            113.0,
+            132.0,
+            190.75,
+            287.5,
+            311.25,
+            339.0,
+            373.0
+          ]
+        }
+      },
+      "gradient_probe_ids": [
+        "hellaswag:activitynet~v_2TEJnQzCPUM:25446",
+        "hellaswag:activitynet~v_yJezvcXU4YE:5220",
+        "hellaswag:wikihow~11111:6724",
+        "hellaswag:wikihow~4480:2726",
+        "hellaswag:activitynet~v_sMVf7HDvsEc:49904",
+        "hellaswag:activitynet~v_MeHEDK_Y8sE:32033",
+        "hellaswag:activitynet~v_b_iUgvzb1-0:23284",
+        "hellaswag:wikihow~69951:42528"
+      ],
+      "final_evaluation": "500 untouched validation items; no shared question or scene with development set",
+      "dataset_revision": "218ec52e09a7e7462a5400043bb9a69a41d06b76"
+    }
+  },
+  "config": {
+    "model_id": "Qwen/Qwen3.5-2B",
+    "model_revision": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+    "precision": "BF16 base, FP32 LoRA parameters",
+    "quantization": null,
+    "seed": 42,
+    "epochs": 3,
+    "micro_batch_size": 1,
+    "gradient_accumulation": 8,
+    "learning_rate": 0.0002,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0,
+    "optimizer": "AdamW",
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "scheduler": "linear",
+    "warmup_steps": 10,
+    "max_sequence_length": 1024,
+    "gradient_checkpointing": true,
+    "use_reentrant": false,
+    "use_cache": false,
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "target_modules": "all-linear",
+    "bias": "none",
+    "loss": "0.5 * (T^2 * gated Forward/Reverse KL + shared EOS CE)",
+    "checkpoint_selection": "fixed final epoch; no validation-based selection"
+  },
+  "methods": [
+    "fixed_mix",
+    "adaptive_mix",
+    "adaptive_soft"
+  ],
+  "source_sha256": {
+    "kl_experiment.py": "e6465c3bf443d990d6c2d2fbcd1efe4c2e41324498d586fb83c12b1544af5061",
+    "analyze_kl.py": "627850a5e93e062d8f0249dd9b5775a37593fe095a4eab6db5c62337f8705b66",
+    "train_student.py": "d51f0db5d1cf4a047794b7763d55680abdf709ae0fcab8933b2f60eb99aa9eef",
+    "logit_kd.py": "546e15489a8adba7c26cb5cd89756f3fe42679a34feacd8782f2ad58a53abd50",
+    "monitor_training.py": "939b12c96df146030d310a61b7a8f44041586a763b86bd71764811c0a6620751",
+    "pilot.py": "415594b568171f08721a72b9f2a89ebb0f8b118063ab6c908c8a2cc6f6fb7817",
+    "teacher_quantization.py": "4160cfa15099dcc144eab089f157b6d32bb92665c162111a1ba203f820aba439",
+    "soft_gate.py": "774069647de1daf62b752f22d99b19bf9f2fe5643c2ebd31bde7a13031f6ed17",
+    "probe_soft_gate.py": "ce4732d64b2a51cf334b1a1d5ffd2a6b5c97930a210a631b375a44d0eddca69a",
+    "gate_experiment.py": "ba855f263553516b5026f4b2fda90e854890e7cbf15579d2003beac2060a0806",
+    "gate_evaluation.py": "4a8ae868dde999db84ce03154493c80d5de2fcad747341be2c60fe03c57b2f38",
+    "gate_reporting.py": "53e420a2815c982183707a6045285468372fc56639ae6bdfc4f30c79e7356e86",
+    "data_gate_experiment.py": "8198f1595b1cdc980a6aa0f13c19eb7f073aec38305ec73ab9efca2992be7fc9",
+    "report_data_gates.py": "3c2d080efd1f745e484a53000db594055576694cb7f05d4bb0b2d4fccc32c026",
+    "gate_continuity.py": "651207fdfea40b503d209c8e3b411d381f478085759580c0bf0857e05321e3e0",
+    "choice_kd.py": "6e221f2471f289cbc302d9caa9e7867bff59ac1e6b38b92bb3d52ec1d7cf792b",
+    "bayesian_analysis.py": "fb09414573bceeb356127ec491086d4d9bac3135ac19855ee348148a98bcc4bc"
+  },
+  "data_sha256": {
+    "data\\data_gates_v1\\openbookqa\\train.jsonl": "11934073232cfc1908fe66dce619dc6ca1683cfee97d90f3d9b3c0c0d178ebfa",
+    "data\\data_gates_v1\\openbookqa\\validation.jsonl": "d2a2963a8eaccf3d78644aef4e4529b582b3252c92d6f836bb01ddc3468d98b6",
+    "data\\data_gates_v1\\hellaswag\\train.jsonl": "982c241ed3a6e9d804af445ce4267b0ac56bdec413cb38491fc8848dc97a823c",
+    "data\\data_gates_v1\\hellaswag\\validation.jsonl": "559833f5b944a28318c06faa947a657d924cd0e446369105de8e93565174b500",
+    "data\\data_gates_v1\\hellaswag\\holdout.jsonl": "607357880b1600f2a8267612293621e6ded9a0c10c6872d48dab549c706d1c26"
+  },
+  "teacher": {
+    "id": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "quantization": "NF4 double quant, BF16 compute"
+  },
+  "train_budget_basis": "Inherited ARC 1118 items/3 epochs; one seed is exploratory compute budget",
+  "evaluation": "T=1 valid-letter argmax/NLL, common neutral prompt; not official completion scoring",
+  "teacher_hard_target": "valid-letter argmax for common EOS conditioning; full vocabulary soft targets at T=2",
+  "soft_formula": "sigmoid(c_teacher-c_student-0.05), selection gradient retained",
+  "checkpoint": "fixed epoch 3; no validation or final-holdout selection",
+  "bootstrap": {
+    "replicates": 5000,
+    "seed": 42,
+    "pairing": "same unique question across methods, one training seed"
+  },
+  "training_order": [
+    [
+      "openbookqa",
+      "fixed_mix"
+    ],
+    [
+      "openbookqa",
+      "adaptive_mix"
+    ],
+    [
+      "openbookqa",
+      "adaptive_soft"
+    ],
+    [
+      "hellaswag",
+      "adaptive_soft"
+    ],
+    [
+      "hellaswag",
+      "adaptive_mix"
+    ],
+    [
+      "hellaswag",
+      "fixed_mix"
+    ]
+  ],
+  "openbookqa_final_rule": "no test scoring before all six adapters are frozen; exclude train/dev question hashes, keep first unique test question, reject over-budget inputs without truncation",
+  "preservation": {
+    "frozen_sources": 12,
+    "protected_artifacts": 130,
+    "all_match": true
+  },
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.19.0",
+    "peft": "0.21.2",
+    "bitsandbytes": "0.50.2",
+    "safetensors": "0.8.0"
+  },
+  "sources": {
+    "gate": "https://arxiv.org/html/2609.36734v1",
+    "hellaswag_test_policy": "https://rowanzellers.com/hellaswag/"
+  },
+  "pretraining_probe_fix": {
+    "previous_protocol_sha256": "e5d9d0341fa297c90bcc455b05be9a8d952077884db0741830ffc4e2dc2087a9",
+    "no_training_started": true,
+    "reason": "Remove unrelated two-position entropy check accidentally inserted into gradient-only audit; loss, split and baseline inference unchanged"
+  }
+}

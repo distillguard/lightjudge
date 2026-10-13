@@ -1,0 +1,86 @@
+{
+  "status": "passed",
+  "synthetic_uniform_teacher": true,
+  "optimizer_updated": false,
+  "audit": {
+    "n": 8,
+    "scope": "Deterministic eval-mode train items; unclipped LoRA gradient norms, no optimizer update",
+    "records": [
+      {
+        "source_id": "openbookqa:7-980",
+        "forward_weight": 0.37687984108924866,
+        "learning_grad_norm": 132.49130249023438,
+        "selection_grad_norm": 15.414613723754883,
+        "eos_grad_norm": 0.0014221537858247757,
+        "selection_to_learning_ratio": 0.1163443443760473,
+        "parameter_decomposition_relative_error": 0.017516296356916428
+      },
+      {
+        "source_id": "openbookqa:7-584",
+        "forward_weight": 0.36318981647491455,
+        "learning_grad_norm": 148.86920166015625,
+        "selection_grad_norm": 18.800968170166016,
+        "eos_grad_norm": 0.002786625176668167,
+        "selection_to_learning_ratio": 0.12629185862825754,
+        "parameter_decomposition_relative_error": 0.017735837027430534
+      },
+      {
+        "source_id": "openbookqa:7-870",
+        "forward_weight": 0.3750576972961426,
+        "learning_grad_norm": 143.60757446289062,
+        "selection_grad_norm": 16.997127532958984,
+        "eos_grad_norm": 0.0028858778532594442,
+        "selection_to_learning_ratio": 0.1183581548294389,
+        "parameter_decomposition_relative_error": 0.020466797053813934
+      },
+      {
+        "source_id": "openbookqa:7-321",
+        "forward_weight": 0.3898089826107025,
+        "learning_grad_norm": 135.47061157226562,
+        "selection_grad_norm": 14.523046493530273,
+        "eos_grad_norm": 0.002070000860840082,
+        "selection_to_learning_ratio": 0.10720440636516268,
+        "parameter_decomposition_relative_error": 0.019103171303868294
+      },
+      {
+        "source_id": "openbookqa:9-732",
+        "forward_weight": 0.37229084968566895,
+        "learning_grad_norm": 122.20244598388672,
+        "selection_grad_norm": 14.76971435546875,
+        "eos_grad_norm": 0.004306429531425238,
+        "selection_to_learning_ratio": 0.12086267370962643,
+        "parameter_decomposition_relative_error": 0.01946069672703743
+      },
+      {
+        "source_id": "openbookqa:9-782",
+        "forward_weight": 0.3877846896648407,
+        "learning_grad_norm": 113.49835205078125,
+        "selection_grad_norm": 12.450071334838867,
+        "eos_grad_norm": 0.013306456618010998,
+        "selection_to_learning_ratio": 0.10969385114304106,
+        "parameter_decomposition_relative_error": 0.01821492426097393
+      },
+      {
+        "source_id": "openbookqa:9-87",
+        "forward_weight": 0.3837999403476715,
+        "learning_grad_norm": 136.63858032226562,
+        "selection_grad_norm": 15.181661605834961,
+        "eos_grad_norm": 0.004996102768927813,
+        "selection_to_learning_ratio": 0.11110816264358588,
+        "parameter_decomposition_relative_error": 0.018369169905781746
+      },
+      {
+        "source_id": "openbookqa:155",
+        "forward_weight": 0.3919146955013275,
+        "learning_grad_norm": 104.82076263427734,
+        "selection_grad_norm": 11.013894081115723,
+        "eos_grad_norm": 0.0037786895409226418,
+        "selection_to_learning_ratio": 0.10507359233345322,
+        "parameter_decomposition_relative_error": 0.01770506240427494
+      }
+    ],
+    "decomposition_verified": true,
+    "parameter_relative_error_tolerance": 0.03125,
+    "tolerance_basis": "BF16 backward rounds before component sums; FP32 logit identity checked separately"
+  }
+}

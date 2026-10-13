@@ -2,7 +2,7 @@
 
 **대규모 언어모델 지식 증류에서 신뢰도 기반 Hard·Soft Gate의 성능과 시간 효율성 비교**
 
-v4.3 본실험의 동결 설계와 후속 탐색을 구분해 정리했다. 사용자 제공 「LightJudge 지식 증류 성능 및 시간 효율성 연구보고서」를 개정의 출발점으로 삼았다. 갱신: 2026-10-13.
+v4.3 본실험의 동결 설계와 후속 탐색을 구분해 정리했다. 사용자 제공 「LightJudge 지식 증류 성능 및 시간 효율성 연구보고서」를 개정의 출발점으로 삼았다. 갱신: 2026-10-14.
 
 <!-- main-status:start -->
 **v4.3 완료:** 본실험 21개 학습·validation과 Teacher·원본 Student·21개 adapter의 test 1,172개 평가 완료. Fixed seed 42 시간 재현 1회는 별도이며 원본 최종 checkpoint를 유지했다. Test 이후 재학습·checkpoint 변경은 수행하지 않았다.
@@ -156,3 +156,13 @@ MCMC 수렴과 후방 예측 적합성을 구분한다. 현재 계층모형은 �
 - [Dror 외](https://aclanthology.org/P18-1128/) · [Reimers·Gurevych](https://aclanthology.org/D17-1035/): NLP 통계 비교·반복 변동.
 - [Stan 계층 로짓](https://mc-stan.org/docs/stan-users-guide/regression.html#item-response-theory-models) · [Benavoli 외](https://jmlr.org/papers/v18/16-305.html) · [Rubin](https://doi.org/10.1214/aos/1176345338): Bayesian 구조·해석·bootstrap.
 - [Guo 외](https://arxiv.org/abs/1706.04599) · [PyTorch 계측](https://docs.pytorch.org/docs/2.11/benchmark_utils.html): calibration·시간 계측 원칙.
+
+<!-- data-gates:start -->
+## 현실적인 후속 범위 동결: 2026-10-14
+
+**2개 데이터×Fixed·Hard·Soft×seed 42=6회 탐색 학습**으로 정했다. 각 train은 질문 단위 중복·validation 겹침·라벨 충돌을 제외한 1,118개, 3 epochs·420 steps이며 개발용 평가 500개를 사용한다. 기존 T=2·margin=0.05·BF16 LoRA·전체 어휘 KD·공통 EOS를 유지한다. Teacher·원본 Student의 개발용 기준선과 train 8문항의 gradient 크기를 먼저 측정한다.
+
+HellaSwag는 공개 validation에서 질문·출처가 겹치지 않는 개발용 500개/최종 평가용 500개를 사전 분리했다. OpenBookQA는 공식 validation과 test를 쓰며, test는 6개 최종 adapter 동결 뒤 입력 겹침 제외 규칙을 적용하고 평가한다. 모든 평가는 T=1 선택지 문자 argmax/NLL로 통일하며 공식 completion 점수와 구분한다. 최종 평가 뒤 재학습·조건 변경은 하지 않는다.
+
+원본 130개 산출물·12개 소스·21개 adapter는 보존한다. 다른 Student 9회와 추가 상수/detach 대조는 후속 단계로 둔다. 1 seed는 예산에 따른 탐색이며 안정적인 일반화를 확정하지 않는다. [실행·분할·코드 동결](../results/data_gates_v1/protocol.json) · [현재 상태](../results/data_gates_v1/status.json)
+<!-- data-gates:end -->
