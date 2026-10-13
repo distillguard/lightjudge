@@ -1,0 +1,95 @@
+{
+  "checked_at_kst": "2026-10-14T03:10:09.953491+09:00",
+  "stage": "openbookqa_three_runs_verified_hellaswag_in_progress",
+  "completed_training": 3,
+  "planned_training": 6,
+  "protocol_sha256": "eb2649ac319ad08d17e97edccaef09f55dfbac666eeaf644dbda15ea5152f21d",
+  "development_only": true,
+  "holdout_evaluation_started": false,
+  "models": {
+    "fixed_mix": {
+      "metrics": {
+        "n": 500,
+        "accuracy": 0.822,
+        "choice_nll": 0.5212241512271139
+      },
+      "gate": {
+        "n_training_forwards": 3354,
+        "forward_weight_mean": 0.5,
+        "forward_weight_sd": 0.0,
+        "forward_weight_quantiles_0_25_50_75_100": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ],
+        "confidence_gap_mean": 0.004988682166977019,
+        "counterfactual_hard_forward_fraction": 0.5181872391174717,
+        "scope": "T=2 full-vocabulary entropy during training including dropout; not answer correctness confidence"
+      },
+      "summary_sha256": "dc2d3f12784a399e4bbf9c367174216bbacd705727596d1c51bdbdc2f80a06a5",
+      "reloaded_validation_sha256": "e6529af31f2fd5bc61557ad505184e442dc21a5bba3e48519e3ca7f798b9ecb9"
+    },
+    "adaptive_mix": {
+      "metrics": {
+        "n": 500,
+        "accuracy": 0.828,
+        "choice_nll": 0.5264586573092093
+      },
+      "gate": {
+        "n_training_forwards": 3354,
+        "forward_weight_mean": 0.5214669051878354,
+        "forward_weight_sd": 0.4996134452149675,
+        "forward_weight_quantiles_0_25_50_75_100": [
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "confidence_gap_mean": 0.0035309881309561596,
+        "counterfactual_hard_forward_fraction": 0.5214669051878354,
+        "scope": "T=2 full-vocabulary entropy during training including dropout; not answer correctness confidence"
+      },
+      "summary_sha256": "feb1b3c144887f897d4c3352d9d9478b822dea8a74587c1aec49a74643cbea37",
+      "reloaded_validation_sha256": "b04b8a69b135b7e8b738759ae7fa675a23dca422c2b90b1afa21fc6977a132c0"
+    },
+    "adaptive_soft": {
+      "metrics": {
+        "n": 500,
+        "accuracy": 0.822,
+        "choice_nll": 0.5274381159073382
+      },
+      "gate": {
+        "n_training_forwards": 3354,
+        "forward_weight_mean": 0.48878700310585393,
+        "forward_weight_sd": 0.029579039073211025,
+        "forward_weight_quantiles_0_25_50_75_100": [
+          0.3730791509151459,
+          0.47065894305706024,
+          0.4884701371192932,
+          0.5059497952461243,
+          0.606659471988678
+        ],
+        "confidence_gap_mean": 0.004998984280695997,
+        "counterfactual_hard_forward_fraction": 0.5172927847346452,
+        "scope": "T=2 full-vocabulary entropy during training including dropout; not answer correctness confidence"
+      },
+      "summary_sha256": "09cab39f9d81344b9cbfda09347adcd005389c401c1d0861ca71f5c145c3be55",
+      "reloaded_validation_sha256": "1654445a6baf26c465f5cd9beb1fa480e4fa46e2d16b082d6eb13eadf6b057a7"
+    }
+  },
+  "preservation": {
+    "frozen_sources": 12,
+    "protected_artifacts": 130,
+    "all_match": true
+  },
+  "final_soft_gradient_audit": {
+    "n": 8,
+    "selection_to_learning_ratio_median": 0.0063573771401254945,
+    "bf16_rounding_warnings": 0,
+    "fp32_identity_verified": true,
+    "sha256": "a8d891328afedd98de22b8c60e2e882425a5d7aeb7619e5ff327de9a3406e62a"
+  }
+}

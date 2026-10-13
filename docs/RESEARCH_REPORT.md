@@ -146,6 +146,10 @@ Gold/Response의 평균 NLL 1.0417/1.1187 중 오답 손실 비중은 **98.85%/9
 <!-- data-gates:start -->
 ## 현실적인 후속 범위 동결: 2026-10-14
 
+**진행 점검:** OpenBookQA Fixed·Hard·Soft의 3회 학습과 adapter 재로딩을 검증했다. 개발용 Accuracy는 **82.20% / 82.80% / 82.20%**, NLL은 **0.5212 / 0.5265 / 0.5274**다. 동일 초기 adapter·학습 순서·각 420 steps와 3,354회 train 관측을 확인했다. Soft 최종 gradient 검사도 통과했다. HellaSwag 세 조건은 진행 중이며 최종 holdout 평가는 아직 시작하지 않았다.
+
+[OpenBookQA 완료 검증](../results/data_gates_v1/openbookqa_training_check.json)
+
 **2개 데이터×Fixed·Hard·Soft×seed 42=6회 탐색 학습**으로 정했다. 각 train은 질문 단위 중복·validation 겹침·라벨 충돌을 제외한 1,118개, 3 epochs·420 steps이며 개발용 평가 500개를 사용한다. 기존 T=2·margin=0.05·BF16 LoRA·전체 어휘 KD·공통 EOS를 유지한다. Teacher·원본 Student의 개발용 기준선과 train 8문항의 gradient 크기를 먼저 측정한다.
 
 HellaSwag는 공개 validation에서 질문·출처가 겹치지 않는 개발용 500개/최종 평가용 500개를 사전 분리했다. OpenBookQA는 공식 validation과 test를 쓰며, test는 6개 최종 adapter 동결 뒤 입력 겹침 제외 규칙을 적용하고 평가한다. 모든 평가는 T=1 선택지 문자 argmax/NLL로 통일하며 공식 completion 점수와 구분한다. 최종 평가 뒤 재학습·조건 변경은 하지 않는다.
