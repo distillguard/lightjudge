@@ -113,7 +113,7 @@ Fixed·Hard·Soft는 epoch 0·1·2·3의 validation 299개 전체와 누적 시�
 
 **완료:** ARC와 새 두 데이터에서 미리 고른 train 128문항씩을 기존 Teacher·원본 Student로 진단했다. 공통 중립 문구·native template·T=2 전체 어휘 confidence를 사용했다. HellaSwag는 raw context/endings의 문자 선택형 변환이므로 공식 completion 점수가 아니다. 유효 선택지 entropy는 별도 측정 공간 진단이다. [선정·수식 동결](../results/gate_continuity/protocol.json)
 
-**미실행:** 새 데이터 2개×Fixed·Hard·Soft×seed 42의 **6회 탐색 학습**. 먼저 전체 token 길이·공통 train 예산·validation·prompt·checkpoint 기준을 동결한다. 정제 후보 수를 자동으로 학습 예산으로 삼지 않는다. 두 데이터 결과를 모두 보고하며, 1 seed 결과로 안정적인 일반화를 확정하지 않는다. 새 test는 모든 선택을 고정한 뒤 접근한다.
+**실행 명세:** 새 데이터 2개×Fixed·Hard·Soft×seed 42의 **6회 탐색 학습**. 전체 token 길이·공통 train 예산·validation·prompt·최종 epoch 3 기준을 동결했다. 정제 후보 수를 자동으로 학습 예산으로 삼지 않는다. 실행 상태·완료 결과는 아래 갱신 블록에 둔다. 두 데이터 결과를 모두 보고하며, 1 seed 결과로 안정적인 일반화를 확정하지 않는다. 새 최종 평가 입력은 모든 adapter를 고정한 뒤 접근한다.
 
 Soft−Fixed에는 평균 가중치 이동·문항별 변화·selection gradient가 함께 포함된다. **연속성 자체의 인과 효과**를 주장하려면 train으로 정한 상수 가중치 대조와 Soft detach 대조가 추가로 필요하다. 현재 3조건의 질문은 실제 방법 차이이며 세 원인의 분리는 별도 확장이다.
 
@@ -141,6 +141,8 @@ MCMC 수렴과 후방 예측 적합성을 구분한다. 현재 계층모형은 �
 같은 1,118문항·3 epochs·420 steps는 **동일 문항 노출 예산**이며 동일 입력 토큰 예산은 아니다. SmolLM2는 Qwen 대비 총 파라미터 −9.1%, 입력 토큰 +18.0%이고 Granite는 +34.6%, +50.8%다. native template의 비패딩 입력만 세었으며 예측할 답변은 입력에 더하지 않았다. 강제로 tokenizer를 교체하거나 질문을 잘라 수치를 맞추지 않는다. embedding 비중·LoRA 수도 다르므로 계열 차이의 인과 효과와 동일 연산량을 주장하지 않는다. 정확한 입력 토큰 예산 일치 실험은 미설계·미실행이다. [예산 실측](../results/checks/student_comparison_budget.json)
 
 이 확장은 **유효 선택지에 재정규화한 별도 KD 손실**이며 기존 전체 어휘 KD와 구분한다. 이미 T=2인 Teacher cache에 온도를 다시 적용하지 않고 EOS CE를 붙이지 않는다. Qwen도 같은 새 손실로 다시 비교한다. [MCQA distillation](https://aclanthology.org/2025.findings-emnlp.452/)의 문자 logit 대응을 참고했으며, [DSKD](https://aclanthology.org/2024.emnlp-main.1010/)·[ULD](https://arxiv.org/html/2402.12030v3)의 어휘 정렬을 구현한 것은 아니다.
+
+확정 순서는 **새 데이터 6회 학습·최종 평가를 모두 완료한 뒤 원본 Student 3개를 공통 ARC validation 299개로 벤치마크**하는 것이다. 성공한 새 데이터 pipeline 종료 후에만 순차 GPU 평가를 시작한다. 원본 모델은 BF16·adapter 없음·T=1 선택지 argmax/NLL로 평가하며 test를 읽지 않는다. [벤치마크 사전 동결](../results/model_benchmark_v1/protocol.json)
 
 모델 3개×3조건×seed 42의 **9회 탐색 학습**은 새 데이터 비교 뒤로 보류한다. 초기 validation·독립 본학습·새 test는 미실행이다. 크기·template·LoRA 수가 달라 raw Accuracy 차이를 계열 자체의 인과 효과로 주장하지 않는다. [문헌 대조](../results/protocols/cross_family_evidence.json)
 
